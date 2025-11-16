@@ -1,0 +1,60 @@
+# ========== Unity ==========
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# Lightmap / GI / Cache
+[Ll]ightmapSnapshot/
+[Ll]ightmaps/
+[Ll]ightProbes/
+[Ll]ightingData.asset
+[Ll]ightingData/
+[Uu]nityGenerated/
+Assets/**/Lightmap-*.exr
+
+# Asset store tools
+[Aa]ssets/AssetStoreTools*
+
+# Crash reports
+sysinfo.txt
+
+# ========== Rider / JetBrains ==========
+.idea/
+*.sln.iml
+*.csproj
+*.unityproj
+*.pidb
+*.mdb
+*.pdb.meta
+
+# Rider's project model cache
+.project/
+.gradle/
+.cache/
+local.properties
+
+# Rider auto-generated C# solution
+*.sln
+*.csproj
+
+# Rider metadata
+.idea/
+
+# ========== VSCode (optional) ==========
+.vscode/
+
+# ========== OS ==========
+.DS_Store
+Thumbs.db
+
+# ========== Unity Collaborate (if exists) ==========
+.collab/
+
+# ========== Other ==========
+*.userprefs
+*.user
+
