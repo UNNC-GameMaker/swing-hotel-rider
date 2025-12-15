@@ -1,27 +1,268 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region Inspector
+    [Header("Movement")]
+    [Tooltip("Maximum move speed (m/s)")]
+    public float maxMoveSpeed = 8f;
+
+    [Tooltip("Acceleration (m/s²). Higher values reach max speed faster")]
+    public float acceleration = 60f;
+
+    [Tooltip("Deceleration (m/s²). Horizontal speed decay when releasing input")]
+    public float deceleration = 80f;
+
+    [Tooltip("Reverse acceleration (m/s²). Acceleration when input direction is opposite to velocity")]
+    public float reverseAcceleration = 100f;
+
+    [Header("Jump")]
+    [Tooltip("Initial jump impulse")]
+    public float jumpForce = 16f;
+
+    [Tooltip("Extra jump force applied per second while holding the jump button")]
+    public float extraJumpForce = 12f;
+
+    [Tooltip("Maximum additional height relative to the jump start point")]
+    public float maxJumpHeight = 5f;
+
+    [Tooltip("Gravity scale used while ascending")]
+    public float ascendGravityScale = 1f;
+
+    [Tooltip("Gravity scale used while descending")]
+    public float descendGravityScale = 2.5f;
+
+    [Tooltip("Number of extra air jumps (1 means double jump)")]
+    public int maxAirJumps = 1;
+
+    [Header("Ground Check")]
+    [Tooltip("Transform used as the center of the ground check box")]
+    public Transform groundCheck;
+
+    [Tooltip("Ground check box size (width, height)")]
+    public Vector2 groundCheckSize = new Vector2(0.2f, 0.1f);
+
+    [Tooltip("Layer(s) considered ground")]
+    public LayerMask groundLayer;
+    #endregion
+    
+    private PlayerInput _playerInput;
+    private Vector2 _movementInput;
+
+    // Physics
+    private Rigidbody2D _rb;
+    private bool _isGrounded;
+    private int _airJumpsLeft;
+    private float _jumpStartY; // the y position where the last jump started
+    private bool _jumpButtonHeld; // whether jump button is still held
+    private Collider2D[] _groundCheckResults = new Collider2D[4]; // Reusable array for ground check
+
+    public bool IsGrounded { get { return _isGrounded; } }
+
+    private void Awake()
     {
-        Debug.Log("player init, position:" + transform.position);
+        _rb = GetComponent<Rigidbody2D>();
+        _airJumpsLeft = maxAirJumps;
+        
+        // Initialize new Input System
+        _playerInput = new PlayerInput();
+        Debug.Log("Player input initialized:" +  _playerInput);
+        Debug.Log("player input init, position:" + transform.position);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        if (Input.GetKey(KeyCode.W))
+        _playerInput.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _playerInput.Disable();
+    }
+
+    private void Update()
+    {
+        // Handle input and non-physics logic only
+        ReadInput();
+        GroundCheck();
+        HandleJumpInput();
+    }
+
+    private void FixedUpdate()
+    {
+        // All forces / velocity changes should happen in FixedUpdate
+        HorizontalMove();
+        AdjustGravity();
+    }
+
+    /// <summary>
+    /// Read input from the new Input System
+    /// </summary>
+    private void ReadInput()
+    {
+        _movementInput = _playerInput.Player.Move.ReadValue<Vector2>();
+    }
+
+    /// <summary>
+    /// Horizontal movement: approach the target speed using acceleration rather than setting velocity directly
+    /// </summary>
+    private void HorizontalMove()
+    {
+        float input = _movementInput.x; // horizontal input from new Input System
+        float targetSpeed = input * maxMoveSpeed;
+        float speedDiff = targetSpeed - _rb.velocity.x;
+
+        // Choose acceleration or deceleration depending on input
+        float accelRate;
+        if (Mathf.Abs(targetSpeed) > 0.01f)
         {
-            Debug.Log("W pressed");
-            transform.position += Vector3.forward * Time.deltaTime;
+            // Check if velocity direction is opposite to input
+            bool isReversing = (input > 0 && _rb.velocity.x < 0) || (input < 0 && _rb.velocity.x > 0);
+            accelRate = isReversing ? reverseAcceleration : acceleration;
+        }
+        else
+        {
+            accelRate = deceleration;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Δv = a * Δt -> apply a force proportional to desired change
+        float movement = speedDiff * accelRate * Time.fixedDeltaTime;
+        _rb.AddForce(Vector2.right * movement, ForceMode2D.Force);
+
+        // Clamp horizontal speed to avoid excessive velocity
+        Vector2 v = _rb.velocity;
+        v.x = Mathf.Clamp(v.x, -maxMoveSpeed, maxMoveSpeed);
+        _rb.velocity = v;
+    }
+
+    /// <summary>
+    /// Ground check using an overlap box at the groundCheck position
+    /// </summary>
+    private void GroundCheck()
+    {
+        // TODO: setup ground collision mask bruh
+        if (groundCheck == null)
         {
-            transform.position += Vector3.up * Time.deltaTime;
+            Debug.LogWarning("GroundCheck Transform is not assigned in the Inspector!");
+            _isGrounded = false;
+            return;
+        }
+
+        int hitCount = Physics2D.OverlapBoxNonAlloc(groundCheck.position, groundCheckSize, 0f, _groundCheckResults, groundLayer);
+
+        bool wasGrounded = _isGrounded;
+        _isGrounded = false;
+        
+        for (int i = 0; i < hitCount; i++)
+        {
+            if (_groundCheckResults[i] != null && !_groundCheckResults[i].isTrigger)
+            {
+                _isGrounded = true;
+                break;
+            }
+        }
+
+        // Reset air jumps when landing
+        if (_isGrounded && !wasGrounded)
+        {
+            _airJumpsLeft = maxAirJumps;
+            Debug.Log($"Landed! Air jumps reset to {maxAirJumps}");
+        }
+
+        // Debug info (comment out after fixing)
+        if (hitCount > 0)
+        {
+            Debug.Log($"Ground check: hitCount={hitCount}, isGrounded={_isGrounded}, airJumpsLeft={_airJumpsLeft}");
+        }
+    }
+
+    /// <summary>
+    /// Handle jump-related input
+    /// Tap jump = short jump with initial impulse only
+    /// Hold jump = higher jump with continuous force applied
+    /// </summary>
+    private void HandleJumpInput()
+    {
+        // On jump pressed (triggered on first frame of press)
+        if (_playerInput.Player.Jump.triggered)
+        {
+            if (_isGrounded)
+            {
+                Jump();
+            }
+            else if (_airJumpsLeft > 0)
+            {
+                Jump();
+                _airJumpsLeft--;
+            }
+        }
+
+        // While holding jump: apply extra force until reaching max height
+        // Only applies if we're still holding from the jump we initiated (_jumpButtonHeld)
+        if (_playerInput.Player.Jump.IsPressed() && _jumpButtonHeld)
+        {
+            if (transform.position.y < _jumpStartY + maxJumpHeight && _rb.velocity.y > 0f)
+            {
+                // Use Impulse so the added force affects the velocity immediately
+                _rb.AddForce(Vector2.up * (extraJumpForce * Time.deltaTime), ForceMode2D.Impulse);
+            }
+            else
+            {
+                // Stop applying extra force if we've reached max height or started falling
+                _jumpButtonHeld = false;
+            }
+        }
+
+        // On jump released - stop applying extra force
+        if (_playerInput.Player.Jump.WasReleasedThisFrame())
+        {
+            _jumpButtonHeld = false;
+        }
+    }
+
+    /// <summary>
+    /// Perform a jump: reset vertical velocity and apply initial impulse
+    /// </summary>
+    private void Jump()
+    {
+        // Reset vertical velocity to avoid stacking
+        Vector2 v = _rb.velocity;
+        v.y = 0f;
+        _rb.velocity = v;
+
+        // Apply initial jump impulse
+        _rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        _jumpStartY = transform.position.y;
+        _jumpButtonHeld = true;
+    }
+
+    /// <summary>
+    /// Switch gravity scale depending on ascending/descending phase to get a nicer jump arc
+    /// </summary>
+    private void AdjustGravity()
+    {
+        if (_rb.velocity.y > 0f)            // ascending
+        {
+            _rb.gravityScale = ascendGravityScale;
+        }
+        else if (_rb.velocity.y < 0f)       // descending
+        {
+            _rb.gravityScale = descendGravityScale;
+        }
+        else                               // stationary vertically
+        {
+            _rb.gravityScale = 1f;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
         }
     }
 }

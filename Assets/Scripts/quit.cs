@@ -1,25 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class quit : MonoBehaviour
+public class Quit : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private PlayerInput _playerInput;
+
+    private void Awake()
     {
-        Debug.Log("quit");
+        // Initialize the PlayerInput instance
+        _playerInput = new PlayerInput();
+        Debug.Log("Quit script initialized");
+    }
+
+    private void OnEnable()
+    {
+        // Enable the input actions
+        _playerInput.Enable();
+    }
+
+    private void OnDisable()
+    {
+        // Disable the input actions to prevent memory leaks
+        _playerInput.Disable();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
-
+        if (_playerInput.UI.Quit.triggered)
         {
+            Debug.Log("Quit function called - exiting play mode");
+            
+            #if UNITY_EDITOR
+            // If running in the Unity Editor, stop play mode
             UnityEditor.EditorApplication.isPlaying = false;
-
-            //Application.Quit();
-
-        } 
+            #else
+            // If running as a build, quit the application
+            Application.Quit();
+            #endif
+        }
     }
 }
