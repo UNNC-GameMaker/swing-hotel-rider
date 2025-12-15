@@ -15,12 +15,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
+            Debug.Log("W pressed");
             transform.position += Vector3.forward * Time.deltaTime;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            
+            transform.position += Vector3.up * Time.deltaTime;
         }
     }
 }
