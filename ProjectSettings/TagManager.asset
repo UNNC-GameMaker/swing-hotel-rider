@@ -11,14 +11,14 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - GroundCollider
+  - Player
+  - DEBUG
+  - Room
+  - Furniture
+  - Costumer
+  - GroundColliderHollow
+  - Food
   - 
   - 
   - 

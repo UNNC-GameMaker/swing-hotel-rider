@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     #region Inspector
     [Header("Movement")]
     [Tooltip("Maximum move speed (m/s)")]
-    public float maxMoveSpeed = 8f;
+    public float maxMoveSpeed = 12f;
 
     [Tooltip("Acceleration (m/s²). Higher values reach max speed faster")]
     public float acceleration = 60f;
@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
 
     [Tooltip("Ground check box size (width, height)")]
-    public Vector2 groundCheckSize = new Vector2(0.2f, 0.1f);
+    public Vector2 groundCheckSize = new Vector2(0.8f, 0.1f);
 
     [Tooltip("Layer(s) considered ground")]
     public LayerMask groundLayer;
@@ -70,6 +70,30 @@ public class PlayerMovement : MonoBehaviour
         _playerInput = new PlayerInput();
         Debug.Log("Player input initialized:" +  _playerInput);
         Debug.Log("player input init, position:" + transform.position);
+    }
+    
+    private void Start()
+    {
+        // Auto-assign groundCheck from GroundCheck component (FootCollider)
+        // Done in Start() to ensure GroundCheck.Instance is initialized
+        if (groundCheck == null)
+        {
+            // Try to find GroundCheck component in children
+            var groundCheckComponent = GetComponentInChildren<GroundCheck>();
+            if (groundCheckComponent != null)
+            {
+                groundCheck = groundCheckComponent.transform;
+                Debug.Log("GroundCheck auto-assigned from child component: " + groundCheck.name);
+            }
+        }
+        
+        // Validate ground layer mask
+        if (groundLayer == 0)
+        {
+            Debug.LogWarning("Ground Layer Mask is not set! Ground check will not work. Please assign it in the Inspector.");
+        }
+        
+        Debug.Log($"PlayerMovement initialized - GroundCheck: {(groundCheck != null ? groundCheck.name : "NULL")}, LayerMask: {groundLayer.value}");
     }
 
     private void OnEnable()
@@ -142,16 +166,24 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void GroundCheck()
     {
-        // TODO: setup ground collision mask bruh
         if (groundCheck == null)
         {
-            Debug.LogWarning("GroundCheck Transform is not assigned in the Inspector!");
             _isGrounded = false;
             return;
         }
 
-        int hitCount = Physics2D.OverlapBoxNonAlloc(groundCheck.position, groundCheckSize, 0f, _groundCheckResults, groundLayer);
+        if (groundLayer == 0)
+        {
+            _isGrounded = false;
+            return;
+        }
 
+        // Debug: Check what we're actually testing
+        Vector3 checkPos = groundCheck.position;
+        
+        // Now check with layer mask
+        int hitCount = Physics2D.OverlapBoxNonAlloc(checkPos, groundCheckSize, 0f, _groundCheckResults, groundLayer);
+        
         bool wasGrounded = _isGrounded;
         _isGrounded = false;
         
@@ -159,8 +191,14 @@ public class PlayerMovement : MonoBehaviour
         {
             if (_groundCheckResults[i] != null && !_groundCheckResults[i].isTrigger)
             {
-                _isGrounded = true;
-                break;
+                // Make sure we're not detecting ourselves or our children
+                if (_groundCheckResults[i].transform != transform && 
+                    !_groundCheckResults[i].transform.IsChildOf(transform))
+                {
+                    _isGrounded = true;
+                    Debug.Log($"Ground detected: {_groundCheckResults[i].name}");
+                    break;
+                }
             }
         }
 
@@ -169,12 +207,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _airJumpsLeft = maxAirJumps;
             Debug.Log($"Landed! Air jumps reset to {maxAirJumps}");
-        }
-
-        // Debug info (comment out after fixing)
-        if (hitCount > 0)
-        {
-            Debug.Log($"Ground check: hitCount={hitCount}, isGrounded={_isGrounded}, airJumpsLeft={_airJumpsLeft}");
         }
     }
 
@@ -261,7 +293,19 @@ public class PlayerMovement : MonoBehaviour
     {
         if (groundCheck != null)
         {
-            Gizmos.color = Color.yellow;
+            Gizmos.color = _isGrounded ? Color.green : Color.red;
+            Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
+            
+            Gizmos.color = new Color(1f, 1f, 0f, 0.3f);
+            Gizmos.DrawCube(groundCheck.position, groundCheckSize);
+        }
+    }
+    
+    private void OnDrawGizmos()
+    {
+        if (groundCheck != null && Application.isPlaying)
+        {
+            Gizmos.color = _isGrounded ? Color.green : Color.red;
             Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
         }
     }
