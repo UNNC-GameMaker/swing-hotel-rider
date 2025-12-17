@@ -50,9 +50,10 @@ public class PlayerMovement : MonoBehaviour
     
     private PlayerInput _playerInput;
     private Vector2 _movementInput;
+    private PlayerAnimation _playerAnimation;
 
     // Physics
-    private Rigidbody2D _rb;
+    public Rigidbody2D rb;
     private bool _isGrounded;
     private int _airJumpsLeft;
     private float _jumpStartY; // the y position where the last jump started
@@ -73,8 +74,9 @@ public class PlayerMovement : MonoBehaviour
     public MovementState currentState;
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         _airJumpsLeft = maxAirJumps;
+        _playerAnimation = GetComponent<PlayerAnimation>();
         
         // Initialize new Input System
         _playerInput = new PlayerInput();
@@ -150,11 +152,11 @@ public class PlayerMovement : MonoBehaviour
             currentState = MovementState.Left;
         }
 
-        if (_rb.velocity.y > 0 && !_isGrounded)
+        if (rb.velocity.y > 0 && !_isGrounded)
         {
             currentState = MovementState.JumpAsc;
         }
-        else if (_rb.velocity.y < 0 && _isGrounded)
+        else if (rb.velocity.y < 0 && _isGrounded)
         {
             currentState = MovementState.JumpDesc;
         }
@@ -171,14 +173,14 @@ public class PlayerMovement : MonoBehaviour
     {
         float input = _movementInput.x; // horizontal input from new Input System
         float targetSpeed = input * maxMoveSpeed;
-        float speedDiff = targetSpeed - _rb.velocity.x;
+        float speedDiff = targetSpeed - rb.velocity.x;
 
         // Choose acceleration or deceleration depending on input
         float accelRate;
         if (Mathf.Abs(targetSpeed) > 0.01f)
         {
             // Check if velocity direction is opposite to input
-            bool isReversing = (input > 0 && _rb.velocity.x < 0) || (input < 0 && _rb.velocity.x > 0);
+            bool isReversing = (input > 0 && rb.velocity.x < 0) || (input < 0 && rb.velocity.x > 0);
             accelRate = isReversing ? reverseAcceleration : acceleration;
         }
         else
@@ -188,12 +190,12 @@ public class PlayerMovement : MonoBehaviour
 
         // Δv = a * Δt -> apply a force proportional to desired change
         float movement = speedDiff * accelRate * Time.fixedDeltaTime;
-        _rb.AddForce(Vector2.right * movement, ForceMode2D.Force);
+        rb.AddForce(Vector2.right * movement, ForceMode2D.Force);
 
         // Clamp horizontal speed to avoid excessive velocity
-        Vector2 v = _rb.velocity;
+        Vector2 v = rb.velocity;
         v.x = Mathf.Clamp(v.x, -maxMoveSpeed, maxMoveSpeed);
-        _rb.velocity = v;
+        rb.velocity = v;
     }
 
     /// <summary>
@@ -242,6 +244,12 @@ public class PlayerMovement : MonoBehaviour
         {
             _airJumpsLeft = maxAirJumps;
             Debug.Log($"Landed! Air jumps reset to {maxAirJumps}");
+            
+            // Trigger landing animation
+            if (_playerAnimation != null)
+            {
+                _playerAnimation.OnLanding();
+            }
         }
     }
 
@@ -270,10 +278,10 @@ public class PlayerMovement : MonoBehaviour
         // Only applies if we're still holding from the jump we initiated (_jumpButtonHeld)
         if (_playerInput.Player.Jump.IsPressed() && _jumpButtonHeld)
         {
-            if (transform.position.y < _jumpStartY + maxJumpHeight && _rb.velocity.y > 0f)
+            if (transform.position.y < _jumpStartY + maxJumpHeight && rb.velocity.y > 0f)
             {
                 // Use Impulse so the added force affects the velocity immediately
-                _rb.AddForce(Vector2.up * (extraJumpForce * Time.deltaTime), ForceMode2D.Impulse);
+                rb.AddForce(Vector2.up * (extraJumpForce * Time.deltaTime), ForceMode2D.Impulse);
             }
             else
             {
@@ -295,14 +303,20 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         // Reset vertical velocity to avoid stacking
-        Vector2 v = _rb.velocity;
+        Vector2 v = rb.velocity;
         v.y = 0f;
-        _rb.velocity = v;
+        rb.velocity = v;
 
         // Apply initial jump impulse
-        _rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         _jumpStartY = transform.position.y;
         _jumpButtonHeld = true;
+        
+        // Trigger jump start animation
+        if (_playerAnimation != null)
+        {
+            _playerAnimation.OnJumpStart();
+        }
     }
 
     /// <summary>
@@ -310,17 +324,17 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void AdjustGravity()
     {
-        if (_rb.velocity.y > 0f)            // ascending
+        if (rb.velocity.y > 0f)            // ascending
         {
-            _rb.gravityScale = ascendGravityScale;
+            rb.gravityScale = ascendGravityScale;
         }
-        else if (_rb.velocity.y < 0f)       // descending
+        else if (rb.velocity.y < 0f)       // descending
         {
-            _rb.gravityScale = descendGravityScale;
+            rb.gravityScale = descendGravityScale;
         }
         else                               // stationary vertically
         {
-            _rb.gravityScale = 1f;
+            rb.gravityScale = 1f;
         }
     }
 
