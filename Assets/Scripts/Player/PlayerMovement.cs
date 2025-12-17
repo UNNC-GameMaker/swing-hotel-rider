@@ -61,6 +61,16 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsGrounded { get { return _isGrounded; } }
 
+    public enum MovementState
+    {
+        Idle,
+        Left,
+        Right,
+        JumpAsc,
+        JumpDesc,
+    }
+
+    public MovementState currentState;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -112,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
         ReadInput();
         GroundCheck();
         HandleJumpInput();
+        UpdateDirection();
     }
 
     private void FixedUpdate()
@@ -127,6 +138,30 @@ public class PlayerMovement : MonoBehaviour
     private void ReadInput()
     {
         _movementInput = _playerInput.Player.Move.ReadValue<Vector2>();
+    }
+
+    private void UpdateDirection()
+    {
+        if (_movementInput.x > 0)
+        {
+            currentState =  MovementState.Right;
+        } else if (_movementInput.x < 0)
+        {
+            currentState = MovementState.Left;
+        }
+
+        if (_rb.velocity.y > 0 && !_isGrounded)
+        {
+            currentState = MovementState.JumpAsc;
+        }
+        else if (_rb.velocity.y < 0 && _isGrounded)
+        {
+            currentState = MovementState.JumpDesc;
+        }
+        else
+        {
+            currentState = MovementState.Idle;
+        }
     }
 
     /// <summary>

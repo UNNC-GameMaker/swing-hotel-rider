@@ -275,6 +275,10 @@ PrefabInstance:
       propertyPath: m_IncludeLayers.m_Bits
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 3359561157275440841, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6697065785264695750, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -323,87 +327,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 940198127}
   m_SourcePrefab: {fileID: 100100000, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
---- !u!1 &549006999 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7555047300939060745, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-  m_PrefabInstance: {fileID: 1407575265}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &549007000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 549006999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c789e3849b9cb42b383bed6da9249666, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxMoveSpeed: 8
-  acceleration: 60
-  deceleration: 80
-  reverseAcceleration: 100
-  jumpForce: 16
-  extraJumpForce: 12
-  maxJumpHeight: 5
-  ascendGravityScale: 1
-  descendGravityScale: 2.5
-  maxAirJumps: 1
-  groundCheck: {fileID: 847799929}
-  groundCheckSize: {x: 0.2, y: 0.1}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
---- !u!4 &549007003 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3718844019348173442, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-  m_PrefabInstance: {fileID: 1407575265}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &847799928
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 847799929}
-  - component: {fileID: 847799930}
-  m_Layer: 0
-  m_Name: FootCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &847799929
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 847799928}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 549007003}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &847799930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 847799928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c7e8a94242c4ee5a3c78cd8cbbf0cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &940198126 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 864842833395306217, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
@@ -513,36 +436,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4593973530061845966, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-      propertyPath: m_Color.b
-      value: 0.34187275
-      objectReference: {fileID: 0}
-    - target: {fileID: 4593973530061845966, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-      propertyPath: m_Color.g
-      value: 0.9339623
-      objectReference: {fileID: 0}
-    - target: {fileID: 4593973530061845966, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-      propertyPath: m_Color.r
-      value: 0.2863564
-      objectReference: {fileID: 0}
-    - target: {fileID: 4818135422043668928, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 7555047300939060745, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3718844019348173442, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 847799929}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7555047300939060745, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 549007000}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 namespace Managers
@@ -11,8 +10,7 @@ namespace Managers
         public GameObject gameOverUI;
         public GameObject gameWinUI;
         public GameObject pauseUI;
-
-        public TextMeshProUGUI inOfText;
+        
 
         public int nowCostumerOrderCount = 0;
 

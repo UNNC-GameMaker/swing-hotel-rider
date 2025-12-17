@@ -8,7 +8,7 @@ public class GroundCheck : MonoBehaviour
     
     public Vector2 Position2D => transform.position;
     
-    public Transform groundCheck => transform;
+    public Transform FootCollider => transform;
 
     GroundCheck()
     {

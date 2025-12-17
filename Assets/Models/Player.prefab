@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3909244599925704288}
   - component: {fileID: 4593973530061845966}
+  - component: {fileID: 838151957545524001}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: SpriteNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: -2072806194, guid: 52bd67a6258c6466693e6494aa2db81c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,6 +85,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &838151957545524001
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2526333639980305121}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: de0db9ec6ef3f48128b353cf19f25157, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6352133224074664137
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2943862931458657606}
-  - component: {fileID: 5454286530268014108}
+  - component: {fileID: 5587385673561005445}
   m_Layer: 0
   m_Name: FootCollider
   m_TagString: Untagged
@@ -110,13 +132,13 @@ Transform:
   m_GameObject: {fileID: 6352133224074664137}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.2, z: 0}
+  m_LocalPosition: {x: 0, y: -0.645, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3718844019348173442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5454286530268014108
+--- !u!114 &5587385673561005445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,6 +161,8 @@ GameObject:
   - component: {fileID: 3718844019348173442}
   - component: {fileID: 4818135422043668928}
   - component: {fileID: 7103781621915317796}
+  - component: {fileID: 9155387627846111358}
+  - component: {fileID: 3781530949255947511}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -189,7 +213,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &7103781621915317796
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -222,6 +246,48 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.0013924837}
-  m_Size: {x: 1, y: 1.9769137}
+  m_Offset: {x: 0, y: -0.11198336}
+  m_Size: {x: 1, y: 1.0214087}
   m_Direction: 0
+--- !u!114 &9155387627846111358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7555047300939060745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c789e3849b9cb42b383bed6da9249666, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMoveSpeed: 8
+  acceleration: 60
+  deceleration: 80
+  reverseAcceleration: 100
+  jumpForce: 16
+  extraJumpForce: 12
+  maxJumpHeight: 5
+  ascendGravityScale: 1
+  descendGravityScale: 2.5
+  maxAirJumps: 1
+  groundCheck: {fileID: 2943862931458657606}
+  groundCheckSize: {x: 0.2, y: 0.1}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  currentState: 0
+--- !u!114 &3781530949255947511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7555047300939060745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c70f3905ffc44c70ae7bd378be82936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  spriteRenderer: {fileID: 0}
