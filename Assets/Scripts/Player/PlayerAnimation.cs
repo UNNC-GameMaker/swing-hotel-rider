@@ -28,6 +28,7 @@ public class PlayerAnimation : MonoBehaviour
     private readonly int _animationJumpLanding = Animator.StringToHash("JumpLandingTrigger");
     private readonly int _animationRun = Animator.StringToHash("RunTrigger");
     private readonly int _animationRunHolding = Animator.StringToHash("RunHoldingTrigger");
+    private readonly int _fallSpeed = Animator.StringToHash("FallSpeed");
 
     void Awake()
     {  
@@ -81,6 +82,7 @@ public class PlayerAnimation : MonoBehaviour
                 {
                     animator.SetTrigger(_animationJumpDescend);
                 }
+                animator.SetFloat(_fallSpeed, -_playerMovement.rb.velocity.y);
                 break;
         }
     }
