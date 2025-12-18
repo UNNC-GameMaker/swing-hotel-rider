@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3909244599925704288}
   - component: {fileID: 4593973530061845966}
   - component: {fileID: 838151957545524001}
+  - component: {fileID: 5780860577118661632}
   m_Layer: 0
   m_Name: SpriteNode
   m_TagString: Untagged
@@ -106,6 +107,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5780860577118661632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2526333639980305121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c70f3905ffc44c70ae7bd378be82936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  isHoldingThings: 0
 --- !u!1 &6352133224074664137
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +178,6 @@ GameObject:
   - component: {fileID: 4818135422043668928}
   - component: {fileID: 7103781621915317796}
   - component: {fileID: 9155387627846111358}
-  - component: {fileID: 3781530949255947511}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -276,18 +291,5 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  rb: {fileID: 0}
   currentState: 0
---- !u!114 &3781530949255947511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7555047300939060745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c70f3905ffc44c70ae7bd378be82936, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  spriteRenderer: {fileID: 0}

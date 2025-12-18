@@ -32,12 +32,34 @@ public class PlayerAnimation : MonoBehaviour
 
     void Awake()
     {  
-        _playerMovement = GetComponent<PlayerMovement>();
-        _spriteNode = transform.Find("SpriteNode");
-        animator = _spriteNode.GetComponent<Animator>();
-        spriteRenderer = _spriteNode.GetComponent<SpriteRenderer>();
-        Debug.Log("get Animator = ", animator);
-        Debug.Log("get SpriteNode = ", spriteRenderer);
+        // Get PlayerMovement from parent if this script is on SpriteNode, otherwise from self
+        _playerMovement = GetComponentInParent<PlayerMovement>();
+        if (_playerMovement == null)
+        {
+            _playerMovement = GetComponent<PlayerMovement>();
+        }
+        
+        // Check if we're on the SpriteNode or on the Player
+        if (GetComponent<Animator>() != null)
+        {
+            // We're on the SpriteNode
+            _spriteNode = transform;
+            animator = GetComponent<Animator>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        else
+        {
+            // We're on the Player, find SpriteNode child
+            _spriteNode = transform.Find("SpriteNode");
+            if (_spriteNode != null)
+            {
+                animator = _spriteNode.GetComponent<Animator>();
+                spriteRenderer = _spriteNode.GetComponent<SpriteRenderer>();
+            }
+        }
+        
+        Debug.Log("get Animator = " + animator);
+        Debug.Log("get SpriteRenderer = " + spriteRenderer);
     }
 
     void Update()
