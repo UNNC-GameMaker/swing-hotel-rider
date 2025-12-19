@@ -8,7 +8,7 @@ namespace GameObjects
         #region Private Fields
         
         private bool _isOccupied;
-        private FurnitureManager _furnitureManager = FurnitureManager.Instance;
+        private readonly FurnitureManager _furnitureManager = FurnitureManager.Instance;
         #endregion
         public void Awake()
         {
