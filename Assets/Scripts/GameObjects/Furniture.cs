@@ -1,19 +1,42 @@
+using Managers;
 using UnityEngine;
 
 namespace GameObjects
 {
     public class Furniture : Grabbable
     {
-        public bool isOccupied;
+        #region Private Fields
         
+        private bool _isOccupied;
+        private FurnitureManager _furnitureManager = FurnitureManager.Instance;
+        #endregion
         public void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
         }
 
-        public void Start()
+        public void Init()
         {
-            isOccupied = false;
+            _isOccupied = false;
+            FurnitureManager.Instance.AddFurniture(this);
+            GetComponent<Tiltable>().Activate();
+        }
+
+        public void OnDisable()
+        {
+            _furnitureManager?.RemoveFurniture(this);
+        }
+
+        public void SetOccupied()
+        {
+            _isOccupied = true;
+            _furnitureManager.RemoveFreeFurniture(this);
+        }
+
+        public void SetFree()
+        {
+            _isOccupied = false;
+            _furnitureManager.AddFreeFurniture(this);
         }
 
         /// <summary>

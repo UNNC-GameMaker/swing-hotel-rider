@@ -24,6 +24,38 @@ namespace Managers
         
         public List<Manager> managers = new();
         
+        private void Awake()
+        {
+            // Singleton pattern
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Optional: persist across scenes
+            
+            // Auto-find and initialize all managers in the scene
+            InitializeManagers();
+        }
+        
+        /// <summary>
+        /// Automatically finds all Manager components in children and initializes them
+        /// </summary>
+        private void InitializeManagers()
+        {
+            Manager[] foundManagers = GetComponentsInChildren<Manager>();
+            foreach (Manager manager in foundManagers)
+            {
+                if (!managers.Contains(manager))
+                {
+                    manager.Init();
+                    Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
+                }
+            }
+        }
+        
         public T GetManager<T>() where T : Manager
         {
             var m = managers.Find(x => x is T);
@@ -37,7 +69,11 @@ namespace Managers
         
         public void RegisterManager(Manager manager)
         {
-            managers.Add(manager);
+            if (!managers.Contains(manager))
+            {
+                managers.Add(manager);
+                Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
+            }
         }
         
     }

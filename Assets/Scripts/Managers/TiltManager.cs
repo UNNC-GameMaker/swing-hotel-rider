@@ -1,36 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
-using Managers;
 using UnityEngine;
 
-public class TiltManager : Manager
+namespace Managers
 {
-    
-    public float tiltFactor = 100f;
-    
-    public float tiltTarget;
-
-    public float tiltSpeed;
-
-    public float totalTilt;
-    
-    
-    [SerializeField] private readonly float _centerX = 10f;
-    
-    public override void Init()
+    public class TiltManager : Manager
     {
-        Debug.Log("TiltManager Init");
-        GameManager.Instance.RegisterManager(this);
-    }
-
-    void Update()
-    {
-        foreach (var tiltObject in Tiltable.AllTiltables)
-        {
-            totalTilt += (tiltObject.transform.position.x - _centerX) * tiltObject.weight;
-        }
+        #region Inspector Fields
+        [SerializeField, Tooltip("Tilt Coefficient")]
+        private float _tiltFactor = 100f;
         
-        tiltTarget = Mathf.Lerp(tiltTarget, totalTilt / tiltFactor, tiltSpeed * Time.deltaTime);
+        [SerializeField, Tooltip("Tilt Speed")]
+        private float _tiltSpeed = 1f;
+        
+        [SerializeField]
+        private float _centerX = 10f;
+        #endregion
+        
+        #region Public Properties
+        public float TiltTarget => _tiltTarget;
+        public float TotalTilt => _totalTilt;
+        #endregion
+        
+        #region Private Fields
+        private float _tiltTarget;
+        private float _totalTilt;
+        #endregion
+        
+        public override void Init()
+        {
+            Debug.Log("[TiltManager] Init");
+            GameManager.Instance.RegisterManager(this);
+        }
 
+        private void Update()
+        {
+            // Reset total tilt each frame
+            _totalTilt = 0f;
+            
+            // Calculate total tilt from all tiltable objects
+            foreach (var tiltObject in Tiltable.AllTiltables)
+            {
+                _totalTilt += (tiltObject.transform.position.x - _centerX) * tiltObject.Weight;
+            }
+            
+            // Smoothly interpolate to target tilt
+            _tiltTarget = Mathf.Lerp(_tiltTarget, _totalTilt / _tiltFactor, _tiltSpeed * Time.deltaTime);
+        }
     }
 }

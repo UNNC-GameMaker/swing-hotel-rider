@@ -13,8 +13,8 @@ public class Gravity : MonoBehaviour
 
     void FixedUpdate()
     {
-        float forceX = gravity * Mathf.Sin(_manager.tiltTarget * Mathf.Deg2Rad);
-        float forceY = -gravity * Mathf.Sin(_manager.tiltTarget * Mathf.Deg2Rad);
+        float forceX = gravity * Mathf.Sin(_manager.TiltTarget * Mathf.Deg2Rad);
+        float forceY = -gravity * Mathf.Sin(_manager.TiltTarget * Mathf.Deg2Rad);
 
         forceY += gravity;
         
