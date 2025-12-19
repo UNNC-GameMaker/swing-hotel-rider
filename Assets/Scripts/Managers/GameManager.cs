@@ -24,6 +24,21 @@ namespace Managers
         
         public List<Manager> managers = new();
         
+        public T GetManager<T>() where T : Manager
+        {
+            var m = managers.Find(x => x is T);
+            if (m == null)
+            {
+                Debug.LogError($"[GameManager] Manager {typeof(T).Name} not found");
+                return null;
+            }
+            return m as T;
+        }
+        
+        public void RegisterManager(Manager manager)
+        {
+            managers.Add(manager);
+        }
         
     }
 

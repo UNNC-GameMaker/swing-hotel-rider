@@ -4,7 +4,8 @@ using Random = UnityEngine.Random;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    // TODO : make these private later I think
+    // TODO: make these private later I think
+    // TODO: Fix triggers, bruh 
     public Animator animator;
     public SpriteRenderer spriteRenderer;
 
@@ -73,7 +74,7 @@ public class PlayerAnimation : MonoBehaviour
     void UpdateKinematicStatus()
     {
         _movementState = _playerMovement.currentState;
-        _currentHorizontalSpeed = Mathf.Abs(_playerMovement.rb.velocity.x);
+        _currentHorizontalSpeed = Mathf.Abs(_playerMovement.Rb.velocity.x);
     }
 
     void UpdateAnimation()
@@ -104,7 +105,7 @@ public class PlayerAnimation : MonoBehaviour
                 {
                     animator.SetTrigger(_animationJumpDescend);
                 }
-                animator.SetFloat(_fallSpeed, -_playerMovement.rb.velocity.y);
+                animator.SetFloat(_fallSpeed, -_playerMovement.Rb.velocity.y);
                 break;
         }
     }
@@ -112,7 +113,7 @@ public class PlayerAnimation : MonoBehaviour
     void HandleMovementAnimation()
     {
         // Determine if player is running (above a speed threshold) or walking
-        float runSpeedThreshold = _playerMovement.maxMoveSpeed * 0.7f;
+        float runSpeedThreshold = _playerMovement.MaxMoveSpeed * 0.7f;
         
         if (_currentHorizontalSpeed > runSpeedThreshold)
         {
