@@ -6,13 +6,13 @@ namespace Managers
     {
         #region Inspector Fields
         [SerializeField, Tooltip("Tilt Coefficient")]
-        private float _tiltFactor = 100f;
+        private float tiltFactor = 100f;
         
         [SerializeField, Tooltip("Tilt Speed")]
-        private float _tiltSpeed = 1f;
+        private float tiltSpeed = 1f;
         
         [SerializeField]
-        private float _centerX = 10f;
+        private float centerX = 10f;
         #endregion
         
         #region Public Properties
@@ -39,11 +39,11 @@ namespace Managers
             // Calculate total tilt from all tiltable objects
             foreach (var tiltObject in Tiltable.AllTiltables)
             {
-                _totalTilt += (tiltObject.transform.position.x - _centerX) * tiltObject.Weight;
+                _totalTilt += (tiltObject.transform.position.x - centerX) * tiltObject.Weight;
             }
             
             // Smoothly interpolate to target tilt
-            _tiltTarget = Mathf.Lerp(_tiltTarget, _totalTilt / _tiltFactor, _tiltSpeed * Time.deltaTime);
+            _tiltTarget = Mathf.Lerp(_tiltTarget, _totalTilt / tiltFactor, tiltSpeed * Time.deltaTime);
         }
     }
 }

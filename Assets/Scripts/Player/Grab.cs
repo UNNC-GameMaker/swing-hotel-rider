@@ -101,7 +101,7 @@ public class Grab : MonoBehaviour
             if (closestInteract != null)
             {
                 cursor.SetActive(true);
-                cursor.transform.position = closestInteract.GetTransform().position;
+                cursor.transform.position = closestInteract.Transform.position;
             }
             else if (closestGrabbable != null)
             {
@@ -228,13 +228,4 @@ public class Grab : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, grabRange);
     }
-}
-
-/// <summary>
-/// Interface for interactable objects
-/// </summary>
-public interface IInteract
-{
-    void Interact();
-    Transform GetTransform();
 }

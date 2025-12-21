@@ -852,6 +852,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "BuildMode",
+            "id": "a8ef9246-07d9-4444-bdfc-d7f31a1c1036",
+            "actions": [
+                {
+                    "name": "Choose",
+                    "type": "Button",
+                    "id": "e508d743-f634-419f-a746-60878db77b6b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Drag",
+                    "type": "Value",
+                    "id": "fbbd6738-6a91-40da-9681-408cf80df29c",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "63939be0-d8f7-4069-a52c-715d8b73e739",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Choose",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a2d5c5f7-7f48-4931-ad61-19541220c67c",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

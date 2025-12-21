@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using Random = UnityEngine.Random;
 
 public class PlayerAnimation : MonoBehaviour
@@ -75,6 +76,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         _movementState = _playerMovement.currentState;
         _currentHorizontalSpeed = Mathf.Abs(_playerMovement.Rb.velocity.x);
+        // Debug.Log(_currentHorizontalSpeed);
     }
 
     void UpdateAnimation()
@@ -111,10 +113,10 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     void HandleMovementAnimation()
-    {
+    {   
+        Debug.Log(_currentHorizontalSpeed);
         // Determine if player is running (above a speed threshold) or walking
-        float runSpeedThreshold = _playerMovement.MaxMoveSpeed * 0.7f;
-        
+        float runSpeedThreshold = _playerMovement.MaxMoveSpeed * 0.9f;
         if (_currentHorizontalSpeed > runSpeedThreshold)
         {
             // Running
@@ -176,6 +178,7 @@ public class PlayerAnimation : MonoBehaviour
 
     void StartWalking()
     {
+        Debug.Log("StartWalking");
         RandomizeWalk();
         animator.SetTrigger(_animationWalk);
     }

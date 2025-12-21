@@ -149,25 +149,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateDirection()
     {
-        if (_movementInput.x > 0)
-        {
-            currentState =  MovementState.Right;
-        } else if (_movementInput.x < 0)
-        {
-            currentState = MovementState.Left;
-        }
-
+        // Determine vertical state first
+        MovementState verticalState = MovementState.Idle;
         if (_rb.velocity.y > 0 && !_isGrounded)
         {
-            currentState = MovementState.JumpAsc;
+            verticalState = MovementState.JumpAsc;
         }
-        else if (_rb.velocity.y < 0 && _isGrounded)
+        else if (_rb.velocity.y < 0 && !_isGrounded) // Fixed: should check !_isGrounded for falling
         {
-            currentState = MovementState.JumpDesc;
+            verticalState = MovementState.JumpDesc;
+        }
+
+        // Determine horizontal state
+        MovementState horizontalState = MovementState.Idle;
+        if (_movementInput.x > 0)
+        {
+            horizontalState = MovementState.Right;
+        }
+        else if (_movementInput.x < 0)
+        {
+            horizontalState = MovementState.Left;
+        }
+
+        // Prioritize vertical state when jumping/falling, otherwise use horizontal
+        if (verticalState == MovementState.JumpAsc || verticalState == MovementState.JumpDesc)
+        {
+            currentState = verticalState;
         }
         else
         {
-            currentState = MovementState.Idle;
+            currentState = horizontalState;
         }
     }
 
