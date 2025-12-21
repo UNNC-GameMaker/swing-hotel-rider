@@ -6,11 +6,9 @@ public interface ICustomerState
 
     void ExecuteState()
     {
-        
     }
-    
+
     void ExitState()
     {
     }
-
 }

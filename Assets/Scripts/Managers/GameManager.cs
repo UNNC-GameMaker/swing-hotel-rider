@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,20 +11,20 @@ namespace Managers
         public GameObject gameOverUI;
         public GameObject gameWinUI;
         public GameObject pauseUI;
-        
 
-        public int nowCostumerOrderCount = 0;
+
+        public int nowCostumerOrderCount;
 
         public List<DayData> dayData = new();
 
-        public int nowDay = 0;
+        public int nowDay;
 
         public float tiltMax = 8f;
 
-        public int skipTo = 0;
-        
+        public int skipTo;
+
         public List<Manager> managers = new();
-        
+
         private void Awake()
         {
             // Singleton pattern
@@ -32,30 +33,28 @@ namespace Managers
                 Destroy(gameObject);
                 return;
             }
-            
+
             Instance = this;
             DontDestroyOnLoad(gameObject); // Optional: persist across scenes
-            
+
             // Auto-find and initialize all managers in the scene
             InitializeManagers();
         }
-        
+
         /// <summary>
-        /// Automatically finds all Manager components in children and initializes them
+        ///     Automatically finds all Manager components in children and initializes them
         /// </summary>
         private void InitializeManagers()
         {
-            Manager[] foundManagers = GetComponentsInChildren<Manager>();
-            foreach (Manager manager in foundManagers)
-            {
+            var foundManagers = GetComponentsInChildren<Manager>();
+            foreach (var manager in foundManagers)
                 if (!managers.Contains(manager))
                 {
                     manager.Init();
                     Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
                 }
-            }
         }
-        
+
         public T GetManager<T>() where T : Manager
         {
             var m = managers.Find(x => x is T);
@@ -64,9 +63,10 @@ namespace Managers
                 Debug.LogError($"[GameManager] Manager {typeof(T).Name} not found");
                 return null;
             }
+
             return m as T;
         }
-        
+
         public void RegisterManager(Manager manager)
         {
             if (!managers.Contains(manager))
@@ -75,11 +75,10 @@ namespace Managers
                 Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
             }
         }
-        
     }
 
 
-    [System.Serializable]
+    [Serializable]
     public class DayData
     {
         public int costumerCount;

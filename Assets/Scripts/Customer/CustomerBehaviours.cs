@@ -1,4 +1,5 @@
-public enum CustomerState{
+public enum CustomerState
+{
     FindDesk,
     Order,
     Waiting,

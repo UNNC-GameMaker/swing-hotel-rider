@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Managers;
 using UnityEngine;
@@ -7,51 +5,44 @@ using UnityEngine.InputSystem;
 
 public class BuildModeManager : Manager
 {
-    [SerializeField]
-    private UnityEngine.InputSystem.PlayerInput playerInputComponent;
-    
-    private bool _buildMode = false;
-    private bool _isHolding;
-    
-    private CinemachineVirtualCamera _buildCamera;
-    
-    private Camera _camera;
-    private Vector3 _dragOffset;
-    private Vector2 _mouseInput;
-    private ChooseBuilding _currentBuildingChoice;
-    
-    
-    
-    public override void Init()
-    {
-        
-        GameManager.Instance.RegisterManager(this);
-    }
+    [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
 
-    void Start()
+    private CinemachineVirtualCamera _buildCamera;
+
+    private readonly bool _buildMode = false;
+
+    private Camera _camera;
+    private ChooseBuilding _currentBuildingChoice;
+    private Vector3 _dragOffset;
+    private bool _isHolding;
+    private Vector2 _mouseInput;
+
+    private void Start()
     {
         _camera = Camera.main;
         RegisterInputs();
     }
 
-    void Update()
+    private void Update()
     {
         if (_buildMode)
         {
             _buildCamera.Priority = 20;
-            if (_isHolding)
-            {
-                HandleBuildingInput();
-            }
+            if (_isHolding) HandleBuildingInput();
         }
         else
         {
             _buildCamera.Priority = -99;
-            
         }
     }
 
-    void RegisterInputs()
+
+    public override void Init()
+    {
+        GameManager.Instance.RegisterManager(this);
+    }
+
+    private void RegisterInputs()
     {
         if (playerInputComponent)
         {
@@ -61,38 +52,39 @@ public class BuildModeManager : Manager
         }
     }
 
-    void OnChooseStarted(InputAction.CallbackContext ctx)
+    private void OnChooseStarted(InputAction.CallbackContext ctx)
     {
-        Ray ray = _camera.ScreenPointToRay(_mouseInput);
+        var ray = _camera.ScreenPointToRay(_mouseInput);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            ChooseBuilding choice = hit.collider.GetComponent<ChooseBuilding>();
+            var choice = hit.collider.GetComponent<ChooseBuilding>();
             if (choice)
             {
-                _currentBuildingChoice =  choice;
+                _currentBuildingChoice = choice;
                 choice.NowChoose = true;
                 _dragOffset = hit.point - _buildCamera.transform.position;
             }
         }
-        _isHolding = true;  
+
+        _isHolding = true;
     }
 
-    void OnChooseCanceled(InputAction.CallbackContext ctx)
+    private void OnChooseCanceled(InputAction.CallbackContext ctx)
     {
         _isHolding = false;
         _currentBuildingChoice.NowChoose = false;
         _currentBuildingChoice = null;
     }
 
-    void HandleBuildingInput()
+    private void HandleBuildingInput()
     {
         if (_isHolding)
         {
-            Vector3 mouseWorldPos = _camera.ScreenToWorldPoint(Input.mousePosition);
+            var mouseWorldPos = _camera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos.z = _currentBuildingChoice.transform.position.z;
-            Vector3 targetPosition = mouseWorldPos - _dragOffset;
-            
+            var targetPosition = mouseWorldPos - _dragOffset;
+
             _currentBuildingChoice.MoveTo(targetPosition);
         }
     }

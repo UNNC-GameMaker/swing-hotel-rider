@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class Quit : MonoBehaviour
@@ -11,6 +12,23 @@ public class Quit : MonoBehaviour
         Debug.Log("Quit script initialized");
     }
 
+    // Update is called once per frame
+    private void Update()
+    {
+        if (_playerInput.UI.Quit.triggered)
+        {
+            Debug.Log("Quit function called - exiting play mode");
+
+#if UNITY_EDITOR
+            // If running in the Unity Editor, stop play mode
+            EditorApplication.isPlaying = false;
+#else
+            // If running as a build, quit the application
+            Application.Quit();
+#endif
+        }
+    }
+
     private void OnEnable()
     {
         // Enable the input actions
@@ -21,22 +39,5 @@ public class Quit : MonoBehaviour
     {
         // Disable the input actions to prevent memory leaks
         _playerInput.Disable();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (_playerInput.UI.Quit.triggered)
-        {
-            Debug.Log("Quit function called - exiting play mode");
-            
-            #if UNITY_EDITOR
-            // If running in the Unity Editor, stop play mode
-            UnityEditor.EditorApplication.isPlaying = false;
-            #else
-            // If running as a build, quit the application
-            Application.Quit();
-            #endif
-        }
     }
 }

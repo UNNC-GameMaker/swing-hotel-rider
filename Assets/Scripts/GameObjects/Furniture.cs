@@ -5,14 +5,14 @@ namespace GameObjects
 {
     public class Furniture : Grabbable
     {
-        #region Private Fields
-        
-        private bool _isOccupied;
-        private readonly FurnitureManager _furnitureManager = FurnitureManager.Instance;
-        #endregion
         public void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+        }
+
+        public void OnDisable()
+        {
+            _furnitureManager?.RemoveFurniture(this);
         }
 
         public void Init()
@@ -20,11 +20,6 @@ namespace GameObjects
             _isOccupied = false;
             FurnitureManager.Instance.AddFurniture(this);
             GetComponent<Tiltable>().Activate();
-        }
-
-        public void OnDisable()
-        {
-            _furnitureManager?.RemoveFurniture(this);
         }
 
         public void SetOccupied()
@@ -40,19 +35,26 @@ namespace GameObjects
         }
 
         /// <summary>
-        /// Called when the food is grabbed by the player
+        ///     Called when the food is grabbed by the player
         /// </summary>
         public override void OnGrab()
         {
             Debug.Log($"{gameObject.name} was grabbed!");
         }
-        
+
         /// <summary>
-        /// Called when the food is released by the player
+        ///     Called when the food is released by the player
         /// </summary>
         public override void OnRelease()
         {
             Debug.Log($"{gameObject.name} was released!");
         }
+
+        #region Private Fields
+
+        private bool _isOccupied;
+        private readonly FurnitureManager _furnitureManager = FurnitureManager.Instance;
+
+        #endregion
     }
 }

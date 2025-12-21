@@ -1,30 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
-{   
+{
+    private GroundCheck()
+    {
+        Instance = this;
+    }
+
     public static GroundCheck Instance { get; private set; }
-    
+
     public Vector2 Position2D => transform.position;
-    
+
     public Transform FootCollider => transform;
 
-    GroundCheck()
+    private void Awake()
     {
         Instance = this;
     }
 
-    void Awake()
+    private void OnDestroy()
     {
-        Instance = this;
-    }
-    
-    void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
+        if (Instance == this) Instance = null;
     }
 }
