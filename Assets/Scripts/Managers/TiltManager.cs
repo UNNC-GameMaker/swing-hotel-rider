@@ -4,8 +4,11 @@ namespace Managers
 {
     public class TiltManager : Manager
     {
-        private void Update()
+        
+        void Update()
         {
+            //Debug.Log("[TiltManager] totalTilt: " + TotalTilt);
+            
             // Reset total tilt each frame
             TotalTilt = 0f;
 

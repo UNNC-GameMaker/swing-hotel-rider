@@ -13,16 +13,14 @@ public class PlayerAnimation : MonoBehaviour
     private readonly int _animationIdle = Animator.StringToHash("StopTrigger");
 
     // walk/run is based on current speed
-    private readonly int _animationIdleVariant = Animator.StringToHash("idleVariant");
-    private readonly int _animationJumpAscend = Animator.StringToHash("JumpAscTrigger");
-    private readonly int _animationJumpDescend = Animator.StringToHash("JumpDescTrigger");
-    private readonly int _animationJumpLanding = Animator.StringToHash("JumpLandingTrigger");
-    private readonly int _animationJumpStart = Animator.StringToHash("JumpTrigger");
-    private readonly int _animationRun = Animator.StringToHash("RunTrigger");
-    private readonly int _animationRunHolding = Animator.StringToHash("RunHoldingTrigger");
-    private readonly int _animationWalk = Animator.StringToHash("MoveTrigger");
-    private readonly int _animationWalkVariant = Animator.StringToHash("walkVariant");
-    private readonly int _fallSpeed = Animator.StringToHash("FallSpeed");
+    // prefix with an is means that it is a bool, otherwise a trigger
+    private readonly int _isRunning = Animator.StringToHash("Run");
+    private readonly int _jumpStart = Animator.StringToHash("StartJump");
+    private readonly int _isOnGround = Animator.StringToHash("OnGround");
+    private readonly int _isDescending = Animator.StringToHash("IsDown");
+    private readonly int _isHolding = Animator.StringToHash("RunHolding");
+    
+    
     private AnimatorStateInfo _animatorState;
     private float _currentHorizontalSpeed;
 
@@ -77,49 +75,70 @@ public class PlayerAnimation : MonoBehaviour
 
     private void UpdateAnimation()
     {
+        // Always set the ground state boolean
+        animator.SetBool(_isOnGround, _playerMovement.IsGrounded);
+
         switch (_movementState)
         {
             case PlayerMovement.MovementState.Idle:
-                if (!IsInState("Idle1") && !IsInState("Idle2")) BackToIdle();
+                if (_playerMovement.IsGrounded && !IsInState("Idle1") && !IsInState("Idle2"))
+                {
+                    // Reset conflicting triggers when transitioning to idle on ground
+                    animator.ResetTrigger(_isDescending);
+                    animator.SetBool(_isRunning, false);
+                    BackToIdle();
+                }
                 break;
 
             case PlayerMovement.MovementState.Left:
             case PlayerMovement.MovementState.Right:
-                HandleMovementAnimation();
+                if (_playerMovement.IsGrounded)
+                {
+                    // Reset conflicting triggers when moving on ground
+                    animator.ResetTrigger(_isDescending);
+                    HandleMovementAnimation();
+                }
                 break;
 
             case PlayerMovement.MovementState.JumpAsc:
-                if (!IsInState("JumpAsc")) animator.SetTrigger(_animationJumpAscend);
+                if (!IsInState("JumpAsc"))
+                {
+                    animator.ResetTrigger(_isDescending);
+                    animator.SetBool(_isRunning, false);
+                    animator.SetTrigger(_jumpStart);
+                }
                 break;
 
             case PlayerMovement.MovementState.JumpDesc:
-                if (!IsInState("JumpDesc")) animator.SetTrigger(_animationJumpDescend);
-                animator.SetFloat(_fallSpeed, -_playerMovement.Rb.velocity.y);
+                if (!_playerMovement.IsGrounded && !IsInState("JumpDesc"))
+                {
+                    animator.SetTrigger(_isDescending);
+                }
                 break;
         }
     }
 
     private void HandleMovementAnimation()
     {
-        Debug.Log(_currentHorizontalSpeed);
+        // Debug.Log(_currentHorizontalSpeed);
         // Determine if player is running (above a speed threshold) or walking
-        var runSpeedThreshold = _playerMovement.MaxMoveSpeed * 0.9f;
+        var runSpeedThreshold = _playerMovement.MaxMoveSpeed * 0.1f;
         if (_currentHorizontalSpeed > runSpeedThreshold)
         {
             // Running
             if (isHoldingThings)
             {
-                if (!IsInState("RunHolding")) animator.SetTrigger(_animationRunHolding);
+                if (!IsInState("RunHolding")) animator.SetBool(_isHolding, true);
             }
             else
             {
-                if (!IsInState("Run")) animator.SetTrigger(_animationRun);
+                if (!IsInState("Run")) animator.SetBool(_isRunning, true);
             }
         }
-        else if (_currentHorizontalSpeed > 0.1f)
+        else
         {
-            // Walking
-            if (!IsInState("Walk1") && !IsInState("Walk2")) StartWalking();
+            // Not running - reset running state
+            animator.SetBool(_isRunning, false);
         }
     }
 
@@ -137,39 +156,19 @@ public class PlayerAnimation : MonoBehaviour
         return _animatorState.IsName(stateName);
     }
 
-    // choose from 2 idle animation
-    private void RandomizeIdle()
-    {
-        animator.SetFloat(_animationIdleVariant, (float)Math.Round(Random.value));
-    }
-
-    // choose from 2 walking animation
-    private void RandomizeWalk()
-    {
-        animator.SetFloat(_animationWalkVariant, (float)Math.Round(Random.value));
-    }
-
-    private void StartWalking()
-    {
-        Debug.Log("StartWalking");
-        RandomizeWalk();
-        animator.SetTrigger(_animationWalk);
-    }
-
     private void BackToIdle()
     {
-        RandomizeIdle();
         animator.SetTrigger(_animationIdle);
     }
 
     private void TriggerJumpStart()
     {
-        animator.SetTrigger(_animationJumpStart);
+        animator.SetTrigger(_jumpStart);
     }
 
     private void TriggerJumpLanding()
     {
-        animator.SetTrigger(_animationJumpLanding);
+        animator.SetBool(_isOnGround, true);
     }
 
     // Public methods that can be called by PlayerMovement or other scripts

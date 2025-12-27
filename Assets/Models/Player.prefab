@@ -264,7 +264,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.11198336}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1.0214087}
   m_Direction: 0
 --- !u!114 &9155387627846111358
@@ -279,6 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c789e3849b9cb42b383bed6da9249666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
   maxMoveSpeed: 8
   acceleration: 60
   deceleration: 80
@@ -295,7 +296,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   playerInputComponent: {fileID: 284356607108703290}
-  currentState: 0
 --- !u!114 &284356607108703290
 MonoBehaviour:
   m_ObjectHideFlags: 0

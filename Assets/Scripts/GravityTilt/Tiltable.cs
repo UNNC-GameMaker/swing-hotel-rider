@@ -19,7 +19,9 @@ public class Tiltable : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log("Tiltable added");
         if (!AllTiltables.Contains(this) && autoActivate) AllTiltables.Add(this);
+        Debug.Log("Tiltable list length: " + AllTiltables.Count);
     }
 
     private void OnDisable()

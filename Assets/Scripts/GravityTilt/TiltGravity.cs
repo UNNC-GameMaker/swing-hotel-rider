@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Gravity : MonoBehaviour
 {
-    [SerializeField] private float gravity = 4f;
+    [SerializeField] private float gravity = 2f;
     private TiltManager _manager;
 
     private void Start()
@@ -13,10 +13,9 @@ public class Gravity : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Debug.Log(_manager.TiltTarget);
         var forceX = gravity * Mathf.Sin(_manager.TiltTarget * Mathf.Deg2Rad);
-        var forceY = -gravity * Mathf.Sin(_manager.TiltTarget * Mathf.Deg2Rad);
-
-        forceY += gravity;
+        var forceY = -gravity * Mathf.Cos(_manager.TiltTarget * Mathf.Deg2Rad) * 0.5f;
 
         var force = new Vector2(forceX, forceY);
 
