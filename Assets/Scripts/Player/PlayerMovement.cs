@@ -26,17 +26,6 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
     private void OnEnable()
     {
-        // Register with InputManager
-        var inputManager = GameManager.Instance.GetManager<InputManager>();
-        if (inputManager != null)
-        {
-            inputManager.RegisterListener(this);
-            Debug.Log("PlayerMovement registered with InputManager");
-        }
-        else
-        {
-            Debug.LogError("InputManager not found! PlayerMovement will not receive input events.");
-        }
     }
 
     private void OnDisable()
@@ -71,6 +60,19 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
         Debug.Log(
             $"PlayerMovement initialized - GroundCheck: {(groundCheck != null ? groundCheck.name : "NULL")}, LayerMask: {groundLayer.value}");
+   
+   
+        // Register with InputManager
+        var inputManager = GameManager.Instance.GetManager<InputManager>();
+        if (inputManager != null)
+        {
+            inputManager.RegisterListener(this);
+            Debug.Log("PlayerMovement registered with InputManager");
+        }
+        else
+        {
+            Debug.LogError("InputManager not found! PlayerMovement will not receive input events.");
+        }
     }
 
 
