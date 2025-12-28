@@ -93,37 +93,30 @@ namespace Platform
         {
             var footTf = GroundCheck.Instance.FootCollider;
             var surfaceY = _boxCollider.bounds.max.y;
-
-            // Input: Holding down key (reading from cached _movementInput updated by callbacks)
+            
             var pressingDown = _movementInput.y < -0.1f;
             
-                UnityEngine.Debug.Log($"Platform: Pressing down detected - moveInput.y = {_movementInput.y}");
-
-            // Overlapping with player?
             bool overlapping = Physics2D.OverlapArea(_boxCollider.bounds.min, _boxCollider.bounds.max, playerLayer);
 
             // Calculate distance from foot to platform surface
             var distanceToSurface = Mathf.Abs(footTf.position.y - surfaceY);
             var isNearPlatform = distanceToSurface <= downKeyDistance &&
                                  Mathf.Abs(footTf.position.x - transform.position.x) < 1.5f;
-
-            // 1. Pressing down and foot is near platform -> Immediately hollow, prevent becoming solid immediately
+            
             if (pressingDown && isNearPlatform)
             {
                 SetSolid(false);
                 _allowSolid = false;
                 return;
             }
-
-            // 2. Foot is below the low threshold -> Hollow, and allow "low to high" logic for next time
+            
             if (footTf.position.y < surfaceY - hollowOffset)
             {
                 SetSolid(false);
                 _allowSolid = true;
                 return;
             }
-
-            // 3. If it was below before, currently above high threshold, and not overlapping -> Become solid
+            
             if (_allowSolid &&
                 footTf.position.y > surfaceY + solidOffset &&
                 !overlapping)
@@ -131,7 +124,6 @@ namespace Platform
                 SetSolid(true);
                 _allowSolid = false; // Need to go "low to high" again to become solid
             }
-            // 4. Otherwise keep current state
         }
 
         /// <summary>
@@ -146,7 +138,7 @@ namespace Platform
             // When solid, make it a collider so player stands on it
             _boxCollider.isTrigger = !solid;
             
-            UnityEngine.Debug.Log($"OneWayPlatform: SetSolid({solid}) - isTrigger = {_boxCollider.isTrigger}");
+            // UnityEngine.Debug.Log($"OneWayPlatform: SetSolid({solid}) - isTrigger = {_boxCollider.isTrigger}");
         }
     }
 }
