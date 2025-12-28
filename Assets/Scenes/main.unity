@@ -406,6 +406,7 @@ GameObject:
   - component: {fileID: 301501829}
   - component: {fileID: 301501831}
   - component: {fileID: 301501830}
+  - component: {fileID: 301501832}
   m_Layer: 0
   m_Name: ColliderTile
   m_TagString: Untagged
@@ -515,6 +516,25 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &301501832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301501828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d7fab40c784f9fa5cdca32bd72f258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilePrefabPairs:
+  - tile: {fileID: 11400000, guid: 033662082389b480ebc9a63bda6adb1f, type: 2}
+    prefab: {fileID: 7532434774080770600, guid: 13a7982da653a4957aebaf8f35c92f13, type: 3}
+  - tile: {fileID: 11400000, guid: 71b859403e3214946b40713d22619967, type: 2}
+    prefab: {fileID: 7532434774080770600, guid: 69303901ec405463c99d7542c255608a, type: 3}
+  - tile: {fileID: 11400000, guid: 6b42a252c802c47eab918fb71678e4ba, type: 2}
+    prefab: {fileID: 2627255675841844906, guid: 35a39a42e2cd84eb2972a0f26acf4339, type: 3}
 --- !u!1 &597325764 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6856667103738617168, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
