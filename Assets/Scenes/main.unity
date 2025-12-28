@@ -676,6 +676,10 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 6200000, guid: 4925af236986f4ac590c3727b02d6a34, type: 2}
+    - target: {fileID: 4818135422043668928, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5780860577118661632, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
       propertyPath: animator
       value: 
