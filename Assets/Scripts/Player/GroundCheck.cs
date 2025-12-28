@@ -1,25 +1,28 @@
 using UnityEngine;
 
-public class GroundCheck : MonoBehaviour
+namespace Player
 {
-    private GroundCheck()
+    public class GroundCheck : MonoBehaviour
     {
-        Instance = this;
-    }
+        private GroundCheck()
+        {
+            Instance = this;
+        }
 
-    public static GroundCheck Instance { get; private set; }
+        public static GroundCheck Instance { get; private set; }
 
-    public Vector2 Position2D => transform.position;
+        public Vector2 Position2D => transform.position;
 
-    public Transform FootCollider => transform;
+        public Transform FootCollider => transform;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
+        private void Awake()
+        {
+            Instance = this;
+        }
 
-    private void OnDestroy()
-    {
-        if (Instance == this) Instance = null;
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
     }
 }

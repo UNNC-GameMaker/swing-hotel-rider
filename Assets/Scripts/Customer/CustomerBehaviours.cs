@@ -1,9 +1,12 @@
-public enum CustomerState
+namespace Customer
 {
-    FindDesk,
-    Order,
-    Waiting,
-    Eating,
-    OrderTimeout,
-    Leaving
+    public enum CustomerState
+    {
+        FindDesk,
+        Order,
+        Waiting,
+        Eating,
+        OrderTimeout,
+        Leaving
+    }
 }

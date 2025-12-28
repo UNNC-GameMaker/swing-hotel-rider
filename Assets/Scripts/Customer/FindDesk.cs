@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class FindDesk : MonoBehaviour, ICustomerState
+namespace Customer
 {
-    public void EnterState()
+    public class FindDesk : MonoBehaviour, ICustomerState
     {
-    }
+        public void EnterState()
+        {
+        }
 
-    public void ExecuteState()
-    {
-    }
+        public void ExecuteState()
+        {
+        }
 
-    public void ExitState()
-    {
+        public void ExitState()
+        {
+        }
     }
 }

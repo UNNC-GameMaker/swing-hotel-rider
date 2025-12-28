@@ -1,14 +1,17 @@
-public interface ICustomerState
+namespace Customer
 {
-    void EnterState()
+    public interface ICustomerState
     {
-    }
+        void EnterState()
+        {
+        }
 
-    void ExecuteState()
-    {
-    }
+        void ExecuteState()
+        {
+        }
 
-    void ExitState()
-    {
+        void ExitState()
+        {
+        }
     }
 }
