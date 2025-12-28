@@ -1,11 +1,9 @@
 using Cinemachine;
 using Managers;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BuildModeManager : Manager
 {
-    [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
 
     private CinemachineVirtualCamera _buildCamera;
 
@@ -20,14 +18,23 @@ public class BuildModeManager : Manager
     private void Start()
     {
         _camera = Camera.main;
-        RegisterInputs();
     }
 
     private void Update()
     {
+        // 旧输入系统：每帧读取鼠标位置
+        _mouseInput = Input.mousePosition;
+
         if (_buildMode)
         {
             _buildCamera.Priority = 20;
+
+            if (Input.GetMouseButtonDown(0))
+                OnChooseStarted();
+
+            if (Input.GetMouseButtonUp(0))
+                OnChooseCanceled();
+
             if (_isHolding) HandleBuildingInput();
         }
         else
@@ -42,17 +49,7 @@ public class BuildModeManager : Manager
         GameManager.Instance.RegisterManager(this);
     }
 
-    private void RegisterInputs()
-    {
-        if (playerInputComponent)
-        {
-            playerInputComponent.actions["Choose"].started += OnChooseStarted;
-            playerInputComponent.actions["Choose"].canceled += OnChooseCanceled;
-            playerInputComponent.actions["Drag"].performed += ctx => _mouseInput = ctx.ReadValue<Vector2>();
-        }
-    }
-
-    private void OnChooseStarted(InputAction.CallbackContext ctx)
+    private void OnChooseStarted()
     {
         var ray = _camera.ScreenPointToRay(_mouseInput);
         RaycastHit hit;
@@ -70,11 +67,14 @@ public class BuildModeManager : Manager
         _isHolding = true;
     }
 
-    private void OnChooseCanceled(InputAction.CallbackContext ctx)
+    private void OnChooseCanceled()
     {
         _isHolding = false;
-        _currentBuildingChoice.NowChoose = false;
-        _currentBuildingChoice = null;
+        if (_currentBuildingChoice != null)
+        {
+            _currentBuildingChoice.NowChoose = false;
+            _currentBuildingChoice = null;
+        }
     }
 
     private void HandleBuildingInput()

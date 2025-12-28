@@ -22,8 +22,6 @@ public class OneWayPlatform : MonoBehaviour
     [Header("Distance threshold for down key to take effect")]
     public float downKeyDistance = 1.0f;
 
-    [Header("Input")] [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
-
     /// <summary>Flag: Only allow becoming solid again if the foot has been below the platform</summary>
     private bool _allowSolid;
 
@@ -42,16 +40,14 @@ public class OneWayPlatform : MonoBehaviour
         _initialized = false;
         _isSolid = true;
         _boxCollider.isTrigger = false;
-
-        if (playerInputComponent != null)
-        {
-            playerInputComponent.actions["Move"].performed += ctx => _movementInput = ctx.ReadValue<Vector2>();
-            playerInputComponent.actions["Move"].canceled += _ => _movementInput = Vector2.zero;
-        }
     }
 
     private void Update()
     {
+        // 旧输入系统：每帧读取方向键
+        _movementInput.x = Input.GetAxisRaw("Horizontal");
+        _movementInput.y = Input.GetAxisRaw("Vertical");
+
         if (GroundCheck.Instance == null) return;
 
         if (!_initialized)

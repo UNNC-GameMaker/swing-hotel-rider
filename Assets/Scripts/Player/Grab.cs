@@ -1,6 +1,5 @@
 using GameObjects;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Grab : MonoBehaviour
 {
@@ -12,17 +11,6 @@ public class Grab : MonoBehaviour
     {
         _playerRb = GetComponent<Rigidbody2D>();
         _playerAnimation = GetComponent<PlayerAnimation>();
-
-        if (playerInputComponent != null)
-        {
-            playerInputComponent.actions["Grab"].started += OnGrabPressed;
-
-            Debug.Log("Grab input callback registered");
-        }
-        else
-        {
-            Debug.LogError("PlayerInput component is not assigned!");
-        }
     }
 
     private void Update()
@@ -93,6 +81,12 @@ public class Grab : MonoBehaviour
             // Hide cursor when holding an object
             cursor.SetActive(false);
         }
+
+        // 旧输入系统：按下 Fire1 交互/抓取
+        if (Input.GetButtonDown("Fire1"))
+        {
+            HandleGrabPressed();
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -103,9 +97,9 @@ public class Grab : MonoBehaviour
     }
 
     /// <summary>
-    ///     Called when grab button is pressed (via InputAction callback)
+    ///     Called when grab/interaction button is pressed
     /// </summary>
-    private void OnGrabPressed(InputAction.CallbackContext context)
+    private void HandleGrabPressed()
     {
         if (_grabbedRb == null)
         {
@@ -185,8 +179,6 @@ public class Grab : MonoBehaviour
 
     [SerializeField] [Tooltip("Cursor GameObject to show grab target")]
     private GameObject cursor;
-
-    [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
 
     [SerializeField] [Tooltip("Force applied when releasing objects")]
     private Vector3 releaseForce = Vector3.up;

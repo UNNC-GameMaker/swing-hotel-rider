@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -20,23 +19,6 @@ public class PlayerMovement : MonoBehaviour
         Rb = GetComponent<Rigidbody2D>();
         _airJumpsLeft = maxAirJumps;
         _playerAnimation = GetComponent<PlayerAnimation>();
-
-        // Set up PlayerInput component action callbacks
-        if (playerInputComponent != null)
-        {
-            playerInputComponent.actions["Move"].performed += ctx => _movementInput = ctx.ReadValue<Vector2>();
-            playerInputComponent.actions["Move"].canceled += _ => _movementInput = Vector2.zero;
-
-            playerInputComponent.actions["Jump"].started += OnJumpStarted;
-            playerInputComponent.actions["Jump"].canceled += OnJumpCanceled;
-
-            Debug.Log("PlayerInput component callbacks registered");
-        }
-        else
-        {
-            Debug.LogError(
-                "PlayerInput component is not assigned! Please add a PlayerInput component to the GameObject.");
-        }
     }
 
     private void Start()
@@ -66,6 +48,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        // 旧输入：每帧主动读取按键
+        ReadPlayerInput();
+
         // Handle input and non-physics logic only
         GroundCheck();
         HandleJumpInput();
@@ -204,47 +189,39 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    ///     Handle jump-related input
-    ///     Tap jump = short jump with initial impulse only
-    ///     Hold jump = higher jump with continuous force applied
+    ///     处理跳跃相关输入：
+    ///     - 按下时起跳或二段跳
+    ///     - 持续按住时追加上升力
+    ///     - 松开时停止追加
     /// </summary>
     private void HandleJumpInput()
     {
-        // While holding jump: apply extra force until reaching max height
-        // Only applies if we're still holding from the jump we initiated (_jumpButtonHeld)
+        // 按下跳跃键
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (IsGrounded)
+            {
+                Jump();
+            }
+            else if (_airJumpsLeft > 0)
+            {
+                Jump();
+                _airJumpsLeft--;
+            }
+        }
+
+        // 松开跳跃键
+        if (Input.GetButtonUp("Jump"))
+            _jumpButtonHeld = false;
+
+        // 持续按住：追加上升力
         if (_jumpButtonHeld)
         {
             if (transform.position.y < _jumpStartY + maxJumpHeight && Rb.velocity.y > 0f)
-                // Use Impulse so the added force affects the velocity immediately
                 Rb.AddForce(Vector2.up * (extraJumpForce * Time.deltaTime), ForceMode2D.Impulse);
             else
-                // Stop applying extra force if we've reached max height or started falling
                 _jumpButtonHeld = false;
         }
-    }
-
-    /// <summary>
-    ///     Called when jump button is pressed (via InputAction callback)
-    /// </summary>
-    private void OnJumpStarted(InputAction.CallbackContext context)
-    {
-        if (IsGrounded)
-        {
-            Jump();
-        }
-        else if (_airJumpsLeft > 0)
-        {
-            Jump();
-            _airJumpsLeft--;
-        }
-    }
-
-    /// <summary>
-    ///     Called when jump button is released (via InputAction callback)
-    /// </summary>
-    private void OnJumpCanceled(InputAction.CallbackContext context)
-    {
-        _jumpButtonHeld = false;
     }
 
     /// <summary>
@@ -277,6 +254,15 @@ public class PlayerMovement : MonoBehaviour
             Rb.gravityScale = descendGravityScale;
         else // stationary vertically
             Rb.gravityScale = 1f;
+    }
+
+    /// <summary>
+    ///     旧输入系统：读取移动轴并缓存
+    /// </summary>
+    private void ReadPlayerInput()
+    {
+        _movementInput.x = Input.GetAxisRaw("Horizontal");
+        _movementInput.y = Input.GetAxisRaw("Vertical");
     }
 
     #region Inspector Fields
@@ -319,8 +305,6 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] [Tooltip("Layer(s) considered ground")]
     private LayerMask groundLayer;
-
-    [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
 
     #endregion
 

@@ -3,41 +3,20 @@ using UnityEngine;
 
 public class Quit : MonoBehaviour
 {
-    private PlayerInput _playerInput;
+    [SerializeField] [Tooltip("InputManager 里配置的退出按钮名")]
+    private string quitButton = "Cancel"; // 默认使用旧输入系统内置的 Cancel（常为 Escape）
 
-    private void Awake()
-    {
-        // Initialize the PlayerInput instance
-        _playerInput = new PlayerInput();
-        Debug.Log("Quit script initialized");
-    }
-
-    // Update is called once per frame
     private void Update()
     {
-        if (_playerInput.UI.Quit.triggered)
+        if (Input.GetButtonDown(quitButton))
         {
             Debug.Log("Quit function called - exiting play mode");
 
 #if UNITY_EDITOR
-            // If running in the Unity Editor, stop play mode
             EditorApplication.isPlaying = false;
 #else
-            // If running as a build, quit the application
             Application.Quit();
 #endif
         }
-    }
-
-    private void OnEnable()
-    {
-        // Enable the input actions
-        _playerInput.Enable();
-    }
-
-    private void OnDisable()
-    {
-        // Disable the input actions to prevent memory leaks
-        _playerInput.Disable();
     }
 }
