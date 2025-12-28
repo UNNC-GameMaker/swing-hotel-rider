@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: PhysicsIcon_0
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -774372760, guid: ebd13fbdc927144f1a073a80a76bcfb8, type: 3}
+  m_Sprite: {fileID: -555571058, guid: 2289cb012015e4ba8ac3ce0602b446ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
