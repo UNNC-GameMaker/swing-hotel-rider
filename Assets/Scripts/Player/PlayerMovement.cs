@@ -16,6 +16,7 @@ namespace Player
         }
 
         public MovementState currentState;
+        
 
         private void Awake()
         {

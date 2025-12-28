@@ -1,5 +1,6 @@
 using Player;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Platform
 {
@@ -24,8 +25,8 @@ namespace Platform
 
         [Header("Distance threshold for down key to take effect")]
         public float downKeyDistance = 1.0f;
-
-        [Header("Input")] [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
+        
+        [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInput;
 
         /// <summary>Flag: Only allow becoming solid again if the foot has been below the platform</summary>
         private bool _allowSolid;
@@ -37,6 +38,7 @@ namespace Platform
         /// <summary>Current solid state</summary>
         private bool _isSolid;
 
+        /// <summary>Cached movement input from PlayerInput callbacks</summary>
         private Vector2 _movementInput;
 
         private void Awake()
@@ -44,18 +46,25 @@ namespace Platform
             _boxCollider = GetComponent<BoxCollider2D>();
             _initialized = false;
             _isSolid = true;
-            _boxCollider.isTrigger = false;
 
-            if (playerInputComponent != null)
+            // Find the PlayerInput component and subscribe to its Move action
+            if (playerInput != null)
             {
-                playerInputComponent.actions["Move"].performed += ctx => _movementInput = ctx.ReadValue<Vector2>();
-                playerInputComponent.actions["Move"].canceled += _ => _movementInput = Vector2.zero;
+                // Subscribe to the Move action callbacks, just like PlayerMovement does
+                playerInput.actions["Move"].performed += ctx => _movementInput = ctx.ReadValue<Vector2>();
+                playerInput.actions["Move"].canceled += _ => _movementInput = Vector2.zero;
+                
+                UnityEngine.Debug.Log("OneWayPlatform: Move action callbacks registered");
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning("OneWayPlatform: Could not find PlayerInput component in scene");
             }
         }
 
         private void Update()
         {
-            if (GroundCheck.Instance == null) return;
+            if (!GroundCheck.Instance) return;
 
             if (!_initialized)
             {
@@ -85,8 +94,10 @@ namespace Platform
             var footTf = GroundCheck.Instance.FootCollider;
             var surfaceY = _boxCollider.bounds.max.y;
 
-            // Input: Holding down key
+            // Input: Holding down key (reading from cached _movementInput updated by callbacks)
             var pressingDown = _movementInput.y < -0.1f;
+            
+                UnityEngine.Debug.Log($"Platform: Pressing down detected - moveInput.y = {_movementInput.y}");
 
             // Overlapping with player?
             bool overlapping = Physics2D.OverlapArea(_boxCollider.bounds.min, _boxCollider.bounds.max, playerLayer);
@@ -124,17 +135,18 @@ namespace Platform
         }
 
         /// <summary>
-        ///     Unify switching layer and recording state
+        ///     Unify switching collision state and recording state
         /// </summary>
         private void SetSolid(bool solid)
         {
             if (_isSolid == solid) return;
             _isSolid = solid;
 
-            if (solid)
-                gameObject.layer = LayerMask.NameToLayer("GroundCollider");
-            else
-                gameObject.layer = LayerMask.NameToLayer("GroundColliderHollow");
+            // When hollow, make it a trigger so player passes through
+            // When solid, make it a collider so player stands on it
+            _boxCollider.isTrigger = !solid;
+            
+            UnityEngine.Debug.Log($"OneWayPlatform: SetSolid({solid}) - isTrigger = {_boxCollider.isTrigger}");
         }
     }
 }

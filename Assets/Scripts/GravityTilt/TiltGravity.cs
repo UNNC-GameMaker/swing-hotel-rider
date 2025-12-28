@@ -15,7 +15,7 @@ namespace GravityTilt
 
         private void FixedUpdate()
         {
-            UnityEngine.Debug.Log(_manager.TiltTarget);
+            // UnityEngine.Debug.Log(_manager.TiltTarget);
             var forceX = gravity * Mathf.Sin(_manager.TiltTarget * Mathf.Deg2Rad);
             var forceY = -gravity * Mathf.Cos(_manager.TiltTarget * Mathf.Deg2Rad) * 0.5f;
 
