@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,15 +24,16 @@ namespace Player
             Rb = GetComponent<Rigidbody2D>();
             _airJumpsLeft = maxAirJumps;
             _playerAnimation = GetComponent<PlayerAnimation>();
-
+            playerInputComponent = new PlayerInput();
+            playerInputComponent.Enable();
             // Set up PlayerInput component action callbacks
             if (playerInputComponent != null)
             {
-                playerInputComponent.actions["Move"].performed += ctx => _movementInput = ctx.ReadValue<Vector2>();
-                playerInputComponent.actions["Move"].canceled += _ => _movementInput = Vector2.zero;
+                playerInputComponent.Player.Move.performed += ctx => _movementInput = ctx.ReadValue<Vector2>();
+                playerInputComponent.Player.Move.canceled += _ => _movementInput = Vector2.zero;
 
-                playerInputComponent.actions["Jump"].started += OnJumpStarted;
-                playerInputComponent.actions["Jump"].canceled += OnJumpCanceled;
+                playerInputComponent.Player.Jump.started += OnJumpStarted;
+                playerInputComponent.Player.Jump.canceled += OnJumpCanceled;
 
                 UnityEngine.Debug.Log("PlayerInput component callbacks registered");
             }
@@ -323,7 +325,7 @@ namespace Player
         [SerializeField] [Tooltip("Layer(s) considered ground")]
         private LayerMask groundLayer;
 
-        [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
+        [SerializeField] private PlayerInput playerInputComponent;
 
         #endregion
 
