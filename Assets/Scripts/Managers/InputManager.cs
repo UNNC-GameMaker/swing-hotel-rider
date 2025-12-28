@@ -89,9 +89,22 @@ namespace Managers
 
         private void Awake()
         {
-            // Initialize
+            // Initialize current state
             _moveInput = Vector2.zero;
             _lookInput = Vector2.zero;
+            _jumpHeld = false;
+            _releaseHeld = false;
+            _downHeld = false;
+            _grabHeld = false;
+            
+            // Initialize previous state to prevent first-frame false positives
+            _prevMoveInput = Vector2.zero;
+            _prevLookInput = Vector2.zero;
+            _prevJumpHeld = false;
+            _prevReleaseHeld = false;
+            _prevDownHeld = false;
+            _prevGrabHeld = false;
+            
             Debug.Log("InputManager: Initialized with " + currentScheme + " control scheme");
         }
 
@@ -124,20 +137,38 @@ namespace Managers
         /// </summary>
         private void DetectControlScheme()
         {
-            // Check for any keyboard input
-            if (UnityEngine.Input.anyKey)
-            {
-                // Keyboard detected
-                currentScheme = ControlScheme.Keyboard;
-            }
-
-            // Check for gamepad input
+            // Check for gamepad input first (more specific)
             if (Mathf.Abs(UnityEngine.Input.GetAxis(gamepadHorizontalAxis)) > axisDeadzone ||
                 Mathf.Abs(UnityEngine.Input.GetAxis(gamepadVerticalAxis)) > axisDeadzone ||
-                UnityEngine.Input.GetKey(gamepadJumpButton))
+                UnityEngine.Input.GetKey(gamepadJumpButton) ||
+                UnityEngine.Input.GetKey(gamepadFireButton) ||
+                UnityEngine.Input.GetKey(gamepadGrabButton))
             {
                 // Gamepad detected
-                currentScheme = ControlScheme.Gamepad;
+                if (currentScheme != ControlScheme.Gamepad)
+                {
+                    currentScheme = ControlScheme.Gamepad;
+                    Debug.Log("InputManager: Switched to Gamepad control scheme");
+                }
+                return;
+            }
+
+            // Check for keyboard/mouse input
+            if (UnityEngine.Input.GetKey(jumpKey) ||
+                UnityEngine.Input.GetKey(releaseKey) ||
+                UnityEngine.Input.GetKey(downKey) ||
+                UnityEngine.Input.GetKey(grabKey) ||
+                Mathf.Abs(UnityEngine.Input.GetAxis(horizontalAxis)) > axisDeadzone ||
+                Mathf.Abs(UnityEngine.Input.GetAxis(verticalAxis)) > axisDeadzone ||
+                Mathf.Abs(UnityEngine.Input.GetAxis(mouseXAxis)) > axisDeadzone ||
+                Mathf.Abs(UnityEngine.Input.GetAxis(mouseYAxis)) > axisDeadzone)
+            {
+                // Keyboard detected
+                if (currentScheme != ControlScheme.Keyboard)
+                {
+                    currentScheme = ControlScheme.Keyboard;
+                    Debug.Log("InputManager: Switched to Keyboard control scheme");
+                }
             }
         }
 
@@ -285,11 +316,15 @@ namespace Managers
         private void BroadcastButtonEvent(Input.InputEvents inputEvent, Input.InputState state)
         {
 
+            if (inputEvent == Input.InputEvents.Jump)
+            {
+                Debug.Log("JUMP");
+            }
 
             for (int i = InputListeners.Count - 1; i >= 0; i--)
             {
                 var listener = InputListeners[i];
-                if (listener.IsInputEnabled)
+                if (listener != null && listener.IsInputEnabled)
                 {
                     listener.OnInputEvent(inputEvent, state);
                 }
@@ -304,7 +339,7 @@ namespace Managers
             for (int i = InputListeners.Count - 1; i >= 0; i--)
             {
                 var listener = InputListeners[i];
-                if (listener.IsInputEnabled)
+                if (listener != null && listener.IsInputEnabled)
                 {
                     listener.OnInputAxis(axis, value);
                 }
