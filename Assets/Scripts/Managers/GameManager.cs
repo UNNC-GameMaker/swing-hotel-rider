@@ -51,7 +51,7 @@ namespace Managers
                 if (!managers.Contains(manager))
                 {
                     manager.Init();
-                    Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
+                    UnityEngine.Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
                 }
         }
 
@@ -60,7 +60,7 @@ namespace Managers
             var m = managers.Find(x => x is T);
             if (m == null)
             {
-                Debug.LogError($"[GameManager] Manager {typeof(T).Name} not found");
+                UnityEngine.Debug.LogError($"[GameManager] Manager {typeof(T).Name} not found");
                 return null;
             }
 
@@ -72,7 +72,7 @@ namespace Managers
             if (!managers.Contains(manager))
             {
                 managers.Add(manager);
-                Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
+                UnityEngine.Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
             }
         }
     }

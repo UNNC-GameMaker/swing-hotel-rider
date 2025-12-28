@@ -1,62 +1,65 @@
 using Managers;
 using UnityEngine;
 
-public class ChooseBuilding : MonoBehaviour
+namespace Buliding
 {
-    private GameObject _building;
-    private BuildModeManager _manager;
-
-    [Tooltip("that name object attached on room")]
-    private GameObject _name;
-
-    private bool _nowChoose;
-    private Vector3 _originPos;
-
-    public bool NowChoose
+    public class ChooseBuilding : MonoBehaviour
     {
-        get => _nowChoose;
-        set
+        private GameObject _building;
+        private BuildModeManager _manager;
+
+        [Tooltip("that name object attached on room")]
+        private GameObject _name;
+
+        private bool _nowChoose;
+        private Vector3 _originPos;
+
+        public bool NowChoose
         {
-            _nowChoose = value;
-            if (!_nowChoose) EndDrag();
+            get => _nowChoose;
+            set
+            {
+                _nowChoose = value;
+                if (!_nowChoose) EndDrag();
+            }
         }
-    }
 
-    private void Start()
-    {
-        _manager = GameManager.Instance.GetManager<BuildModeManager>();
-        _originPos = transform.position;
-    }
-
-    private void Update()
-    {
-        if (_nowChoose)
+        private void Start()
         {
-            _name.SetActive(false);
+            _manager = GameManager.Instance.GetManager<BuildModeManager>();
+            _originPos = transform.position;
         }
-        else
+
+        private void Update()
         {
-            _name.SetActive(true);
-            MoveTo(_originPos);
+            if (_nowChoose)
+            {
+                _name.SetActive(false);
+            }
+            else
+            {
+                _name.SetActive(true);
+                MoveTo(_originPos);
+            }
         }
-    }
 
-    private void EndDrag()
-    {
-        if (!_building) _building = transform.GetChild(0).gameObject;
-
-        var baseBuilding = _building.GetComponent<BaseBuilding>();
-        Debug.Log(baseBuilding.CheckBuildable(false));
-        if (baseBuilding.CheckBuildable(false))
+        private void EndDrag()
         {
-            baseBuilding.transform.SetParent(null);
-            baseBuilding.Set();
-            Destroy(gameObject);
-        }
-    }
+            if (!_building) _building = transform.GetChild(0).gameObject;
 
-    public void MoveTo(Vector2 position)
-    {
-        transform.position = Vector2.Lerp(transform.position, position, Time.deltaTime * 30);
+            var baseBuilding = _building.GetComponent<BaseBuilding>();
+            UnityEngine.Debug.Log(baseBuilding.CheckBuildable(false));
+            if (baseBuilding.CheckBuildable(false))
+            {
+                baseBuilding.transform.SetParent(null);
+                baseBuilding.Set();
+                Destroy(gameObject);
+            }
+        }
+
+        public void MoveTo(Vector2 position)
+        {
+            transform.position = Vector2.Lerp(transform.position, position, Time.deltaTime * 30);
+        }
     }
 }

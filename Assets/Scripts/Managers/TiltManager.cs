@@ -1,3 +1,4 @@
+using GravityTilt;
 using UnityEngine;
 
 namespace Managers
@@ -22,7 +23,7 @@ namespace Managers
 
         public override void Init()
         {
-            Debug.Log("[TiltManager] Init");
+            UnityEngine.Debug.Log("[TiltManager] Init");
             GameManager.Instance.RegisterManager(this);
         }
 

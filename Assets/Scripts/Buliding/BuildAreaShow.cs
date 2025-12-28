@@ -1,14 +1,17 @@
 using UnityEngine;
 
-public class BuildAreaShow : MonoBehaviour
+namespace Buliding
 {
-    // Start is called before the first frame update
-    private void Start()
+    public class BuildAreaShow : MonoBehaviour
     {
-    }
+        // Start is called before the first frame update
+        private void Start()
+        {
+        }
 
-    // Update is called once per frame
-    private void Update()
-    {
+        // Update is called once per frame
+        private void Update()
+        {
+        }
     }
 }

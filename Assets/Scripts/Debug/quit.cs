@@ -1,43 +1,46 @@
 using UnityEditor;
 using UnityEngine;
 
-public class Quit : MonoBehaviour
+namespace Debug
 {
-    private PlayerInput _playerInput;
-
-    private void Awake()
+    public class Quit : MonoBehaviour
     {
-        // Initialize the PlayerInput instance
-        _playerInput = new PlayerInput();
-        Debug.Log("Quit script initialized");
-    }
+        private PlayerInput _playerInput;
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if (_playerInput.UI.Quit.triggered)
+        private void Awake()
         {
-            Debug.Log("Quit function called - exiting play mode");
+            // Initialize the PlayerInput instance
+            _playerInput = new PlayerInput();
+            UnityEngine.Debug.Log("Quit script initialized");
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (_playerInput.UI.Quit.triggered)
+            {
+                UnityEngine.Debug.Log("Quit function called - exiting play mode");
 
 #if UNITY_EDITOR
-            // If running in the Unity Editor, stop play mode
-            EditorApplication.isPlaying = false;
+                // If running in the Unity Editor, stop play mode
+                EditorApplication.isPlaying = false;
 #else
             // If running as a build, quit the application
             Application.Quit();
 #endif
+            }
         }
-    }
 
-    private void OnEnable()
-    {
-        // Enable the input actions
-        _playerInput.Enable();
-    }
+        private void OnEnable()
+        {
+            // Enable the input actions
+            _playerInput.Enable();
+        }
 
-    private void OnDisable()
-    {
-        // Disable the input actions to prevent memory leaks
-        _playerInput.Disable();
+        private void OnDisable()
+        {
+            // Disable the input actions to prevent memory leaks
+            _playerInput.Disable();
+        }
     }
 }

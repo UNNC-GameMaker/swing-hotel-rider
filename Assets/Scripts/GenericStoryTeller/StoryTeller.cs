@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace GenericStoryTeller
 {
     // This class in reserved for in-level storytelling
     // maybe I will implement later
