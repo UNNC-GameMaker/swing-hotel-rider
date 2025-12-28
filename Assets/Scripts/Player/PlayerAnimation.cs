@@ -10,7 +10,6 @@ namespace Player
         public SpriteRenderer spriteRenderer;
 
         public bool isHoldingThings;
-        private readonly int _animationIdle = Animator.StringToHash("StopTrigger");
 
         // walk/run is based on current speed
         // prefix with an is means that it is a bool, otherwise a trigger
@@ -86,7 +85,6 @@ namespace Player
                         // Reset conflicting triggers when transitioning to idle on ground
                         animator.ResetTrigger(_isDescending);
                         animator.SetBool(_isRunning, false);
-                        BackToIdle();
                     }
                     break;
 
@@ -155,11 +153,7 @@ namespace Player
         {
             return _animatorState.IsName(stateName);
         }
-
-        private void BackToIdle()
-        {
-            animator.SetTrigger(_animationIdle);
-        }
+        
 
         private void TriggerJumpStart()
         {
