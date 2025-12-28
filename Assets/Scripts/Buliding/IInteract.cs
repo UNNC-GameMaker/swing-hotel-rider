@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public interface IInteract
+namespace Buliding
 {
-    Transform Transform { get; }
-    void Interact();
+    public interface IInteract
+    {
+        Transform Transform { get; }
+        void Interact();
+    }
 }

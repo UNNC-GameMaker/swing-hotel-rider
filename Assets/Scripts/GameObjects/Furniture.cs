@@ -1,5 +1,7 @@
+using GravityTilt;
 using Managers;
 using UnityEngine;
+
 
 namespace GameObjects
 {
@@ -39,7 +41,7 @@ namespace GameObjects
         /// </summary>
         public override void OnGrab()
         {
-            Debug.Log($"{gameObject.name} was grabbed!");
+            UnityEngine.Debug.Log($"{gameObject.name} was grabbed!");
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace GameObjects
         /// </summary>
         public override void OnRelease()
         {
-            Debug.Log($"{gameObject.name} was released!");
+            UnityEngine.Debug.Log($"{gameObject.name} was released!");
         }
 
         #region Private Fields

@@ -32,7 +32,7 @@ namespace Managers
 
         public override void Init()
         {
-            Debug.Log("[FurnitureManager] Init");
+            UnityEngine.Debug.Log("[FurnitureManager] Init");
             GameManager.Instance.RegisterManager(this);
         }
 

@@ -1,14 +1,20 @@
+using GravityTilt;
 using UnityEngine;
 
 namespace Managers
 {
     public class TiltManager : Manager
     {
-        
+        [SerializeField] private GameObject playerCamera;   
         void Update()
         {
             //Debug.Log("[TiltManager] totalTilt: " + TotalTilt);
-            
+
+            TiltObject();
+        }
+
+        private void TiltObject()
+        {
             // Reset total tilt each frame
             TotalTilt = 0f;
 
@@ -20,10 +26,19 @@ namespace Managers
             TiltTarget = Mathf.Lerp(TiltTarget, TotalTilt / tiltFactor, tiltSpeed * Time.deltaTime);
         }
 
+        private void TiltCamera()
+        {
+            if (playerCamera)
+            {
+                playerCamera.transform.rotation = Quaternion.Euler(0f, 0f, TiltTarget);
+            }
+        }
+
         public override void Init()
         {
-            Debug.Log("[TiltManager] Init");
+            UnityEngine.Debug.Log("[TiltManager] Init");
             GameManager.Instance.RegisterManager(this);
+            
         }
 
         #region Inspector Fields

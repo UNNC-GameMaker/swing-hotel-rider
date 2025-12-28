@@ -1,5 +1,6 @@
 using GameObjects;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Grab : MonoBehaviour
 {
@@ -72,22 +73,16 @@ public class Grab : MonoBehaviour
                 cursor.SetActive(false);
             }
 
-            // Store closest objects for grab callback
-            _closestInteract = closestInteract;
-            _closestGrabbable = closestGrabbable;
+                // Store closest objects for grab callback
+                _closestInteract = closestInteract;
+                _closestGrabbable = closestGrabbable;
+            }
+            else
+            {
+                // Hide cursor when holding an object
+                cursor.SetActive(false);
+            }
         }
-        else
-        {
-            // Hide cursor when holding an object
-            cursor.SetActive(false);
-        }
-
-        // 旧输入系统：按下 Fire1 交互/抓取
-        if (Input.GetButtonDown("Fire1"))
-        {
-            HandleGrabPressed();
-        }
-    }
 
     private void OnDrawGizmosSelected()
     {
