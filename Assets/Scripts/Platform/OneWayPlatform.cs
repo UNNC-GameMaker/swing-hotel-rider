@@ -1,3 +1,6 @@
+using Input;
+using Managers;
+using Player;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +11,7 @@ using UnityEngine;
 ///     platform).
 /// </summary>
 [RequireComponent(typeof(BoxCollider2D))]
-public class OneWayPlatform : MonoBehaviour
+public class OneWayPlatform : MonoBehaviour, IInputListener
 {
     [Header("Player Layer (for overlap detection)")]
     public LayerMask playerLayer = 1 << 0;
@@ -44,11 +47,8 @@ public class OneWayPlatform : MonoBehaviour
 
     private void Update()
     {
-        // 旧输入系统：每帧读取方向键
-        _movementInput.x = Input.GetAxisRaw("Horizontal");
-        _movementInput.y = Input.GetAxisRaw("Vertical");
 
-        if (GroundCheck.Instance == null) return;
+        if (!GroundCheck.Instance) return;
 
         if (!_initialized)
         {
@@ -129,4 +129,20 @@ public class OneWayPlatform : MonoBehaviour
         else
             gameObject.layer = LayerMask.NameToLayer("GroundColliderHollow");
     }
+
+    public void OnInputEvent(InputEvents inputEvent, InputState state)
+    {
+        
+    }
+
+    public void OnInputAxis(InputAxis axis, Vector2 value)
+    {
+        if (axis == InputAxis.MoveAxis)
+        {
+            _movementInput = value;
+        }
+    }
+
+    public int InputPriority => 0;
+    public bool IsInputEnabled => true;
 }

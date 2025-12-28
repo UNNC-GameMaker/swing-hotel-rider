@@ -1,8 +1,11 @@
+using Buliding;
 using GameObjects;
+using Input;
+using Managers;
+using Player;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class Grab : MonoBehaviour
+public class Grab : MonoBehaviour, IInputListener
 {
     private Grabbable _closestGrabbable;
 
@@ -12,6 +15,26 @@ public class Grab : MonoBehaviour
     {
         _playerRb = GetComponent<Rigidbody2D>();
         _playerAnimation = GetComponent<PlayerAnimation>();
+    }
+
+    private void OnEnable()
+    {
+        // Register with InputManager
+        var inputManager = FindObjectOfType<InputManager>();
+        if (inputManager != null)
+        {
+            inputManager.RegisterListener(this);
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Unregister from InputManager
+        var inputManager = FindObjectOfType<InputManager>();
+        if (inputManager != null)
+        {
+            inputManager.UnregisterListener(this);
+        }
     }
 
     private void Update()
@@ -28,7 +51,7 @@ public class Grab : MonoBehaviour
             {
                 var col = _overlapResults[i];
 
-                // Find closest Grabbable object
+                // Find the closest Grabbable object
                 if (col.gameObject.CompareTag("Grabbable"))
                 {
                     var grabbable = col.gameObject.GetComponent<Grabbable>();
@@ -73,16 +96,16 @@ public class Grab : MonoBehaviour
                 cursor.SetActive(false);
             }
 
-                // Store closest objects for grab callback
-                _closestInteract = closestInteract;
-                _closestGrabbable = closestGrabbable;
-            }
-            else
-            {
-                // Hide cursor when holding an object
-                cursor.SetActive(false);
-            }
+            // Store closest objects for grab callback
+            _closestInteract = closestInteract;
+            _closestGrabbable = closestGrabbable;
         }
+        else
+        {
+            // Hide cursor when holding an object
+            cursor.SetActive(false);
+        }
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -186,6 +209,43 @@ public class Grab : MonoBehaviour
     private PlayerAnimation _playerAnimation;
     private Rigidbody2D _grabbedRb; // Currently grabbed object's rigidbody
     private readonly Collider2D[] _overlapResults = new Collider2D[1024]; // Never trust players
+
+    #endregion
+
+    #region IInputListener Implementation
+
+    public void OnInputEvent(InputEvents inputEvent, InputState state)
+    {
+        switch (inputEvent)
+        {
+            case InputEvents.Grab:
+                if (state == InputState.Started)
+                {
+                    // Grab button pressed
+                    HandleGrabPressed();
+                }
+                break;
+            
+            case InputEvents.Release:
+                if (state == InputState.Started)
+                {
+                    // Release button pressed - throw the object
+                    if (_grabbedRb != null)
+                    {
+                        ReleaseObj();
+                    }
+                }
+                break;
+        }
+    }
+
+    public void OnInputAxis(InputAxis axis, Vector2 value)
+    {
+        // Grab doesn't need axis input
+    }
+
+    public int InputPriority => 0;
+    public bool IsInputEnabled => true;
 
     #endregion
 }

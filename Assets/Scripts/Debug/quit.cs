@@ -1,22 +1,29 @@
-using UnityEditor;
+using Input;
+using Managers;
 using UnityEngine;
 
-public class Quit : MonoBehaviour
+public class Quit : MonoBehaviour, IInputListener
 {
     [SerializeField] [Tooltip("InputManager 里配置的退出按钮名")]
     private string quitButton = "Cancel"; // 默认使用旧输入系统内置的 Cancel（常为 Escape）
+    
 
-    private void Update()
+    public void OnInputEvent(InputEvents inputEvent, InputState state)
     {
-        if (Input.GetButtonDown(quitButton))
+        if (inputEvent == InputEvents.Exit && (state == InputState.Started || state == InputState.Performed))
         {
-            Debug.Log("Quit function called - exiting play mode");
-
 #if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+    Application.Quit();
 #endif
         }
     }
+
+    public void OnInputAxis(InputAxis axis, Vector2 value)
+    {
+    }
+
+    public int InputPriority => 0;
+    public bool IsInputEnabled => true;
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4593973530061845966}
   - component: {fileID: 838151957545524001}
   - component: {fileID: 5780860577118661632}
+  - component: {fileID: 6797837671864103885}
   m_Layer: 0
   m_Name: SpriteNode
   m_TagString: Untagged
@@ -75,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2072806194, guid: 52bd67a6258c6466693e6494aa2db81c, type: 3}
+  m_Sprite: {fileID: -1331809646, guid: 52bd67a6258c6466693e6494aa2db81c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -96,7 +97,7 @@ Animator:
   m_GameObject: {fileID: 2526333639980305121}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: de0db9ec6ef3f48128b353cf19f25157, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6cf29c3fe811c40d2b2b1435cee877d2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -119,9 +120,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c70f3905ffc44c70ae7bd378be82936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  spriteRenderer: {fileID: 0}
+  animator: {fileID: 838151957545524001}
+  spriteRenderer: {fileID: 4593973530061845966}
   isHoldingThings: 0
+--- !u!114 &6797837671864103885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2526333639980305121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17468eb8a41304d4dbcaf1797442e481, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 838151957545524001}
+  spriteRenderer: {fileID: 4593973530061845966}
 --- !u!1 &6352133224074664137
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +163,7 @@ Transform:
   m_GameObject: {fileID: 6352133224074664137}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.645, z: 0}
+  m_LocalPosition: {x: 0, y: -0.54, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -178,7 +193,6 @@ GameObject:
   - component: {fileID: 4818135422043668928}
   - component: {fileID: 7103781621915317796}
   - component: {fileID: 9155387627846111358}
-  - component: {fileID: 284356607108703290}
   - component: {fileID: 1482189958865433918}
   - component: {fileID: 2594778707868114871}
   m_Layer: 0
@@ -221,16 +235,16 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 4925af236986f4ac590c3727b02d6a34, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!70 &7103781621915317796
 CapsuleCollider2D:
@@ -241,13 +255,13 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 7555047300939060745}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 4925af236986f4ac590c3727b02d6a34, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -295,37 +309,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  playerInputComponent: {fileID: 284356607108703290}
---- !u!114 &284356607108703290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7555047300939060745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 6fa91924ecaeb44218b761a36afc7afa, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &1482189958865433918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,7 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weight: 1
-  autoActivate: 0
+  autoActivate: 1
   rb: {fileID: 0}
 --- !u!114 &2594778707868114871
 MonoBehaviour:
@@ -355,5 +338,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabRange: 0.5
   cursor: {fileID: 5620072953224341793, guid: b0807dae451cc4716b2748f279406f74, type: 3}
-  playerInputComponent: {fileID: 284356607108703290}
   releaseForce: {x: 0, y: 1, z: 0}

@@ -1,7 +1,10 @@
+using Input;
+using Managers;
+using Player;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IInputListener
 {
     public enum MovementState
     {
@@ -19,6 +22,31 @@ public class PlayerMovement : MonoBehaviour
         Rb = GetComponent<Rigidbody2D>();
         _airJumpsLeft = maxAirJumps;
         _playerAnimation = GetComponent<PlayerAnimation>();
+    }
+
+    private void OnEnable()
+    {
+        // Register with InputManager
+        var inputManager = GameManager.Instance.GetManager<InputManager>();
+        if (inputManager != null)
+        {
+            inputManager.RegisterListener(this);
+            Debug.Log("PlayerMovement registered with InputManager");
+        }
+        else
+        {
+            Debug.LogError("InputManager not found! PlayerMovement will not receive input events.");
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Unregister from InputManager
+        var inputManager = FindObjectOfType<InputManager>();
+        if (inputManager != null)
+        {
+            inputManager.UnregisterListener(this);
+        }
     }
 
     private void Start()
@@ -48,8 +76,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // 旧输入：每帧主动读取按键
-        ReadPlayerInput();
 
         // Handle input and non-physics logic only
         GroundCheck();
@@ -145,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void GroundCheck()
     {
-        if (groundCheck == null)
+        if (!groundCheck)
         {
             IsGrounded = false;
             return;
@@ -181,46 +207,39 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded && !wasGrounded)
         {
             _airJumpsLeft = maxAirJumps;
-            Debug.Log($"Landed! Air jumps reset to {maxAirJumps}");
+            // Debug.Log($"Landed! Air jumps reset to {maxAirJumps}");
 
             // Trigger landing animation
-            if (_playerAnimation != null) _playerAnimation.OnLanding();
+            if (_playerAnimation) _playerAnimation.OnLanding();
         }
     }
 
     /// <summary>
-    ///     处理跳跃相关输入：
-    ///     - 按下时起跳或二段跳
-    ///     - 持续按住时追加上升力
-    ///     - 松开时停止追加
+    ///     handle jump input
     /// </summary>
     private void HandleJumpInput()
     {
-        // 按下跳跃键
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (IsGrounded)
-            {
-                Jump();
-            }
-            else if (_airJumpsLeft > 0)
-            {
-                Jump();
-                _airJumpsLeft--;
-            }
-        }
 
-        // 松开跳跃键
-        if (Input.GetButtonUp("Jump"))
-            _jumpButtonHeld = false;
-
-        // 持续按住：追加上升力
+        // hold: jump higher
         if (_jumpButtonHeld)
         {
             if (transform.position.y < _jumpStartY + maxJumpHeight && Rb.velocity.y > 0f)
                 Rb.AddForce(Vector2.up * (extraJumpForce * Time.deltaTime), ForceMode2D.Impulse);
             else
                 _jumpButtonHeld = false;
+        }
+    }
+
+    private void JumpStart()
+    {
+        if (IsGrounded)
+        {
+            Jump();
+        }
+        else if (_airJumpsLeft > 0)
+        {
+            Jump();
+            _airJumpsLeft--;
         }
     }
 
@@ -240,7 +259,7 @@ public class PlayerMovement : MonoBehaviour
         _jumpButtonHeld = true;
 
         // Trigger jump start animation
-        if (_playerAnimation != null) _playerAnimation.OnJumpStart();
+        if (_playerAnimation) _playerAnimation.OnJumpStart();
     }
 
     /// <summary>
@@ -255,15 +274,7 @@ public class PlayerMovement : MonoBehaviour
         else // stationary vertically
             Rb.gravityScale = 1f;
     }
-
-    /// <summary>
-    ///     旧输入系统：读取移动轴并缓存
-    /// </summary>
-    private void ReadPlayerInput()
-    {
-        _movementInput.x = Input.GetAxisRaw("Horizontal");
-        _movementInput.y = Input.GetAxisRaw("Vertical");
-    }
+    
 
     #region Inspector Fields
 
@@ -328,6 +339,66 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D Rb { get; private set; }
 
     public float MaxMoveSpeed => maxMoveSpeed;
+
+    #endregion
+
+    #region IInputListener Implementation
+
+    public void OnInputEvent(InputEvents inputEvent, InputState state)
+    {
+        Debug.Log("OnInputEvent: " + inputEvent.ToString());
+        switch (inputEvent)
+        {
+            case InputEvents.Jump:
+                switch (state)
+                {
+                    case InputState.Started:
+                        Debug.Log("Starting jump");
+                        // Jump button pressed - attempt to jump
+                        JumpStart();
+                        break;
+                    case InputState.Performed:
+                        Debug.Log("Hold jump");
+                        _jumpButtonHeld = true;
+                        break;
+                    case InputState.Canceled:
+                        // Jump button released - stop adding extra jump force
+                        _jumpButtonHeld = false;
+                        break;
+                }
+                break;
+            
+            case InputEvents.Crouch:
+                // Handle crouch if needed
+                break;
+            
+            case InputEvents.Grab:
+                // Handle grab if needed
+                break;
+            
+            case InputEvents.Release:
+                // Handle release if needed
+                break;
+        }
+    }
+
+    public void OnInputAxis(InputAxis axis, Vector2 value)
+    {
+        switch (axis)
+        {
+            case InputAxis.MoveAxis:
+                // Update movement input
+                _movementInput = value;
+                break;
+            
+            case InputAxis.CameraAxis:
+                // Handle camera input if needed
+                break;
+        }
+    }
+
+    public int InputPriority => 0;
+    public bool IsInputEnabled => true;
 
     #endregion
 }

@@ -40,12 +40,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 46817997730301931}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3fd55467fd7a48099135db4f9801566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInputComponent: {fileID: 2111288681781730521}
 --- !u!114 &2111288681781730521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,27 +54,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 46817997730301931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Script: {fileID: 11500000, guid: c4e1f30619a3e4ed588c4f2472ee8b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 6fa91924ecaeb44218b761a36afc7afa, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: a8ef9246-07d9-4444-bdfc-d7f31a1c1036
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &1688591033096358119
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +141,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3814040932424429988}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd21cd1d942ca46e68418aa246879caf, type: 3}
   m_Name: 
@@ -199,6 +180,7 @@ Transform:
   - {fileID: 8772016795738156671}
   - {fileID: 7905768190935069125}
   - {fileID: 4749347705409477082}
+  - {fileID: 7292367058643097498}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5837785532474986045
@@ -222,6 +204,68 @@ MonoBehaviour:
   tiltMax: 8
   skipTo: 0
   managers: []
+--- !u!1 &5212392400597961547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7292367058643097498}
+  - component: {fileID: 261693537208820234}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7292367058643097498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5212392400597961547}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5700537619642902121}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &261693537208820234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5212392400597961547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e331ab21dd644a60919d157bea58c80b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentScheme: 2
+  jumpKey: 32
+  releaseKey: 102
+  downKey: 115
+  grabKey: 102
+  horizontalAxis: Horizontal
+  verticalAxis: Vertical
+  mouseXAxis: Mouse X
+  mouseYAxis: Mouse Y
+  gamepadJumpButton: 330
+  gamepadFireButton: 331
+  gamepadGrabButton: 332
+  gamepadHorizontalAxis: Horizontal
+  gamepadVerticalAxis: Vertical
+  gamepadLookXAxis: RightStickX
+  gamepadLookYAxis: RightStickY
+  axisDeadzone: 0.01
+  downInputThreshold: -0.3
 --- !u!1 &6856667103738617168
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,6 +276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 977676878009082490}
   - component: {fileID: 6836770809921711140}
+  - component: {fileID: 6952800998458920982}
   m_Layer: 0
   m_Name: TiltManager
   m_TagString: Untagged
@@ -266,6 +311,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5aeaea4f8244c5986f824fa491badd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCamera: {fileID: 0}
   tiltFactor: 100
   tiltSpeed: 1
   centerX: 10
+--- !u!114 &6952800998458920982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6856667103738617168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5178eca41c34847458ca5a4f17091d15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: 4
