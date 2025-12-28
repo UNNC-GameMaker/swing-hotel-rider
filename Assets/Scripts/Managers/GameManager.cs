@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Managers
 {
+    [DefaultExecutionOrder(-100)]
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;

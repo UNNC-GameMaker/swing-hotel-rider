@@ -138,9 +138,7 @@ namespace Managers
         private void DetectControlScheme()
         {
             // Check for gamepad input first (more specific)
-            if (Mathf.Abs(UnityEngine.Input.GetAxis(gamepadHorizontalAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(gamepadVerticalAxis)) > axisDeadzone ||
-                UnityEngine.Input.GetKey(gamepadJumpButton) ||
+            if (UnityEngine.Input.GetKey(gamepadJumpButton) ||
                 UnityEngine.Input.GetKey(gamepadFireButton) ||
                 UnityEngine.Input.GetKey(gamepadGrabButton))
             {
@@ -157,11 +155,7 @@ namespace Managers
             if (UnityEngine.Input.GetKey(jumpKey) ||
                 UnityEngine.Input.GetKey(releaseKey) ||
                 UnityEngine.Input.GetKey(downKey) ||
-                UnityEngine.Input.GetKey(grabKey) ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(horizontalAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(verticalAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(mouseXAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(mouseYAxis)) > axisDeadzone)
+                UnityEngine.Input.GetKey(grabKey))
             {
                 // Keyboard detected
                 if (currentScheme != ControlScheme.Keyboard)
