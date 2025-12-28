@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameObjects;
 using Managers;
 using UnityEngine;
 
@@ -18,17 +19,12 @@ public class BuildingGridManager : Manager
 
     public void Reset()
     {
-    }
+        Food.ResetFoods();
 
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
+        foreach (var building in _buildings)
+        {
+            building.ResetFurniture();
+        }
     }
 
     public event Action OnBuilidAreaChanged;

@@ -1,12 +1,40 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameObjects
 {
     public class Food : Grabbable
     {
+        # region static
+        public static readonly List<Food> Foods = new();
+
+        public static void ResetFoods()
+        {
+            foreach (var food in Foods)
+            {
+                if (food!=null)Destroy(food);
+            }
+
+            Foods.Clear();
+            
+        }
+
+        # endregion
+        
         public void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+        }
+
+        public void OnEnable()
+        {
+            if (!Foods.Contains(this)) Foods.Add(this);
+        }
+
+        public void OnDisable()
+        {
+            if(Foods.Contains(this)) Foods.Remove(this);
+            Destroy(this);
         }
 
         /// <summary>
