@@ -1,13 +1,13 @@
 using Buliding;
 using Cinemachine;
+using Input;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Managers
 {
-    public class BuildModeManager : Manager
+    public class BuildModeManager : Manager, IInputListener
     {
-        [SerializeField] private UnityEngine.InputSystem.PlayerInput playerInputComponent;
+
 
         private CinemachineVirtualCamera _buildCamera;
 
@@ -22,7 +22,7 @@ namespace Managers
         private void Start()
         {
             _camera = UnityEngine.Camera.main;
-            RegisterInputs();
+            
         }
 
         private void Update()
@@ -43,18 +43,9 @@ namespace Managers
         {
             GameManager.Instance.RegisterManager(this);
         }
+        
 
-        private void RegisterInputs()
-        {
-            if (playerInputComponent)
-            {
-                playerInputComponent.actions["Choose"].started += OnChooseStarted;
-                playerInputComponent.actions["Choose"].canceled += OnChooseCanceled;
-                playerInputComponent.actions["Drag"].performed += ctx => _mouseInput = ctx.ReadValue<Vector2>();
-            }
-        }
-
-        private void OnChooseStarted(InputAction.CallbackContext ctx)
+        private void OnChooseStarted()
         {
             var ray = _camera.ScreenPointToRay(_mouseInput);
             RaycastHit hit;
@@ -71,24 +62,32 @@ namespace Managers
 
             _isHolding = true;
         }
-
-        private void OnChooseCanceled(InputAction.CallbackContext ctx)
-        {
-            _isHolding = false;
-            _currentBuildingChoice.NowChoose = false;
-            _currentBuildingChoice = null;
-        }
+        
 
         private void HandleBuildingInput()
         {
+            // TODO FIX THIS
             if (_isHolding)
             {
-                var mouseWorldPos = _camera.ScreenToWorldPoint(Input.mousePosition);
+                var mouseWorldPos = _camera.ScreenToWorldPoint(new Vector3());
                 mouseWorldPos.z = _currentBuildingChoice.transform.position.z;
                 var targetPosition = mouseWorldPos - _dragOffset;
 
                 _currentBuildingChoice.MoveTo(targetPosition);
             }
         }
+
+        public void OnInputEvent(InputEvents inputEvent, InputState state)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnInputAxis(InputAxis axis, Vector2 value)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int InputPriority => 0;
+        public bool IsInputEnabled => true;
     }
 }

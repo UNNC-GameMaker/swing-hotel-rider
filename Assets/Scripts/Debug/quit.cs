@@ -1,46 +1,29 @@
-using UnityEditor;
+using Input;
+using Managers;
 using UnityEngine;
 
-namespace Debug
+public class Quit : MonoBehaviour, IInputListener
 {
-    public class Quit : MonoBehaviour
+    [SerializeField] [Tooltip("InputManager 里配置的退出按钮名")]
+    private string quitButton = "Cancel"; // 默认使用旧输入系统内置的 Cancel（常为 Escape）
+    
+
+    public void OnInputEvent(InputEvents inputEvent, InputState state)
     {
-        private PlayerInput _playerInput;
-
-        private void Awake()
+        if (inputEvent == InputEvents.Exit && (state == InputState.Started || state == InputState.Performed))
         {
-            // Initialize the PlayerInput instance
-            _playerInput = new PlayerInput();
-            UnityEngine.Debug.Log("Quit script initialized");
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            if (_playerInput.UI.Quit.triggered)
-            {
-                UnityEngine.Debug.Log("Quit function called - exiting play mode");
-
 #if UNITY_EDITOR
-                // If running in the Unity Editor, stop play mode
-                EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
 #else
-            // If running as a build, quit the application
-            Application.Quit();
+    Application.Quit();
 #endif
-            }
-        }
-
-        private void OnEnable()
-        {
-            // Enable the input actions
-            _playerInput.Enable();
-        }
-
-        private void OnDisable()
-        {
-            // Disable the input actions to prevent memory leaks
-            _playerInput.Disable();
         }
     }
+
+    public void OnInputAxis(InputAxis axis, Vector2 value)
+    {
+    }
+
+    public int InputPriority => 0;
+    public bool IsInputEnabled => true;
 }

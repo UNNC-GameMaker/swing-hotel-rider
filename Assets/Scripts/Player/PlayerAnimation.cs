@@ -53,8 +53,8 @@ namespace Player
                 }
             }
 
-            UnityEngine.Debug.Log("get Animator = " + animator);
-            UnityEngine.Debug.Log("get SpriteRenderer = " + spriteRenderer);
+            Debug.Log("get Animator = " + animator);
+            Debug.Log("get SpriteRenderer = " + spriteRenderer);
         }
 
         private void Update()
