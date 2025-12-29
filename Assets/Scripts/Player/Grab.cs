@@ -20,21 +20,13 @@ public class Grab : MonoBehaviour, IInputListener
     private void OnEnable()
     {
         // Register with InputManager
-        var inputManager = FindObjectOfType<InputManager>();
-        if (inputManager != null)
-        {
-            inputManager.RegisterListener(this);
-        }
+        GameManager.Instance.GetManager<InputManager>().RegisterListener(this);
     }
 
     private void OnDisable()
     {
         // Unregister from InputManager
-        var inputManager = FindObjectOfType<InputManager>();
-        if (inputManager != null)
-        {
-            inputManager.UnregisterListener(this);
-        }
+        GameManager.Instance.GetManager<InputManager>().UnregisterListener(this);
     }
 
     private void Update()
@@ -43,17 +35,16 @@ public class Grab : MonoBehaviour, IInputListener
         {
             // Detect grabbable objects in range
             var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, grabRange, _overlapResults);
-
+            Debug.Log(hitCount);
             Grabbable closestGrabbable = null;
             IInteract closestInteract = null;
-
             for (var i = 0; i < hitCount; i++)
             {
                 var col = _overlapResults[i];
-
+                Debug.Log(col.gameObject.tag);
                 // Find the closest Grabbable object
                 if (col.gameObject.CompareTag("Grabbable"))
-                {
+                {   
                     var grabbable = col.gameObject.GetComponent<Grabbable>();
                     if (grabbable)
                     {

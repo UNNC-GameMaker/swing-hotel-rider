@@ -161,6 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6103767781407219385}
   - component: {fileID: 3324042699942718466}
+  - component: {fileID: 6952055224640474279}
   m_Layer: 0
   m_Name: Cosumeable
   m_TagString: Grabbable
@@ -178,7 +179,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5558573079134581986}
@@ -212,3 +213,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6952055224640474279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108717713414912694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de5d7786974247f9ae23360b069538e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weight: 1
+  autoActivate: 0
+  rb: {fileID: 0}

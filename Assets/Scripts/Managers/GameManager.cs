@@ -18,7 +18,7 @@ namespace Managers
 
         public List<DayData> dayData = new();
 
-        public int nowDay;
+        public int currentDay;
 
         public float tiltMax = 8f;
 
