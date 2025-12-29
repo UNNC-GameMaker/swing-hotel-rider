@@ -7,6 +7,7 @@ namespace GameObjects
 {
     public class Furniture : Grabbable
     {
+        
         public void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -50,6 +51,12 @@ namespace GameObjects
         public override void OnRelease()
         {
             UnityEngine.Debug.Log($"{gameObject.name} was released!");
+        }
+
+        public int Level
+        {   get{
+            return Mathf.FloorToInt(transform.position.y/GameManager.Instance.GetManager<BuildingGridManager>().GridSize.y);
+            }
         }
 
         #region Private Fields

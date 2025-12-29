@@ -9,14 +9,17 @@ namespace Managers
         
         private List<Furniture> _furnitureList;
         private List<Furniture> _freeFurnitureList;
+        private List<(int,int)> _levelUp; // what the fuck is a levelUp
         
-        public IReadOnlyList<Furniture> freeDesks => _freeFurnitureList;
+        public IReadOnlyList<Furniture> FreeDesks => _freeFurnitureList;
+
         
         public override void Init()
         {
             GameManager.Instance.RegisterManager(this);
             _furnitureList = new();
             _freeFurnitureList = new();
+            _levelUp = new();
         }
 
         public void AddNewFurniture(Furniture furniture)
@@ -44,15 +47,28 @@ namespace Managers
             _freeFurnitureList.Remove(furniture);
         }
 
+        public void AddLevelUp(int level,int position)
+        {
+            _levelUp.Add((level,position));
+        }
+
         public int FindLevelUp(int level)
         {
-            // Delegate to FurnitureManager if it exists
-            var furnitureManager = GameManager.Instance.GetManager<FurnitureManager>();
-            if (furnitureManager != null)
+            foreach (var item in _levelUp)
             {
-                return furnitureManager.FindLevelUp(level);
+                if (item.Item1 == level)
+                {
+                    return item.Item2;
+                }
             }
             return -1;
         }
+
+        public void RemoveLevelUp(int level,int position)
+        {
+            _levelUp.Remove((level,position));
+        }
+        
+        
     }
 }
