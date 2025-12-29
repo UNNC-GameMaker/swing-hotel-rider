@@ -76,6 +76,18 @@ namespace Managers
                 UnityEngine.Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
             }
         }
+
+        public void CostumerSuccess()
+        {
+            UnityEngine.Debug.Log("[GameManager] Customer completed orders successfully!");
+            // TODO: Add score, money, or other rewards here
+        }
+
+        public void CostumerFail()
+        {
+            UnityEngine.Debug.Log("[GameManager] Customer left unhappy!");
+            // TODO: Add penalty or failure tracking here
+        }
     }
 
 
