@@ -910,6 +910,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 327338282}
+  FoodType: Default
 --- !u!1 &800472504
 GameObject:
   m_ObjectHideFlags: 3
