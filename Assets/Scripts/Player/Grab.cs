@@ -184,7 +184,7 @@ public class Grab : MonoBehaviour, IInputListener
     #region Inspector Fields
 
     [SerializeField] [Tooltip("Radius for grab field")]
-    private float grabRange = 0.5f;
+    private float grabRange = 0.9f;
 
     [SerializeField] [Tooltip("Cursor GameObject to show grab target")]
     private GameObject cursor;

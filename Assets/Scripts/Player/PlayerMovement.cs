@@ -81,6 +81,7 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         GroundCheck();
         HandleJumpInput();
         UpdateDirection();
+        OutOfBoundCheck();
     }
 
     private void FixedUpdate()
@@ -274,7 +275,15 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         else // stationary vertically
             Rb.gravityScale = 1f;
     }
-    
+
+    private void OutOfBoundCheck()
+    {
+        if (transform.position.y < -100)
+        {
+            transform.position = new Vector3(0, 0, 0);
+        }
+    }
+
 
     #region Inspector Fields
 
