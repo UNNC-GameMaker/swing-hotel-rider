@@ -183,6 +183,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6836770809921711140, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
+      propertyPath: centerX
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836770809921711140, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
       propertyPath: tiltFactor
       value: 10
       objectReference: {fileID: 0}
@@ -613,7 +617,7 @@ Transform:
   m_GameObject: {fileID: 301501828}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.34, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1592,6 +1596,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1482189958865433918, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
+      propertyPath: weight
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2594778707868114871, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
       propertyPath: grabRange
       value: 0.9
