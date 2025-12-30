@@ -55,7 +55,7 @@ public class ShadowRTDrawer : MonoBehaviour
 
         if (shadowRT != null && (shadowRT.width != w || shadowRT.height != h))
         {
-            Debug.Log($"Ensure RT {w}x{h}");
+            // Debug.Log($"Ensure RT {w}x{h}");
             //shadowRT.Release();
             //shadowRT = null;
         }

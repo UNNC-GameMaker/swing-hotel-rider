@@ -210,6 +210,7 @@ public class Grab : MonoBehaviour, IInputListener
         switch (inputEvent)
         {
             case InputEvents.Grab:
+                Debug.Log("OnInputEvent: " + inputEvent);
                 if (state == InputState.Started)
                 {
                     // Grab button pressed
