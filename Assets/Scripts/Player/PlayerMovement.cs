@@ -22,6 +22,10 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         Rb = GetComponent<Rigidbody2D>();
         _airJumpsLeft = maxAirJumps;
         _playerAnimation = GetComponent<PlayerAnimation>();
+        if (jumpAudioSource == null)
+        {
+            jumpAudioSource = GetComponent<AudioSource>();
+        }
     }
 
 
@@ -260,6 +264,8 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
         // Trigger jump start animation
         if (_playerAnimation) _playerAnimation.OnJumpStart();
+
+        PlayJumpSfx();
     }
 
     /// <summary>
@@ -317,6 +323,15 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     [SerializeField] [Tooltip("Layer(s) considered ground")]
     private LayerMask groundLayer;
 
+    [Header("Audio")] [SerializeField] [Tooltip("AudioSource used for jump SFX")]
+    private AudioSource jumpAudioSource;
+
+    [SerializeField] [Tooltip("Jump sound effect clip")]
+    private AudioClip jumpSfx;
+
+    [SerializeField] [Tooltip("Volume scale for jump SFX")]
+    private float jumpSfxVolume = 1f;
+
     #endregion
 
     #region Private Fields
@@ -329,8 +344,24 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     private float _jumpStartY; // the y position where the last jump started
     private bool _jumpButtonHeld; // whether jump button is still held
     private readonly Collider2D[] _groundCheckResults = new Collider2D[4]; // Reusable array for ground check
+    private bool _jumpSfxWarned;
 
     #endregion
+
+    private void PlayJumpSfx()
+    {
+        if (jumpAudioSource == null || jumpSfx == null)
+        {
+            if (!_jumpSfxWarned)
+            {
+                Debug.LogWarning("Jump SFX missing AudioSource or AudioClip.");
+                _jumpSfxWarned = true;
+            }
+            return;
+        }
+
+        jumpAudioSource.PlayOneShot(jumpSfx, jumpSfxVolume);
+    }
 
     #region Public Properties
 
