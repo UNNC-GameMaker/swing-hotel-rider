@@ -46,6 +46,7 @@ local.properties
 
 # ========== VSCode (optional) ==========
 .vscode/
+.vs/
 
 # ========== OS ==========
 .DS_Store
