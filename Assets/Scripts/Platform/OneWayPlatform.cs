@@ -1,3 +1,4 @@
+using System;
 using Input;
 using Managers;
 using Player;
@@ -43,6 +44,12 @@ public class OneWayPlatform : MonoBehaviour, IInputListener
         _initialized = false;
         _isSolid = true;
         _boxCollider.isTrigger = false;
+        GameManager.Instance.GetManager<InputManager>().RegisterListener(this);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.GetManager<InputManager>().UnregisterListener(this);
     }
 
     private void Update()
@@ -124,10 +131,7 @@ public class OneWayPlatform : MonoBehaviour, IInputListener
         if (_isSolid == solid) return;
         _isSolid = solid;
 
-        if (solid)
-            gameObject.layer = LayerMask.NameToLayer("GroundCollider");
-        else
-            gameObject.layer = LayerMask.NameToLayer("GroundColliderHollow");
+        gameObject.layer = LayerMask.NameToLayer(solid ? "GroundCollider" : "GroundColliderHollow");
     }
 
     public void OnInputEvent(InputEvents inputEvent, InputState state)

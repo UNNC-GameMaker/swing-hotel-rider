@@ -33,7 +33,7 @@ namespace Managers
         {
             if (playerCamera)
             {
-                playerCamera.m_Lens.Dutch = _totalTilt;
+                playerCamera.m_Lens.Dutch = TiltTarget;
             }
         }
 
@@ -64,6 +64,24 @@ namespace Managers
 
         private float _totalTilt;
         
+        #endregion
+
+        #region Debug
+
+        private void OnDrawGizmos()
+        {
+            // Draw vertical line at centerX position
+            Gizmos.color = Color.yellow;
+            Vector3 topPoint = new Vector3(centerX, 20f, 0f);
+            Vector3 bottomPoint = new Vector3(centerX, -20f, 0f);
+            Gizmos.DrawLine(bottomPoint, topPoint);
+            
+            // Draw a label
+            #if UNITY_EDITOR
+            UnityEditor.Handles.Label(new Vector3(centerX, 10f, 0f), $"Tilt Center X: {centerX}");
+            #endif
+        }
+
         #endregion
 
     }

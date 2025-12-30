@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Managers
 {
+    [DefaultExecutionOrder(-100)]
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
@@ -17,7 +18,7 @@ namespace Managers
 
         public List<DayData> dayData = new();
 
-        public int nowDay;
+        public int currentDay;
 
         public float tiltMax = 8f;
 
@@ -74,6 +75,18 @@ namespace Managers
                 managers.Add(manager);
                 UnityEngine.Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
             }
+        }
+
+        public void CostumerSuccess()
+        {
+            UnityEngine.Debug.Log("[GameManager] Customer completed orders successfully!");
+            // TODO: Add score, money, or other rewards here
+        }
+
+        public void CostumerFail()
+        {
+            UnityEngine.Debug.Log("[GameManager] Customer left unhappy!");
+            // TODO: Add penalty or failure tracking here
         }
     }
 

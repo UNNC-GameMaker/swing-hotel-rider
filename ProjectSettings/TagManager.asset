@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Grabbable
   - Interactable
+  - RestaurantArea
   layers:
   - Default
   - TransparentFX

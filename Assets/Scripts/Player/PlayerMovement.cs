@@ -24,25 +24,12 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         _playerAnimation = GetComponent<PlayerAnimation>();
     }
 
-    private void OnEnable()
-    {
-        // Register with InputManager
-        var inputManager = GameManager.Instance.GetManager<InputManager>();
-        if (inputManager != null)
-        {
-            inputManager.RegisterListener(this);
-            Debug.Log("PlayerMovement registered with InputManager");
-        }
-        else
-        {
-            Debug.LogError("InputManager not found! PlayerMovement will not receive input events.");
-        }
-    }
+
 
     private void OnDisable()
     {
         // Unregister from InputManager
-        var inputManager = FindObjectOfType<InputManager>();
+        var inputManager = GameManager.Instance.GetManager<InputManager>();
         if (inputManager != null)
         {
             inputManager.UnregisterListener(this);
@@ -71,6 +58,19 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
         Debug.Log(
             $"PlayerMovement initialized - GroundCheck: {(groundCheck != null ? groundCheck.name : "NULL")}, LayerMask: {groundLayer.value}");
+   
+   
+        // Register with InputManager
+        var inputManager = GameManager.Instance.GetManager<InputManager>();
+        if (inputManager != null)
+        {
+            inputManager.RegisterListener(this);
+            Debug.Log("PlayerMovement registered with InputManager");
+        }
+        else
+        {
+            Debug.LogError("InputManager not found! PlayerMovement will not receive input events.");
+        }
     }
 
 
@@ -81,6 +81,7 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         GroundCheck();
         HandleJumpInput();
         UpdateDirection();
+        OutOfBoundCheck();
     }
 
     private void FixedUpdate()
@@ -274,7 +275,15 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         else // stationary vertically
             Rb.gravityScale = 1f;
     }
-    
+
+    private void OutOfBoundCheck()
+    {
+        if (transform.position.y < -100)
+        {
+            transform.position = new Vector3(0, 0, 0);
+        }
+    }
+
 
     #region Inspector Fields
 

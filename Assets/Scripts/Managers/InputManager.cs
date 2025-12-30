@@ -52,6 +52,7 @@ namespace Managers
         [SerializeField] private KeyCode releaseKey = KeyCode.Mouse0;
         [SerializeField] private KeyCode downKey = KeyCode.S;
         [SerializeField] private KeyCode grabKey = KeyCode.F;
+[SerializeField] private KeyCode pauseKey = KeyCode.Escape;
 
         [Header("Axis Names (Project Settings → Input Manager)")]
         [SerializeField] private string horizontalAxis = "Horizontal";
@@ -63,6 +64,7 @@ namespace Managers
         [SerializeField] private KeyCode gamepadJumpButton = KeyCode.JoystickButton0; // A button
         [SerializeField] private KeyCode gamepadFireButton = KeyCode.JoystickButton1; // B button
         [SerializeField] private KeyCode gamepadGrabButton = KeyCode.JoystickButton2; // X button
+[SerializeField] private KeyCode gamepadPauseButton = KeyCode.JoystickButton7; // Start button
         [SerializeField] private string gamepadHorizontalAxis = "Horizontal";
         [SerializeField] private string gamepadVerticalAxis = "Vertical";
         [SerializeField] private string gamepadLookXAxis = "Mouse X";
@@ -82,6 +84,7 @@ namespace Managers
         private bool _releaseHeld;
         private bool _downHeld;
         private bool _grabHeld;
+private bool _pauseHeld;
 
         #endregion
 
@@ -96,6 +99,7 @@ namespace Managers
             _releaseHeld = false;
             _downHeld = false;
             _grabHeld = false;
+            _pauseHeld = false;
             
             // Initialize previous state to prevent first-frame false positives
             _prevMoveInput = Vector2.zero;
@@ -104,6 +108,7 @@ namespace Managers
             _prevReleaseHeld = false;
             _prevDownHeld = false;
             _prevGrabHeld = false;
+            _prevPauseHeld = false;
             
             Debug.Log("InputManager: Initialized with " + currentScheme + " control scheme");
         }
@@ -138,11 +143,10 @@ namespace Managers
         private void DetectControlScheme()
         {
             // Check for gamepad input first (more specific)
-            if (Mathf.Abs(UnityEngine.Input.GetAxis(gamepadHorizontalAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(gamepadVerticalAxis)) > axisDeadzone ||
-                UnityEngine.Input.GetKey(gamepadJumpButton) ||
+            if (UnityEngine.Input.GetKey(gamepadJumpButton) ||
                 UnityEngine.Input.GetKey(gamepadFireButton) ||
-                UnityEngine.Input.GetKey(gamepadGrabButton))
+                UnityEngine.Input.GetKey(gamepadGrabButton) ||
+                UnityEngine.Input.GetKey(gamepadPauseButton))
             {
                 // Gamepad detected
                 if (currentScheme != ControlScheme.Gamepad)
@@ -158,10 +162,7 @@ namespace Managers
                 UnityEngine.Input.GetKey(releaseKey) ||
                 UnityEngine.Input.GetKey(downKey) ||
                 UnityEngine.Input.GetKey(grabKey) ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(horizontalAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(verticalAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(mouseXAxis)) > axisDeadzone ||
-                Mathf.Abs(UnityEngine.Input.GetAxis(mouseYAxis)) > axisDeadzone)
+                UnityEngine.Input.GetKey(pauseKey))
             {
                 // Keyboard detected
                 if (currentScheme != ControlScheme.Keyboard)
@@ -216,6 +217,7 @@ namespace Managers
             _releaseHeld = UnityEngine.Input.GetKey(releaseKey);
             _downHeld = UnityEngine.Input.GetKey(downKey) || _moveInput.y < downInputThreshold;
             _grabHeld = UnityEngine.Input.GetKey(grabKey);
+            _pauseHeld = UnityEngine.Input.GetKey(pauseKey);
         }
 
         /// <summary>
@@ -250,6 +252,7 @@ namespace Managers
             _releaseHeld = UnityEngine.Input.GetKey(gamepadFireButton);
             _downHeld = _moveInput.y < downInputThreshold;
             _grabHeld = UnityEngine.Input.GetKey(gamepadGrabButton);
+            _pauseHeld = UnityEngine.Input.GetKey(gamepadPauseButton);
         }
 
         #endregion
@@ -263,6 +266,7 @@ namespace Managers
         private bool _prevReleaseHeld;
         private bool _prevDownHeld;
         private bool _prevGrabHeld;
+        private bool _prevPauseHeld;
 
         /// <summary>
         /// Broadcast input events based on current input state
@@ -274,6 +278,7 @@ namespace Managers
             CheckAndBroadcastButton(_releaseHeld, _prevReleaseHeld, Input.InputEvents.Release);
             CheckAndBroadcastButton(_downHeld, _prevDownHeld, Input.InputEvents.Crouch);
             CheckAndBroadcastButton(_grabHeld, _prevGrabHeld, Input.InputEvents.Grab);
+            CheckAndBroadcastButton(_pauseHeld, _prevPauseHeld, Input.InputEvents.Pause);
 
             // Broadcast all axis events
             BroadcastAxisEvent(Input.InputAxis.MoveAxis, _moveInput);
@@ -284,6 +289,7 @@ namespace Managers
             _prevReleaseHeld = _releaseHeld;
             _prevDownHeld = _downHeld;
             _prevGrabHeld = _grabHeld;
+            _prevPauseHeld = _pauseHeld;
             _prevMoveInput = _moveInput;
             _prevLookInput = _lookInput;
         }

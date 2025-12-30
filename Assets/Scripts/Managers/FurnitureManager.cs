@@ -6,17 +6,20 @@ namespace Managers
 {
     public class FurnitureManager : Manager
     {
-        public List<string> orderList = new();
-
-        private readonly List<(int, int)> _levelUp = new();
-        private readonly List<Furniture> _freeFurnitures = new();
-
-        private readonly List<Furniture> _furnitures = new();
         public static FurnitureManager Instance { get; private set; }
 
-        // Public properties to access the lists
-        public IReadOnlyList<Furniture> Furnitures => _furnitures;
-        public IReadOnlyList<Furniture> FreeFurnitures => _freeFurnitures;
+        public List<string> OrderList = new();
+        
+        public enum DeskStatus
+        {
+            Empty,
+            Desired,
+            Occupied
+        }
+        
+        private Dictionary<Furniture, DeskStatus> _furnitureList;
+        private Dictionary<Furniture, Costumer> _deskCustomerPair;
+        private List<(int, int)> _levelUp; // that house which has a ladder
 
         private void Awake()
         {
@@ -29,35 +32,99 @@ namespace Managers
 
             Instance = this;
         }
-
+        
         public override void Init()
         {
-            UnityEngine.Debug.Log("[FurnitureManager] Init");
             GameManager.Instance.RegisterManager(this);
+            _furnitureList = new();
+            _deskCustomerPair = new();
+            _levelUp = new();
         }
 
+        public void AddNewFurniture(Furniture furniture)
+        {
+            if (!_furnitureList.ContainsKey(furniture))
+            {
+                _furnitureList[furniture] = DeskStatus.Empty;
+            }
+        }
+        
+        // Alias for compatibility
         public void AddFurniture(Furniture furniture)
         {
-            _furnitures.Add(furniture);
-            _freeFurnitures.Add(furniture);
+            AddNewFurniture(furniture);
         }
-
-        public void AddFreeFurniture(Furniture furniture)
-        {
-            _freeFurnitures.Add(furniture);
-        }
-
-        public void RemoveFreeFurniture(Furniture furniture)
-        {
-            _freeFurnitures.Remove(furniture);
-        }
-
+        
         public void RemoveFurniture(Furniture furniture)
         {
-            _furnitures.Remove(furniture);
-            _freeFurnitures.Remove(furniture);
+            _furnitureList.Remove(furniture);
         }
 
+        // Compatibility methods for Furniture.cs
+        public void AddFreeFurniture(Furniture furniture)
+        {
+            SetFurnitureStatus(furniture, DeskStatus.Empty);
+        }
+
+        public void BookFreeFurniture(Furniture furniture)
+        {
+            SetFurnitureStatus(furniture, DeskStatus.Desired);
+        }
+        
+        public void RemoveFreeFurniture(Furniture furniture)
+        {
+            // Mark as occupied
+            SetFurnitureStatus(furniture, DeskStatus.Occupied);
+        }
+        
+        public DeskStatus GetFurnitureStatus(Furniture furniture)
+        {
+            return _furnitureList.TryGetValue(furniture, out var status) ? status : DeskStatus.Empty;
+        }
+        
+        private void SetFurnitureStatus(Furniture furniture, DeskStatus status)
+        {
+            if (_furnitureList.ContainsKey(furniture))
+            {
+                _furnitureList[furniture] = status;
+            }
+            
+            
+        }
+        
+        public bool TryGetFurnitureStatus(Furniture furniture, out DeskStatus status)
+        {
+            return _furnitureList.TryGetValue(furniture, out status);
+        }
+        
+        // get empty desk that in the same floor
+        public List<Furniture> GetLocalEmptyFurnitureList(int floor)
+        {
+            List<Furniture> res = new List<Furniture>();
+            foreach (var furniture in _furnitureList)
+            {
+                if (furniture.Value == DeskStatus.Empty && furniture.Key.Level == floor)
+                {
+                    res.Add(furniture.Key);
+                }
+            }
+            return res;
+        }
+
+        public List<Furniture> GetAllEmptyFurnitureList()
+        {
+            List<Furniture> res = new List<Furniture>();
+            foreach (var furniture in _furnitureList)
+            {
+                if (furniture.Value == DeskStatus.Empty)
+                {
+                    res.Add(furniture.Key);
+                }
+            }
+            return res;
+        }
+
+        // LevelUp methods
         public void AddLevelUp(int level, int position)
         {
             _levelUp.Add((level, position));
@@ -78,3 +145,4 @@ namespace Managers
         }
     }
 }
+
