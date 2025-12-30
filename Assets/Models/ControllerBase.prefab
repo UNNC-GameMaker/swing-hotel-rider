@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d74c2c5fe070494db8f879a79b89bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orderList: []
+  OrderList: []
 --- !u!1 &3814040932424429988
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,6 +181,7 @@ Transform:
   - {fileID: 7905768190935069125}
   - {fileID: 4749347705409477082}
   - {fileID: 7292367058643097498}
+  - {fileID: 5934818767469476624}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5837785532474986045
@@ -200,7 +201,7 @@ MonoBehaviour:
   pauseUI: {fileID: 0}
   nowCostumerOrderCount: 0
   dayData: []
-  nowDay: 0
+  currentDay: 0
   tiltMax: 8
   skipTo: 0
   managers: []
@@ -250,9 +251,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentScheme: 2
   jumpKey: 32
-  releaseKey: 102
+  releaseKey: 107
   downKey: 115
   grabKey: 102
+  pauseKey: 27
   horizontalAxis: Horizontal
   verticalAxis: Vertical
   mouseXAxis: Mouse X
@@ -260,6 +262,7 @@ MonoBehaviour:
   gamepadJumpButton: 330
   gamepadFireButton: 331
   gamepadGrabButton: 332
+  gamepadPauseButton: 337
   gamepadHorizontalAxis: Horizontal
   gamepadVerticalAxis: Vertical
   gamepadLookXAxis: RightStickX
@@ -312,9 +315,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
-  tiltFactor: 100
+  tiltFactor: 10
   tiltSpeed: 1
-  centerX: 10
+  centerX: 4
 --- !u!114 &6952800998458920982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,4 +330,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5178eca41c34847458ca5a4f17091d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 4
+  gravity: 2
+--- !u!1 &8135235877070241601
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5934818767469476624}
+  - component: {fileID: 6394549165548101175}
+  - component: {fileID: 2348996195142713056}
+  m_Layer: 0
+  m_Name: SoundManagers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5934818767469476624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135235877070241601}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5700537619642902121}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6394549165548101175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135235877070241601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65b3f9984db540fe9be97504333bd0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2348996195142713056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135235877070241601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 884a54b780824760bb4f2ec0e0ab3636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
