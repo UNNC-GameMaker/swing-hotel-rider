@@ -15,6 +15,7 @@ namespace Customer.States
 
         public void EnterState()
         {
+            Debug.Log("Waiting for Food State");
             _waitTime = 0;
             _waitOrderTime = 0;
         }

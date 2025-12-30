@@ -12,6 +12,7 @@ namespace GameObjects
         {
             rb = GetComponent<Rigidbody2D>();
             _furnitureManager = GameManager.Instance.GetManager<FurnitureManager>();
+            Init();
         }
 
         public void OnDisable()

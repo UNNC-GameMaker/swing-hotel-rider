@@ -16,6 +16,7 @@ namespace Customer.States
 
         public void EnterState()
         {
+            Debug.Log("Entering Order State");
             _orderCoroutine = _customer.StartCoroutine(OrderRoutine());
         }
 
@@ -30,7 +31,11 @@ namespace Customer.States
             {
                 _customer.StopCoroutine(_orderCoroutine);
             }
-            _customer.Think.StopThink();
+
+            if (_customer != null && _customer.Think != null)
+            {
+                _customer.Think.StopThink();
+            }
         }
 
         private IEnumerator OrderRoutine()

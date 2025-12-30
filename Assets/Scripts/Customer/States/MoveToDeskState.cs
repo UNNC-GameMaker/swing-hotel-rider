@@ -19,6 +19,7 @@ namespace Customer.States
 
         public void EnterState()
         {
+            Debug.Log("Enter MoveToDeskState");
             _isMoving = false;
             
             // Validate desk exists
@@ -98,6 +99,7 @@ namespace Customer.States
             {
                 SetOnDesk();
                 _customer.ChangeState(new OrderState(_customer));
+                yield break;
             }
             else
             {
@@ -106,6 +108,7 @@ namespace Customer.States
                 _customer.Desk.SetFree();
                 _customer.Desk = null;
                 _customer.ChangeState(new FindDeskState(_customer));
+                yield break;
             }
             
             _isMoving = false;

@@ -75,6 +75,17 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         {
             Debug.LogError("InputManager not found! PlayerMovement will not receive input events.");
         }
+
+        // Auto-assign visualRoot if needed
+        if (visualRoot == null)
+        {
+            if (transform.childCount > 0) visualRoot = transform.GetChild(0);
+        }
+
+        if (visualRoot != null)
+        {
+            _initialVisualLocalPos = visualRoot.localPosition;
+        }
     }
 
 
@@ -86,6 +97,17 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         HandleJumpInput();
         UpdateDirection();
         OutOfBoundCheck();
+    }
+
+    private void LateUpdate()
+    {
+        if (visualRoot == null || visualRoot == transform) return;
+
+        var targetX = _initialVisualLocalPos.x + _movementInput.x * maxHorizontalDisplacement;
+        var target = new Vector3(targetX, _initialVisualLocalPos.y, _initialVisualLocalPos.z);
+
+        visualRoot.localPosition = Vector3.SmoothDamp(visualRoot.localPosition, target, ref _displacementVelocity,
+            displacementSmoothTime);
     }
 
     private void FixedUpdate()
@@ -346,6 +368,11 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     [SerializeField] [Tooltip("Volume scale for jump SFX")]
     private float jumpSfxVolume = 1f;
 
+    [Header("Visual Sway")] 
+    [SerializeField] private Transform visualRoot;
+    [SerializeField] private float maxHorizontalDisplacement = 0.1f;
+    [SerializeField] private float displacementSmoothTime = 0.08f;
+
     #endregion
 
     #region Private Fields
@@ -359,6 +386,10 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     private bool _jumpButtonHeld; // whether jump button is still held
     private readonly Collider2D[] _groundCheckResults = new Collider2D[4]; // Reusable array for ground check
     private bool _jumpSfxWarned;
+
+    // Visual Sway
+    private Vector3 _displacementVelocity;
+    private Vector3 _initialVisualLocalPos;
 
     #endregion
 

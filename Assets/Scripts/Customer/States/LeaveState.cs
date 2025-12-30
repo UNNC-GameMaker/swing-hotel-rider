@@ -16,6 +16,7 @@ namespace Customer.States
 
         public void EnterState()
         {
+            Debug.Log("Enter LeaveState");
             _customer.Think.StopThink();
             SetOffDesk();
             _customer.StartCoroutine(LeaveRoutine());

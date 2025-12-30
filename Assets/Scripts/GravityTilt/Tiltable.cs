@@ -21,9 +21,7 @@ namespace GravityTilt
 
         private void OnEnable()
         {
-            UnityEngine.Debug.Log("Tiltable added");
             if (!AllTiltables.Contains(this) && autoActivate) AllTiltables.Add(this);
-            UnityEngine.Debug.Log("Tiltable list length: " + AllTiltables.Count);
         }
 
         private void OnDisable()
