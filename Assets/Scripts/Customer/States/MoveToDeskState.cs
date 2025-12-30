@@ -79,6 +79,7 @@ namespace Customer.States
             // Move to the correct level first
             while (currentLevel != targetLevel)
             {
+                Debug.Log("vertiacl");
                 bool goingUp = targetLevel > currentLevel;
                 yield return _customer.StartCoroutine(StartLevel(goingUp));
                 currentLevel = _customer.Level;
@@ -90,7 +91,7 @@ namespace Customer.States
                     yield break;
                 }
             }
-            
+            Debug.Log("horizontal");
             // Now move horizontally to the desk on the same level
             yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x));
             
@@ -116,7 +117,10 @@ namespace Customer.States
 
         private bool IsOnDesk()
         {
-            if (_customer.Desk == null) return false;
+            if (_customer.Desk == null) {
+                Debug.Log("desk is null");
+                return false;
+                }
             return Mathf.Abs(_customer.Desk.transform.position.x - _customer.transform.position.x) <= 0.5f && 
                    _customer.Level == _cachedDeskLevel;
         }
