@@ -33,7 +33,7 @@ namespace Managers
         {
             if (playerCamera)
             {
-                playerCamera.m_Lens.Dutch = _totalTilt;
+                playerCamera.m_Lens.Dutch = TiltTarget;
             }
         }
 

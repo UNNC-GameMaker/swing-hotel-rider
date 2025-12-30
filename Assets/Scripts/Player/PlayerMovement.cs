@@ -24,14 +24,12 @@ public class PlayerMovement : MonoBehaviour, IInputListener
         _playerAnimation = GetComponent<PlayerAnimation>();
     }
 
-    private void OnEnable()
-    {
-    }
+
 
     private void OnDisable()
     {
         // Unregister from InputManager
-        var inputManager = FindObjectOfType<InputManager>();
+        var inputManager = GameManager.Instance.GetManager<InputManager>();
         if (inputManager != null)
         {
             inputManager.UnregisterListener(this);
