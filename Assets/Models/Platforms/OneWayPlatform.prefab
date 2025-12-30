@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1122176262351924997}
   - component: {fileID: 5443567167333036249}
   - component: {fileID: 4734554078930482354}
+  - component: {fileID: 8262543426991306763}
   m_Layer: 0
   m_Name: OneWayPlatform
   m_TagString: Untagged
@@ -97,7 +98,6 @@ MonoBehaviour:
   solidOffset: 0.05
   hollowOffset: 0.05
   downKeyDistance: 1
-  playerInputComponent: {fileID: 0}
 --- !u!212 &4734554078930482354
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -150,3 +150,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8262543426991306763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7532434774080770600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de5d7786974247f9ae23360b069538e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weight: 1
+  autoActivate: 1
+  rb: {fileID: 0}

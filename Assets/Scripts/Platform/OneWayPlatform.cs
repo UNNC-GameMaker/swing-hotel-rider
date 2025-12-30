@@ -1,3 +1,7 @@
+using System;
+using Input;
+using Managers;
+using Player;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +12,7 @@ using UnityEngine;
 ///     platform).
 /// </summary>
 [RequireComponent(typeof(BoxCollider2D))]
-public class OneWayPlatform : MonoBehaviour
+public class OneWayPlatform : MonoBehaviour, IInputListener
 {
     [Header("Player Layer (for overlap detection)")]
     public LayerMask playerLayer = 1 << 0;
@@ -40,15 +44,18 @@ public class OneWayPlatform : MonoBehaviour
         _initialized = false;
         _isSolid = true;
         _boxCollider.isTrigger = false;
+        GameManager.Instance.GetManager<InputManager>().RegisterListener(this);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.GetManager<InputManager>().UnregisterListener(this);
     }
 
     private void Update()
     {
-        // 旧输入系统：每帧读取方向键
-        _movementInput.x = Input.GetAxisRaw("Horizontal");
-        _movementInput.y = Input.GetAxisRaw("Vertical");
 
-        if (GroundCheck.Instance == null) return;
+        if (!GroundCheck.Instance) return;
 
         if (!_initialized)
         {
@@ -124,9 +131,22 @@ public class OneWayPlatform : MonoBehaviour
         if (_isSolid == solid) return;
         _isSolid = solid;
 
-        if (solid)
-            gameObject.layer = LayerMask.NameToLayer("GroundCollider");
-        else
-            gameObject.layer = LayerMask.NameToLayer("GroundColliderHollow");
+        gameObject.layer = LayerMask.NameToLayer(solid ? "GroundCollider" : "GroundColliderHollow");
     }
+
+    public void OnInputEvent(InputEvents inputEvent, InputState state)
+    {
+        
+    }
+
+    public void OnInputAxis(InputAxis axis, Vector2 value)
+    {
+        if (axis == InputAxis.MoveAxis)
+        {
+            _movementInput = value;
+        }
+    }
+
+    public int InputPriority => 0;
+    public bool IsInputEnabled => true;
 }

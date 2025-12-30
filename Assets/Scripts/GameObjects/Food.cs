@@ -21,6 +21,9 @@ namespace GameObjects
 
         # endregion
         
+        [Header("Food Properties")]
+        public string FoodType = "Default";
+        
         public void Awake()
         {
             rb = GetComponent<Rigidbody2D>();

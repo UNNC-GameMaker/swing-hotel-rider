@@ -1,7 +1,11 @@
+using Buliding;
 using GameObjects;
+using Input;
+using Managers;
+using Player;
 using UnityEngine;
 
-public class Grab : MonoBehaviour
+public class Grab : MonoBehaviour, IInputListener
 {
     private Grabbable _closestGrabbable;
 
@@ -13,23 +17,34 @@ public class Grab : MonoBehaviour
         _playerAnimation = GetComponent<PlayerAnimation>();
     }
 
+    private void OnEnable()
+    {
+        // Register with InputManager
+        GameManager.Instance.GetManager<InputManager>().RegisterListener(this);
+    }
+
+    private void OnDisable()
+    {
+        // Unregister from InputManager
+        GameManager.Instance.GetManager<InputManager>().UnregisterListener(this);
+    }
+
     private void Update()
     {
         if (_grabbedRb == null)
         {
             // Detect grabbable objects in range
             var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, grabRange, _overlapResults);
-
+            Debug.Log(hitCount);
             Grabbable closestGrabbable = null;
             IInteract closestInteract = null;
-
             for (var i = 0; i < hitCount; i++)
             {
                 var col = _overlapResults[i];
-
-                // Find closest Grabbable object
+                Debug.Log(col.gameObject.tag);
+                // Find the closest Grabbable object
                 if (col.gameObject.CompareTag("Grabbable"))
-                {
+                {   
                     var grabbable = col.gameObject.GetComponent<Grabbable>();
                     if (grabbable)
                     {
@@ -80,12 +95,6 @@ public class Grab : MonoBehaviour
         {
             // Hide cursor when holding an object
             cursor.SetActive(false);
-        }
-
-        // 旧输入系统：按下 Fire1 交互/抓取
-        if (Input.GetButtonDown("Fire1"))
-        {
-            HandleGrabPressed();
         }
     }
 
@@ -191,6 +200,43 @@ public class Grab : MonoBehaviour
     private PlayerAnimation _playerAnimation;
     private Rigidbody2D _grabbedRb; // Currently grabbed object's rigidbody
     private readonly Collider2D[] _overlapResults = new Collider2D[1024]; // Never trust players
+
+    #endregion
+
+    #region IInputListener Implementation
+
+    public void OnInputEvent(InputEvents inputEvent, InputState state)
+    {
+        switch (inputEvent)
+        {
+            case InputEvents.Grab:
+                if (state == InputState.Started)
+                {
+                    // Grab button pressed
+                    HandleGrabPressed();
+                }
+                break;
+            
+            case InputEvents.Release:
+                if (state == InputState.Started)
+                {
+                    // Release button pressed - throw the object
+                    if (_grabbedRb != null)
+                    {
+                        ReleaseObj();
+                    }
+                }
+                break;
+        }
+    }
+
+    public void OnInputAxis(InputAxis axis, Vector2 value)
+    {
+        // Grab doesn't need axis input
+    }
+
+    public int InputPriority => 0;
+    public bool IsInputEnabled => true;
 
     #endregion
 }

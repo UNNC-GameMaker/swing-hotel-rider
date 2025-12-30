@@ -1,3 +1,4 @@
+using Cinemachine;
 using GravityTilt;
 using UnityEngine;
 
@@ -5,38 +6,40 @@ namespace Managers
 {
     public class TiltManager : Manager
     {
-        [SerializeField] private GameObject playerCamera;   
+        [SerializeField] private CinemachineVirtualCamera playerCamera;   
         void Update()
         {
-            //Debug.Log("[TiltManager] totalTilt: " + TotalTilt);
+            //Debug.Log("[TiltManager] _totalTilt: " + TiltTarget);
 
             TiltObject();
+            
+            TiltCamera();
         }
 
         private void TiltObject()
         {
             // Reset total tilt each frame
-            TotalTilt = 0f;
+            _totalTilt = 0f;
 
             // Calculate total tilt from all tiltable objects
             foreach (var tiltObject in Tiltable.AllTiltables)
-                TotalTilt += (tiltObject.transform.position.x - centerX) * tiltObject.Weight;
+                _totalTilt += (tiltObject.transform.position.x - centerX) * tiltObject.Weight;
 
             // Smoothly interpolate to target tilt
-            TiltTarget = Mathf.Lerp(TiltTarget, TotalTilt / tiltFactor, tiltSpeed * Time.deltaTime);
+            TiltTarget = Mathf.Lerp(TiltTarget, _totalTilt / tiltFactor, tiltSpeed * Time.deltaTime);
         }
 
         private void TiltCamera()
         {
             if (playerCamera)
             {
-                playerCamera.transform.rotation = Quaternion.Euler(0f, 0f, TiltTarget);
+                playerCamera.m_Lens.Dutch = TiltTarget;
             }
         }
 
         public override void Init()
         {
-            UnityEngine.Debug.Log("[TiltManager] Init");
+            Debug.Log("[TiltManager] Init");
             GameManager.Instance.RegisterManager(this);
             
         }
@@ -54,15 +57,14 @@ namespace Managers
         #endregion
 
         #region Public Properties
-
         public float TiltTarget { get; private set; }
+        #endregion
+        
+        #region Private Properties
 
-        public float TotalTilt { get; private set; }
-
+        private float _totalTilt;
+        
         #endregion
 
-        #region Private Fields
-
-        #endregion
     }
 }
