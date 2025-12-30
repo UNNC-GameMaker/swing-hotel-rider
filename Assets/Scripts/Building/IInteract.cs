@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Buliding
+namespace Building
 {
     public interface IInteract
     {

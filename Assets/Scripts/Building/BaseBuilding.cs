@@ -4,7 +4,7 @@ using Managers;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Buliding
+namespace Building
 {
     public class BaseBuilding : MonoBehaviour
     {

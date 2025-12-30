@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Buliding
+namespace Building
 {
     public class BuildAreaShow : MonoBehaviour
     {
