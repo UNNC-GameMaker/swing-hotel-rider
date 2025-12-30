@@ -1,21 +1,25 @@
+using Managers;
 using UnityEngine;
 
 namespace BaseLink
 {
     public class BaseLink : MonoBehaviour
     {
-        private float tiltAngle;
-
+        private float _tiltAngle; 
+        private TiltManager _tiltManager;
         // Start is called before the first frame update
         private void Start()
         {
-            tiltAngle = 0;
-            UnityEngine.Debug.Log("BaseLink Init");
+            _tiltManager = GameManager.Instance.GetManager<TiltManager>();
+            Debug.Log("BaseLink Init");
+            
         }
 
         // Update is called once per frame
         private void Update()
         {
+            _tiltAngle = _tiltManager.TiltTarget;
+            transform.localRotation = Quaternion.Euler(0f, 0f, _tiltAngle);
         }
     }
 }
