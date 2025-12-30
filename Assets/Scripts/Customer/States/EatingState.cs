@@ -15,7 +15,8 @@ namespace Customer.States
         }
 
         public void EnterState()
-        {
+        {   
+            Debug.Log("Eating State in");
             _eatCoroutine = _customer.StartCoroutine(EatRoutine());
         }
 

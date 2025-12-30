@@ -35,13 +35,11 @@ public class Grab : MonoBehaviour, IInputListener
         {
             // Detect grabbable objects in range
             var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, grabRange, _overlapResults);
-            Debug.Log(hitCount);
             Grabbable closestGrabbable = null;
             IInteract closestInteract = null;
             for (var i = 0; i < hitCount; i++)
             {
                 var col = _overlapResults[i];
-                Debug.Log(col.gameObject.tag);
                 // Find the closest Grabbable object
                 if (col.gameObject.CompareTag("Grabbable"))
                 {   

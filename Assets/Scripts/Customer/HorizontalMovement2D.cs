@@ -36,6 +36,8 @@ namespace Customer
         private float _targetX;
         private bool _isMoving;
 
+        public float TargetX => _targetX;
+
         void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();

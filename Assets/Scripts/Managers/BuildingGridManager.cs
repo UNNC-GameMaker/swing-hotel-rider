@@ -8,7 +8,8 @@ namespace Managers
 {
     public class BuildingGridManager : Manager
     {
-        private Vector2Int _buildableSize;
+        [SerializeField] private Vector2Int buildableSize;
+        [SerializeField] private Vector2Int gridSize = new Vector2Int(3, 3);
 
         // TODO: not done yet
         private readonly List<BaseBuilding> _buildings = new();
@@ -16,8 +17,8 @@ namespace Managers
         private bool[,] _isOccupied;
 
 
-        public Vector2Int BuildableSize => _buildableSize;
-        public Vector2Int GridSize { get; }
+        public Vector2Int BuildableSize => buildableSize;
+        public Vector2Int GridSize => gridSize;
 
         public void Reset()
         {
@@ -47,7 +48,7 @@ namespace Managers
         // check inbound and is empty, room should be adjacent to other room
         public bool CheckBuildable(int x, int y, Vector2Int size)
         {
-            if (x < 0 || y < 0 || x + size.x > _buildableSize.x || y + size.y > _buildableSize.y) return false;
+            if (x < 0 || y < 0 || x + size.x > buildableSize.x || y + size.y > buildableSize.y) return false;
 
             for (var i = x; i < x + size.x; i++)
             for (var j = y; j < y + size.y; j++)
@@ -65,7 +66,7 @@ namespace Managers
                     if (i >= x && i < x + size.x && j >= y && j < y + size.y)
                         continue;
 
-                    if (i >= 0 && i < _buildableSize.x && j >= 0 && j < _buildableSize.y)
+                    if (i >= 0 && i < buildableSize.x && j >= 0 && j < buildableSize.y)
                         if (_isOccupied[i, j])
                         {
                             hasAdjacentRoom = true;
@@ -81,9 +82,10 @@ namespace Managers
 
         public override void Init()
         {
-            _isOccupied = new bool[_buildableSize.x, _buildableSize.y];
-            for (var i = 0; i < _buildableSize.x; i++)
-            for (var j = 0; j < _buildableSize.y; j++)
+            GameManager.Instance.RegisterManager(this);
+            _isOccupied = new bool[buildableSize.x, buildableSize.y];
+            for (var i = 0; i < buildableSize.x; i++)
+            for (var j = 0; j < buildableSize.y; j++)
                 _isOccupied[i, j] = false;
 
             foreach (var building in _buildings) building.Set();

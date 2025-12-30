@@ -16,9 +16,11 @@ namespace Customer.States
 
         public void EnterState()
         {
+            Debug.Log("Entering FindDeskState");
             GetDesk();
             if (_customer.Desk == null)
-            {
+            {   
+                Debug.Log("Random Move");
                 _customer.RandomMove.StartRandomMove();
             }
         }
@@ -53,6 +55,8 @@ namespace Customer.States
             if (availableDesks.Count > 0)
             {
                 _customer.Desk = availableDesks[Random.Range(0, availableDesks.Count)];
+                Debug.Log("Desk: " + _customer.Desk);
+                return;
             }
             else
             {
@@ -60,8 +64,12 @@ namespace Customer.States
                 if (allDesks.Count > 0)
                 {
                     _customer.Desk = allDesks[Random.Range(0, allDesks.Count)];
+                    Debug.Log("Desk: " + _customer.Desk);
+                    return;
                 }
+
             }
+            Debug.Log("No Desk Found");
         }
     }
 }

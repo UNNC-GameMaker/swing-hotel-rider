@@ -18,7 +18,14 @@ public class Costumer : MonoBehaviour
 
     public Furniture Desk { get; set; }
 
-    public int Level { get { return Mathf.FloorToInt(transform.position.y / BuildingGridManager.GridSize.y); } }
+    public int Level
+    {
+        get
+        {
+            if (BuildingGridManager == null) return 0;
+            return Mathf.FloorToInt(transform.position.y / BuildingGridManager.GridSize.y);
+        }
+    }
 
     public ICustomerState CurrentState { get; private set; }
 
@@ -53,13 +60,32 @@ public class Costumer : MonoBehaviour
 
     void Start()
     {
-        BuildingGridManager = GameManager.Instance.GetManager<BuildingGridManager>();
+        if (GameManager.Instance != null)
+        {
+            BuildingGridManager = GameManager.Instance.GetManager<BuildingGridManager>();
+        }
+
+        if (BuildingGridManager == null)
+        {
+            BuildingGridManager = FindObjectOfType<BuildingGridManager>();
+            if (BuildingGridManager == null)
+            {
+                Debug.LogError("BuildingGridManager not found! Costumer cannot function properly.");
+            }
+        }
+
         FurnitureManager = FurnitureManager.Instance;
         
         RandomMove = GetComponent<RandomMove>();
         HorizontalMovement = GetComponent<HorizontalMovement2D>();
         Think = GetComponent<Think>();
+        
+        if (Think == null)
+        {
+            Debug.LogError($"Think component missing on Customer {name}!");
+        }
 
+        Debug.Log("Customer: to FindDeskState");
         ChangeState(new FindDeskState(this));
     }
 
@@ -126,5 +152,25 @@ public class Costumer : MonoBehaviour
     {
         GameManager.Instance.CostumerSuccess();
         ChangeState(new LeaveState(this));
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Draw line to Desk if assigned
+        if (Desk != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, Desk.transform.position);
+            Gizmos.DrawWireSphere(Desk.transform.position, 0.5f);
+        }
+
+        // Draw line to current horizontal movement target
+        if (HorizontalMovement != null && HorizontalMovement.IsMoving())
+        {
+            Gizmos.color = Color.yellow;
+            Vector3 targetPos = new Vector3(HorizontalMovement.TargetX, transform.position.y, transform.position.z);
+            Gizmos.DrawLine(transform.position, targetPos);
+            Gizmos.DrawWireSphere(targetPos, 0.3f);
+        }
     }
 }
