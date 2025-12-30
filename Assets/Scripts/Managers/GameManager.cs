@@ -25,6 +25,7 @@ namespace Managers
         public int skipTo;
 
         public List<Manager> managers = new();
+        private Dictionary<Type, Manager> _managerMap = new();
 
         private void Awake()
         {
@@ -52,16 +53,23 @@ namespace Managers
                 if (!managers.Contains(manager))
                 {
                     manager.Init();
-                    UnityEngine.Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
+                    Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
                 }
         }
 
         public T GetManager<T>() where T : Manager
         {
+            // Optimization: Try dictionary lookup first for exact type matches
+            if (_managerMap.TryGetValue(typeof(T), out var cachedManager))
+            {
+                return cachedManager as T;
+            }
+
+            // Fallback to list search for inheritance/interfaces
             var m = managers.Find(x => x is T);
             if (m == null)
             {
-                UnityEngine.Debug.LogError($"[GameManager] Manager {typeof(T).Name} not found");
+                Debug.LogError($"[GameManager] Manager {typeof(T).Name} not found");
                 return null;
             }
 
@@ -73,19 +81,27 @@ namespace Managers
             if (!managers.Contains(manager))
             {
                 managers.Add(manager);
-                UnityEngine.Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
+                
+                // Add to dictionary for O(1) lookup
+                var type = manager.GetType();
+                if (!_managerMap.ContainsKey(type))
+                {
+                    _managerMap[type] = manager;
+                }
+                
+                Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
             }
         }
 
         public void CostumerSuccess()
         {
-            UnityEngine.Debug.Log("[GameManager] Customer completed orders successfully!");
+            Debug.Log("[GameManager] Customer completed orders successfully!");
             // TODO: Add score, money, or other rewards here
         }
 
         public void CostumerFail()
         {
-            UnityEngine.Debug.Log("[GameManager] Customer left unhappy!");
+            Debug.Log("[GameManager] Customer left unhappy!");
             // TODO: Add penalty or failure tracking here
         }
     }

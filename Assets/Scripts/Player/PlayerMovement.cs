@@ -289,6 +289,11 @@ public class PlayerMovement : MonoBehaviour, IInputListener
             transform.position = new Vector3(0, 0, 0);
         }
     }
+    
+    private void PlayJumpSfx()
+    {
+        
+    }
 
 
     #region Inspector Fields
@@ -356,21 +361,6 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     private bool _jumpSfxWarned;
 
     #endregion
-
-    private void PlayJumpSfx()
-    {
-        if (jumpAudioSource == null || jumpSfx == null)
-        {
-            if (!_jumpSfxWarned)
-            {
-                Debug.LogWarning("Jump SFX missing AudioSource or AudioClip.");
-                _jumpSfxWarned = true;
-            }
-            return;
-        }
-
-        jumpAudioSource.PlayOneShot(jumpSfx, jumpSfxVolume);
-    }
 
     #region Public Properties
 

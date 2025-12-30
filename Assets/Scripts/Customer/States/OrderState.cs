@@ -41,7 +41,7 @@ namespace Customer.States
                 _customer.Think.StartThink("Order", false);
                 yield return Wait(_customer.OrderSpeed);
                 
-                SoundManager.Play("Order");
+                GameManager.Instance.GetManager<SFXManager>().PlayClip("Order");
                 _customer.NowOrder = _customer.FurnitureManager.OrderList[Random.Range(0, _customer.FurnitureManager.OrderList.Count)];
                 
                 // Waiting for food
