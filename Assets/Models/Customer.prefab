@@ -271,7 +271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8254732161481734391}
   m_Layer: 11
-  m_Name: Circle
+  m_Name: Think
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

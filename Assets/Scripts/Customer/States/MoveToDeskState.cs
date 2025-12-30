@@ -7,10 +7,10 @@ namespace Customer.States
     public class MoveToDeskState : ICustomerState
     {
         private readonly Costumer _customer;
-        private bool _isMoving;
         private Vector3 _cachedDeskPosition;
         private int _cachedDeskLevel;
         private Coroutine _moveCoroutine;
+        private Coroutine _subCoroutine;
 
         public MoveToDeskState(Costumer customer)
         {
@@ -20,7 +20,6 @@ namespace Customer.States
         public void EnterState()
         {
             Debug.Log("Enter MoveToDeskState");
-            _isMoving = false;
             
             // Validate desk exists
             if (_customer.Desk == null)
@@ -40,8 +39,8 @@ namespace Customer.States
 
         public void ExecuteState()
         {
-            // Optional: Check if desk moved significantly
-            if (_customer.Desk != null && !_isMoving)
+            // Check if desk moved significantly
+            if (_customer.Desk != null)
             {
                 float distanceMoved = Vector3.Distance(_cachedDeskPosition, _customer.Desk.transform.position);
                 if (distanceMoved > 0.5f) // Tolerance threshold
@@ -50,10 +49,10 @@ namespace Customer.States
                     _cachedDeskPosition = _customer.Desk.transform.position;
                     _cachedDeskLevel = _customer.Desk.Level;
                     
-                    if (_moveCoroutine != null)
-                    {
-                        _customer.StopCoroutine(_moveCoroutine);
-                    }
+                    StopCoroutines();
+                    ResetRigidbody();
+                    _customer.HorizontalMovement.StopMove();
+                    
                     _moveCoroutine = _customer.StartCoroutine(MoveToDesk());
                 }
             }
@@ -61,6 +60,17 @@ namespace Customer.States
 
         public void ExitState()
         {
+            StopCoroutines();
+            ResetRigidbody();
+        }
+
+        private void StopCoroutines()
+        {
+            if (_subCoroutine != null)
+            {
+                _customer.StopCoroutine(_subCoroutine);
+                _subCoroutine = null;
+            }
             if (_moveCoroutine != null)
             {
                 _customer.StopCoroutine(_moveCoroutine);
@@ -68,19 +78,30 @@ namespace Customer.States
             }
         }
 
+        private void ResetRigidbody()
+        {
+            var rb = _customer.GetComponent<Rigidbody2D>();
+            if (rb != null && rb.bodyType == RigidbodyType2D.Kinematic)
+            {
+                rb.bodyType = RigidbodyType2D.Dynamic;
+                rb.velocity = Vector2.zero;
+            }
+        }
+
         private IEnumerator MoveToDesk()
         {
-            _isMoving = true;
-            
             // Check if we need to change levels
             int currentLevel = _customer.Level;
             int targetLevel = _cachedDeskLevel;
+            int maxLevelChanges = 20;
             
             // Move to the correct level first
-            while (currentLevel != targetLevel)
+            while (currentLevel != targetLevel && maxLevelChanges > 0)
             {
+                maxLevelChanges--;
                 bool goingUp = targetLevel > currentLevel;
-                yield return _customer.StartCoroutine(StartLevel(goingUp));
+                _subCoroutine = _customer.StartCoroutine(StartLevel(goingUp));
+                yield return _subCoroutine;
                 currentLevel = _customer.Level;
                 
                 // Safety check
@@ -92,14 +113,14 @@ namespace Customer.States
             }
             
             // Now move horizontally to the desk on the same level
-            yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x));
+            _subCoroutine = _customer.StartCoroutine(StartMove(_cachedDeskPosition.x));
+            yield return _subCoroutine;
             
             // Check if we arrived at the desk
             if (IsOnDesk())
             {
                 SetOnDesk();
                 _customer.ChangeState(new OrderState(_customer));
-                yield break;
             }
             else
             {
@@ -108,10 +129,7 @@ namespace Customer.States
                 _customer.Desk.SetFree();
                 _customer.Desk = null;
                 _customer.ChangeState(new FindDeskState(_customer));
-                yield break;
             }
-            
-            _isMoving = false;
         }
 
         private bool IsOnDesk()
@@ -133,15 +151,12 @@ namespace Customer.States
         private IEnumerator StartMove(float target)
         {
             Debug.Log("StartMove: " + target);
-            _isMoving = true;
             _customer.HorizontalMovement.MoveToX(target);
             yield return new WaitUntil(() => !_customer.HorizontalMovement.IsMoving());
-            _isMoving = false;
         }
 
         private IEnumerator StartLevel(bool up)
         {
-            _isMoving = true;
             int level = up ? _customer.Level : _customer.Level - 1;
             int position = _customer.FurnitureManager.FindLevelUp(level);
 
@@ -184,7 +199,6 @@ namespace Customer.States
             rb.velocity = Vector2.up * _customer.UpSpeed;
 
             yield return new WaitForSeconds(0.3f);
-            _isMoving = false;
         }
     }
 }
