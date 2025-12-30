@@ -98,11 +98,58 @@ public class Grab : MonoBehaviour, IInputListener
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         // Visualize grab range in editor
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, grabRange);
+        
+        // Draw a filled circle at a smaller radius for better visibility
+        Gizmos.color = new Color(1f, 1f, 0f, 0.1f);
+        DrawCircle(transform.position, grabRange, 32);
+        
+        #if UNITY_EDITOR
+        // Show grab range value
+        UnityEditor.Handles.Label(transform.position + Vector3.up * grabRange, $"Grab Range: {grabRange:F2}");
+        
+        // Show closest grabbable if exists
+        if (_closestGrabbable != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, _closestGrabbable.transform.position);
+            UnityEditor.Handles.Label(_closestGrabbable.transform.position, "Closest Grabbable");
+        }
+        
+        // Show closest interact if exists
+        if (_closestInteract != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(transform.position, _closestInteract.Transform.position);
+            UnityEditor.Handles.Label(_closestInteract.Transform.position, "Closest Interact");
+        }
+        
+        // Show grabbed object connection
+        if (_grabbedRb != null)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(transform.position, _grabbedRb.transform.position);
+            UnityEditor.Handles.Label(_grabbedRb.transform.position, "GRABBED");
+        }
+        #endif
+    }
+    
+    private void DrawCircle(Vector3 center, float radius, int segments)
+    {
+        float angleStep = 360f / segments;
+        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
+        
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = angleStep * i * Mathf.Deg2Rad;
+            Vector3 newPoint = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+            Gizmos.DrawLine(prevPoint, newPoint);
+            prevPoint = newPoint;
+        }
     }
 
     /// <summary>
