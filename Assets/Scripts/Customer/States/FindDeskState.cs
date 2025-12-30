@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using GameObjects;
+using Managers;
 using UnityEngine;
 
 namespace Customer.States
@@ -26,7 +29,8 @@ namespace Customer.States
             {
                 GetDesk();
                 if (_customer.Desk != null)
-                {
+                {   
+                    _customer.Desk.Book();
                     _customer.RandomMove.StopRandomMove();
                     _customer.ChangeState(new MoveToDeskState(_customer));
                 }
@@ -44,13 +48,20 @@ namespace Customer.States
 
         private void GetDesk()
         {
-            if (_customer.DeskManager.FreeDesks.Count <= 0)
+            // get desk in current floor first
+            var availableDesks = _customer.FurnitureManager.GetLocalEmptyFurnitureList(_customer.Level);
+            if (availableDesks.Count > 0)
             {
-                return;
+                _customer.Desk = availableDesks[Random.Range(0, availableDesks.Count)];
             }
-            _customer.Desk = _customer.DeskManager.FreeDesks[Random.Range(0, _customer.DeskManager.FreeDesks.Count)];
-            _customer.Desk.SetOccupied();
-            Debug.Log("GetDesk: " + _customer.Desk.name);
+            else
+            {
+                var allDesks = _customer.FurnitureManager.GetAllEmptyFurnitureList();
+                if (allDesks.Count > 0)
+                {
+                    _customer.Desk = allDesks[Random.Range(0, allDesks.Count)];
+                }
+            }
         }
     }
 }

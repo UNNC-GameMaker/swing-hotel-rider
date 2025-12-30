@@ -1,11 +1,12 @@
 using System.Collections;
+using Managers;
 using UnityEngine;
 
 namespace Customer.States
 {
     public class LeaveState : ICustomerState
     {
-        private Costumer _customer;
+        private readonly Costumer _customer;
         private bool _isMoving;
 
         public LeaveState(Costumer customer)
@@ -78,7 +79,7 @@ namespace Customer.States
         {
             _isMoving = true;
             int level = up ? _customer.Level : _customer.Level - 1;
-            int position = _customer.DeskManager.FindLevelUp(level);
+            int position = _customer.FurnitureManager.FindLevelUp(level);
 
             if (position == -1)
             {

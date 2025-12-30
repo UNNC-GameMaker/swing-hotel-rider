@@ -9,8 +9,8 @@ using UnityEngine.Serialization;
 
 public class Costumer : MonoBehaviour
 {
-    public DeskManager DeskManager { get; private set; }
     public BuildingGridManager BuildingGridManager { get; private set; }
+    public FurnitureManager FurnitureManager { get; private set; }
 
     public RandomMove RandomMove { get; private set; }
     public HorizontalMovement2D HorizontalMovement { get; private set; }
@@ -53,8 +53,8 @@ public class Costumer : MonoBehaviour
 
     void Start()
     {
-        DeskManager = GameManager.Instance.GetManager<DeskManager>();
         BuildingGridManager = GameManager.Instance.GetManager<BuildingGridManager>();
+        FurnitureManager = FurnitureManager.Instance;
         
         RandomMove = GetComponent<RandomMove>();
         HorizontalMovement = GetComponent<HorizontalMovement2D>();

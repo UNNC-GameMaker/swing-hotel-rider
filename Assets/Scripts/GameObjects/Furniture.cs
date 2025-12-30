@@ -11,6 +11,7 @@ namespace GameObjects
         public void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            _furnitureManager = GameManager.Instance.GetManager<FurnitureManager>();
         }
 
         public void OnDisable()
@@ -21,8 +22,14 @@ namespace GameObjects
         public void Init()
         {
             _isOccupied = false;
-            FurnitureManager.Instance.AddFurniture(this);
+            if (_furnitureManager == null) _furnitureManager = FurnitureManager.Instance;
+            _furnitureManager?.AddFurniture(this);
             GetComponent<Tiltable>().Activate();
+        }
+
+        public void Book()
+        {
+            _furnitureManager.BookFreeFurniture(this);
         }
 
         public void SetOccupied()
@@ -62,7 +69,7 @@ namespace GameObjects
         #region Private Fields
 
         private bool _isOccupied;
-        private readonly FurnitureManager _furnitureManager = FurnitureManager.Instance;
+        private FurnitureManager _furnitureManager;
 
         #endregion
     }

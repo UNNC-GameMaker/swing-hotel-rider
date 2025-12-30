@@ -42,7 +42,7 @@ namespace Customer.States
                 yield return Wait(_customer.OrderSpeed);
                 
                 SoundManager.Play("Order");
-                _customer.NowOrder = _customer.DeskManager.OrderList[Random.Range(0, _customer.DeskManager.OrderList.Count)];
+                _customer.NowOrder = _customer.FurnitureManager.OrderList[Random.Range(0, _customer.FurnitureManager.OrderList.Count)];
                 
                 // Waiting for food
                 _customer.ChangeState(new WaitingForFoodState(_customer));
