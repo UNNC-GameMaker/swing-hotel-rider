@@ -130,14 +130,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 261693537208820234, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: releaseKey
-      value: 107
-      objectReference: {fileID: 0}
-    - target: {fileID: 1300143413602066547, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4055609065738143433, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
       propertyPath: m_Name
       value: ControllerBase
@@ -183,21 +175,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6836770809921711140, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: centerX
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6836770809921711140, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: tiltFactor
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6836770809921711140, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 189633122}
-    - target: {fileID: 6952800998458920982, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: gravity
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
