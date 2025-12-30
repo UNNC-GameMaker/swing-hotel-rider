@@ -1,7 +1,7 @@
 using Managers;
 using UnityEngine;
 
-namespace Buliding
+namespace Building
 {
     public class ChooseBuilding : MonoBehaviour
     {

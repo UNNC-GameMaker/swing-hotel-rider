@@ -1,4 +1,4 @@
-using Buliding;
+using Building;
 using Cinemachine;
 using Input;
 using UnityEngine;
