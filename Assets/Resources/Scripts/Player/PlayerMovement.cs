@@ -239,6 +239,7 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
             // Trigger landing animation
             if (_playerAnimation) _playerAnimation.OnLanding();
+            PlayerTouchGround();
         }
     }
 
@@ -315,7 +316,12 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     
     private void PlayJumpSfx()
     {
-        _sfxManager.PlayClip("8bit-jump");
+        _sfxManager.PlayClipUniversal("PlayerJump");
+    }
+
+    private void PlayerTouchGround()
+    {
+        _sfxManager.PlayClipUniversal("PlayerTouchGround");
     }
 
 
