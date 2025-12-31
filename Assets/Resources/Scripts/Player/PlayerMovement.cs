@@ -315,7 +315,7 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     
     private void PlayJumpSfx()
     {
-        _sfxManager.PlayClip("8bit-jump");
+        _sfxManager.PlayClipUniversal("PlayerJump");
     }
 
 

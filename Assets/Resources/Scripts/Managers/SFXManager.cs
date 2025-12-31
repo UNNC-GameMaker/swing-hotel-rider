@@ -53,7 +53,7 @@ namespace Managers
             }
 
             // attempt to load from Resources if not already cached
-            var loaded = Resources.Load<AudioClip>("Audio/SoundEffects/"+clipName);
+            var loaded = Resources.Load<AudioClip>(clipName);
             if (loaded != null)
             {
                 Instance._clips[clipName] = loaded;
