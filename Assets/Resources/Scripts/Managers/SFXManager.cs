@@ -32,6 +32,17 @@ namespace Managers
             GameManager.Instance.RegisterManager(this);
         }
 
+        public void PlayClipUniversal(String clipName)
+        {
+            PlayClip("Audio/SoundEffects/Universal/" + clipName);
+        }
+
+        public void PlayClipChapterWise(int chapter, String clipName)
+        {
+            String literal = chapter < 10 ? "0" + chapter : chapter.ToString();
+            PlayClip("Audio/SoundEffects/ChapterWise" + literal + "/" + clipName);
+        }
+
         public void PlayClip(String clipName)
         {
             // play audio by name
