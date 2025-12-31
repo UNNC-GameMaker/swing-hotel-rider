@@ -36,7 +36,7 @@ namespace GravityTilt
 
         public void Update()
         {
-            if(rb.transform.y < -50)
+            if(transform.position.y < -50)
             {
                 AllTiltables.Remove(this);
             }
