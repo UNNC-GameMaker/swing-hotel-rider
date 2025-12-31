@@ -7,7 +7,6 @@ namespace Customer.States
     public class MoveToDeskState : ICustomerState
     {
         private readonly Costumer _customer;
-        private bool _isMoving;
         private Vector3 _cachedDeskPosition;
         private int _cachedDeskLevel;
         private Coroutine _moveCoroutine;
@@ -20,7 +19,6 @@ namespace Customer.States
         public void EnterState()
         {
             Debug.Log("Enter MoveToDeskState");
-            _isMoving = false;
             
             // Validate desk exists
             if (_customer.Desk == null)
@@ -41,7 +39,7 @@ namespace Customer.States
         public void ExecuteState()
         {
             // Optional: Check if desk moved significantly
-            if (_customer.Desk != null && !_isMoving)
+            if (_customer.Desk != null)
             {
                 float distanceMoved = Vector3.Distance(_cachedDeskPosition, _customer.Desk.transform.position);
                 if (distanceMoved > 0.5f) // Tolerance threshold
@@ -70,8 +68,6 @@ namespace Customer.States
 
         private IEnumerator MoveToDesk()
         {
-            _isMoving = true;
-            
             // Check if we need to change levels
             int currentLevel = _customer.Level;
             int targetLevel = _cachedDeskLevel;
@@ -79,7 +75,6 @@ namespace Customer.States
             // Move to the correct level first
             while (currentLevel != targetLevel)
             {
-                Debug.Log("vertiacl");
                 bool goingUp = targetLevel > currentLevel;
                 yield return _customer.StartCoroutine(StartLevel(goingUp));
                 currentLevel = _customer.Level;
@@ -91,11 +86,9 @@ namespace Customer.States
                     yield break;
                 }
             }
-            Debug.Log("horizontal");
             // Now move horizontally to the desk on the same level
             yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x));
             
-            // Check if we arrived at the desk
             if (IsOnDesk())
             {
                 SetOnDesk();
@@ -111,18 +104,17 @@ namespace Customer.States
                 _customer.ChangeState(new FindDeskState(_customer));
                 yield break;
             }
-            
-            _isMoving = false;
         }
 
         private bool IsOnDesk()
         {
-            if (_customer.Desk == null) {
-                Debug.Log("desk is null");
-                return false;
-                }
-            return Mathf.Abs(_customer.Desk.transform.position.x - _customer.transform.position.x) <= 0.5f && 
-                   _customer.Level == _cachedDeskLevel;
+            if (_customer.Desk)
+            {
+                Debug.Log("Desk Distance: " + (_customer.Desk.transform.position.x - _customer.transform.position.x));
+                return Mathf.Abs(_customer.Desk.transform.position.x - _customer.transform.position.x) <= 0.5f &&
+                       _customer.Level == _cachedDeskLevel;
+            }
+            return false;
         }
 
         private void SetOnDesk()
@@ -137,15 +129,35 @@ namespace Customer.States
         private IEnumerator StartMove(float target)
         {
             Debug.Log("StartMove: " + target);
-            _isMoving = true;
             _customer.HorizontalMovement.MoveToX(target);
-            yield return new WaitUntil(() => !_customer.HorizontalMovement.IsMoving());
-            _isMoving = false;
+            
+            float stuckTimer = 0f;
+            float lastX = _customer.transform.position.x;
+
+            while (_customer.HorizontalMovement.IsMoving())
+            {
+                yield return null;
+
+                if (Mathf.Abs(_customer.transform.position.x - lastX) < 0.001f)
+                {
+                    stuckTimer += Time.deltaTime;
+                    if (stuckTimer > 0.5f)
+                    {
+                        Debug.LogWarning("Customer stuck moving to " + target + ". Force stopping.");
+                        _customer.HorizontalMovement.StopMove();
+                        break;
+                    }
+                }
+                else
+                {
+                    stuckTimer = 0f;
+                    lastX = _customer.transform.position.x;
+                }
+            }
         }
 
         private IEnumerator StartLevel(bool up)
         {
-            _isMoving = true;
             int level = up ? _customer.Level : _customer.Level - 1;
             int position = _customer.FurnitureManager.FindLevelUp(level);
 
@@ -159,9 +171,7 @@ namespace Customer.States
             }
 
             float target = _customer.BuildingGridManager.GridSize.x * (position + 0.5f);
-            _customer.HorizontalMovement.MoveToX(target);
-
-            yield return new WaitUntil(() => !_customer.HorizontalMovement.IsMoving());
+            yield return _customer.StartCoroutine(StartMove(target));
             yield return new WaitForSeconds(0.3f);
 
             Rigidbody2D rb = _customer.GetComponent<Rigidbody2D>();
@@ -188,7 +198,6 @@ namespace Customer.States
             rb.velocity = Vector2.up * _customer.UpSpeed;
 
             yield return new WaitForSeconds(0.3f);
-            _isMoving = false;
         }
     }
 }

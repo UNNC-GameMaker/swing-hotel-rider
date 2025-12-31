@@ -407,19 +407,16 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
     public void OnInputEvent(InputEvents inputEvent, InputState state)
     {
-        Debug.Log("OnInputEvent: " + inputEvent.ToString());
         switch (inputEvent)
         {
             case InputEvents.Jump:
                 switch (state)
                 {
                     case InputState.Started:
-                        Debug.Log("Starting jump");
                         // Jump button pressed - attempt to jump
                         JumpStart();
                         break;
                     case InputState.Performed:
-                        Debug.Log("Hold jump");
                         _jumpButtonHeld = true;
                         break;
                     case InputState.Canceled:

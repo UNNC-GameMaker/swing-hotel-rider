@@ -321,11 +321,7 @@ private bool _pauseHeld;
         /// </summary>
         private void BroadcastButtonEvent(Input.InputEvents inputEvent, Input.InputState state)
         {
-
-            if (inputEvent == Input.InputEvents.Jump)
-            {
-                Debug.Log("JUMP");
-            }
+            
 
             for (int i = InputListeners.Count - 1; i >= 0; i--)
             {
