@@ -1,0 +1,56 @@
+using System.Collections.Generic;
+using Player;
+using UnityEngine;
+
+namespace GravityTilt
+{
+    public class Tiltable : MonoBehaviour
+    {
+        #region static
+
+        public static readonly List<Tiltable> AllTiltables = new();
+
+        #endregion
+
+        private bool _isPlayer;
+
+        public Rigidbody2D Rb => rb;
+        public float Weight => weight;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+            _isPlayer = GetComponent<PlayerMovement>() != null;
+        }
+
+        public void Update()
+        {
+            if (transform.position.y < -50 && !_isPlayer) AllTiltables.Remove(this);
+        }
+
+        private void OnEnable()
+        {
+            if (!AllTiltables.Contains(this) && autoActivate) AllTiltables.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            AllTiltables.Remove(this);
+        }
+
+        public void Activate()
+        {
+            AllTiltables.Add(this);
+        }
+
+        #region private variables
+
+        [SerializeField] private float weight = 1f;
+
+        [SerializeField] private bool autoActivate;
+
+        [SerializeField] private Rigidbody2D rb;
+
+        #endregion
+    }
+}
