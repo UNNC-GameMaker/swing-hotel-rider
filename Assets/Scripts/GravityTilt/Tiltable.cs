@@ -34,6 +34,14 @@ namespace GravityTilt
             AllTiltables.Add(this);
         }
 
+        public void Update()
+        {
+            if(transform.position.y < -50)
+            {
+                AllTiltables.Remove(this);
+            }
+        }
+
         #region private variables
 
         [SerializeField] private float weight = 1f;

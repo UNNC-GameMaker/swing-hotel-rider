@@ -43,7 +43,7 @@ namespace Managers
 
             // attempt to load from Resources if not already cached
             var loaded = Resources.Load<AudioClip>("Audio/SoundEffects/"+clipName);
-                if (loaded != null)
+            if (loaded != null)
             {
                 Instance._clips[clipName] = loaded;
                 Instance.PlayClip(loaded);
@@ -54,7 +54,7 @@ namespace Managers
             }
         }
         
-        //play audio by AduioClip
+        //play audio by AudioClip
         public void PlayClip(AudioClip clip)
         {
             if (!clip)
