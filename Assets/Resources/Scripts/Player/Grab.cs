@@ -16,6 +16,7 @@ public class Grab : MonoBehaviour, IInputListener
     {
         _playerRb = GetComponent<Rigidbody2D>();
         _playerAnimation = GetComponent<PlayerAnimation>();
+        _sfxManager = GameManager.Instance.GetManager<SFXManager>();
     }
 
     private void OnEnable()
@@ -198,6 +199,7 @@ public class Grab : MonoBehaviour, IInputListener
 
         // Call OnGrab callback
         grabbable.OnGrab();
+        PlayGrabSfx();
     }
 
     /// <summary>
@@ -230,6 +232,23 @@ public class Grab : MonoBehaviour, IInputListener
         // Call OnRelease callback
         var grabbable = rb.GetComponent<Grabbable>();
         if (grabbable != null) grabbable.OnRelease();
+        PlayReleaseSfx();
+    }
+
+    private void PlayGrabSfx()
+    {
+        if (_sfxManager != null)
+        {
+            _sfxManager.PlayClipUniversal("PlayerGrab");
+        }
+    }
+
+    private void PlayReleaseSfx()
+    {
+        if (_sfxManager != null)
+        {
+            _sfxManager.PlayClipUniversal("PlayerRealease");
+        }
     }
 
     #region Inspector Fields
@@ -252,6 +271,7 @@ public class Grab : MonoBehaviour, IInputListener
     private List<Rigidbody2D> _grabbedObjects = new List<Rigidbody2D>();
     private int _inventorySize = 4;
     private readonly Collider2D[] _overlapResults = new Collider2D[1024]; // Never trust players
+    private SFXManager _sfxManager;
 
     #endregion
 
