@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
     private void Start()
     {
+        _sfxManager = GameManager.Instance.GetManager<SFXManager>();
         // Auto-assign groundCheck from GroundCheck component (FootCollider)
         // Done in Start() to ensure GroundCheck.Instance is initialized
         if (groundCheck == null)
@@ -314,7 +315,7 @@ public class PlayerMovement : MonoBehaviour, IInputListener
     
     private void PlayJumpSfx()
     {
-        
+        _sfxManager.PlayClip("8bit-jump");
     }
 
 
@@ -377,6 +378,9 @@ public class PlayerMovement : MonoBehaviour, IInputListener
 
     #region Private Fields
 
+    // SFX
+    private SFXManager _sfxManager;
+    
     private Vector2 _movementInput;
     private PlayerAnimation _playerAnimation;
 
