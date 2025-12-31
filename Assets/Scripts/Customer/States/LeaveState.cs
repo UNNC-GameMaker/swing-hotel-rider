@@ -16,6 +16,7 @@ namespace Customer.States
         public void EnterState()
         {
             UnityEngine.Debug.Log("Enter LeaveState");
+            _customer.StateReference = CustomerState.Leaving;
             _customer.Think.StopThink();
             SetOffDesk();
             _customer.StartCoroutine(LeaveRoutine());

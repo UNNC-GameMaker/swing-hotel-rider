@@ -14,6 +14,7 @@ namespace Customer.States
         public void EnterState()
         { 
             UnityEngine.Debug.Log("Entering FindDeskState");
+            _customer.StateReference = CustomerState.FindDesk;
             GetDesk();
             if (_customer.Desk == null)
             {

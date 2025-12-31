@@ -17,6 +17,7 @@ namespace Customer.States
         public void EnterState()
         {
             UnityEngine.Debug.Log("Entering Order State");
+            _customer.StateReference = CustomerState.Order;
             _orderCoroutine = _customer.StartCoroutine(OrderRoutine());
         }
 

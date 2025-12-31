@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1776646675467238765}
   - component: {fileID: 6540800261188826229}
   m_Layer: 10
-  m_Name: Circle
+  m_Name: Texture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.19515002, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 97e1ecd05cd134e9d9effd66c94a09ac, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -161,7 +161,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &5639898626381081924
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -194,9 +194,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.10509312}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.39490688
 --- !u!114 &4326350353877978074
 MonoBehaviour:
   m_ObjectHideFlags: 0

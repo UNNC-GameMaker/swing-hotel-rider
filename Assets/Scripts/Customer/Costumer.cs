@@ -42,6 +42,7 @@ namespace Customer
         }
 
         public ICustomerState CurrentState { get; private set; }
+        public CustomerState StateReference = CustomerState.FindDesk;
         public Color DefaultColor => defaultColor;
         public Color WaitColor => waitColor;
         public float EatingSpeed => eatingSpeed;

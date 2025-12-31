@@ -16,6 +16,7 @@ namespace Customer.States
         public void EnterState()
         {
             UnityEngine.Debug.Log("Waiting for Food State");
+            _customer.StateReference = CustomerState.Waiting;
             _waitTime = 0;
             _waitOrderTime = 0;
         }
@@ -34,6 +35,7 @@ namespace Customer.States
 
                 if (_waitTime > _customer.MaxWaitTime)
                 {
+                    _customer.StateReference = CustomerState.OrderTimeout;
                     _customer.CostumerFail();
                     return;
                 }
