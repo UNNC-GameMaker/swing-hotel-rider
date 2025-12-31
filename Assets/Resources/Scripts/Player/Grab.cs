@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Building;
 using GameObjects;
 using Input;
@@ -31,7 +32,7 @@ public class Grab : MonoBehaviour, IInputListener
 
     private void Update()
     {
-        if (_grabbedRb == null)
+        if (_grabbedObjects.Count < _inventorySize)
         {
             // Detect grabbable objects in range
             var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, grabRange, _overlapResults);
@@ -91,8 +92,10 @@ public class Grab : MonoBehaviour, IInputListener
         }
         else
         {
-            // Hide cursor when holding an object
+            // Hide cursor when holding max objects
             cursor.SetActive(false);
+            _closestInteract = null;
+            _closestGrabbable = null;
         }
     }
 
@@ -126,12 +129,15 @@ public class Grab : MonoBehaviour, IInputListener
             UnityEditor.Handles.Label(_closestInteract.Transform.position, "Closest Interact");
         }
         
-        // Show grabbed object connection
-        if (_grabbedRb != null)
+        // Show grabbed objects connection
+        foreach (var rb in _grabbedObjects)
         {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, _grabbedRb.transform.position);
-            UnityEditor.Handles.Label(_grabbedRb.transform.position, "GRABBED");
+            if (rb != null)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawLine(transform.position, rb.transform.position);
+                UnityEditor.Handles.Label(rb.transform.position, "GRABBED");
+            }
         }
         #endif
     }
@@ -155,18 +161,10 @@ public class Grab : MonoBehaviour, IInputListener
     /// </summary>
     private void HandleGrabPressed()
     {
-        if (_grabbedRb == null)
-        {
             // Try to interact first, then grab
             if (_closestInteract != null)
                 _closestInteract.Interact();
             else if (_closestGrabbable != null) GrabObj(_closestGrabbable);
-        }
-        else
-        {
-            // Release the held object
-            ReleaseObj();
-        }
     }
 
     /// <summary>
@@ -175,21 +173,27 @@ public class Grab : MonoBehaviour, IInputListener
     private void GrabObj(Grabbable grabbable)
     {
         if (grabbable == null) return;
+        if (_grabbedObjects.Count >= _inventorySize) return;
 
-        _grabbedRb = grabbable.rb;
+        Rigidbody2D rb = grabbable.rb;
+        _grabbedObjects.Add(rb);
         cursor.SetActive(false);
 
         // Make object kinematic and reset physics
-        _grabbedRb.isKinematic = true;
-        _grabbedRb.velocity = Vector2.zero;
-        _grabbedRb.angularVelocity = 0;
+        rb.isKinematic = true;
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0;
 
         // Parent to player and position above
-        _grabbedRb.transform.SetParent(transform);
-        _grabbedRb.transform.localPosition = Vector3.up;
+        rb.transform.SetParent(transform);
+        
+        // Stack objects visually
+        float stackOffset = 1.0f;
+        float itemHeight = 0.8f;
+        rb.transform.localPosition = Vector3.up * (stackOffset + (_grabbedObjects.Count - 1) * itemHeight);
 
         // Disable colliders while grabbed
-        var colliders = _grabbedRb.transform.GetComponentsInChildren<Collider2D>();
+        var colliders = rb.transform.GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders) col.enabled = false;
 
         // Call OnGrab callback
@@ -201,29 +205,31 @@ public class Grab : MonoBehaviour, IInputListener
     /// </summary>
     private void ReleaseObj()
     {
-        if (_grabbedRb == null) return;
+        if (_grabbedObjects.Count == 0) return;
+
+        // Get the last object (LIFO)
+        Rigidbody2D rb = _grabbedObjects[_grabbedObjects.Count - 1];
+        _grabbedObjects.RemoveAt(_grabbedObjects.Count - 1);
 
         // Restore physics
-        _grabbedRb.isKinematic = false;
-        _grabbedRb.transform.SetParent(null);
+        rb.isKinematic = false;
+        rb.transform.SetParent(null);
 
         // Apply release force based on player direction
         var direction = 1f;
         if (_playerAnimation != null && _playerAnimation.spriteRenderer != null)
             direction = _playerAnimation.spriteRenderer.flipX ? -1f : 1f;
         var force = new Vector3(releaseForce.x * direction, releaseForce.y, 0);
-        _grabbedRb.velocity = _playerRb.velocity;
-        _grabbedRb.AddForce(force, ForceMode2D.Impulse);
+        rb.velocity = _playerRb.velocity;
+        rb.AddForce(force, ForceMode2D.Impulse);
 
         // Re-enable colliders
-        var colliders = _grabbedRb.transform.GetComponentsInChildren<Collider2D>();
+        var colliders = rb.transform.GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders) col.enabled = true;
 
         // Call OnRelease callback
-        var grabbable = _grabbedRb.GetComponent<Grabbable>();
+        var grabbable = rb.GetComponent<Grabbable>();
         if (grabbable != null) grabbable.OnRelease();
-
-        _grabbedRb = null;
     }
 
     #region Inspector Fields
@@ -243,7 +249,8 @@ public class Grab : MonoBehaviour, IInputListener
 
     private Rigidbody2D _playerRb;
     private PlayerAnimation _playerAnimation;
-    private Rigidbody2D _grabbedRb; // Currently grabbed object's rigidbody
+    private List<Rigidbody2D> _grabbedObjects = new List<Rigidbody2D>();
+    private int _inventorySize = 4;
     private readonly Collider2D[] _overlapResults = new Collider2D[1024]; // Never trust players
 
     #endregion
@@ -266,7 +273,7 @@ public class Grab : MonoBehaviour, IInputListener
                 if (state == InputState.Started)
                 {
                     // Release button pressed - throw the object
-                    if (_grabbedRb != null)
+                    if (_grabbedObjects.Count > 0)
                     {
                         ReleaseObj();
                     }

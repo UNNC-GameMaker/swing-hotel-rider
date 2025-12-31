@@ -14,9 +14,12 @@ namespace GravityTilt
         public Rigidbody2D Rb => rb;
         public float Weight => weight;
 
+        private bool _isPlayer;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            _isPlayer = GetComponent<PlayerMovement>() != null;
         }
 
         private void OnEnable()
@@ -36,7 +39,7 @@ namespace GravityTilt
 
         public void Update()
         {
-            if(transform.position.y < -50)
+            if(transform.position.y < -50 && !_isPlayer)
             {
                 AllTiltables.Remove(this);
             }
