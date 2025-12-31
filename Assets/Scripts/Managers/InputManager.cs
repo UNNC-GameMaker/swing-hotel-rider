@@ -10,6 +10,7 @@ namespace Managers
     /// </summary>
     public class InputManager : Manager
     {   
+        public static InputManager Instance { get; private set; }
         
         public override void Init()
         {
@@ -92,6 +93,14 @@ private bool _pauseHeld;
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
             // Initialize current state
             _moveInput = Vector2.zero;
             _lookInput = Vector2.zero;
@@ -113,6 +122,11 @@ private bool _pauseHeld;
             Debug.Log("InputManager: Initialized with " + currentScheme + " control scheme");
         }
 
+        private void Start()
+        {
+            Init();
+        }
+
         private void Update()
         {
             // Auto-detect control scheme if set to Auto
@@ -130,7 +144,10 @@ private bool _pauseHeld;
 
         private void OnDestroy()
         {
-            InputListeners.Clear();
+            if (Instance == this)
+            {
+                InputListeners.Clear();
+            }
         }
 
         #endregion
