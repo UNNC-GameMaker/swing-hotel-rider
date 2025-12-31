@@ -1,0 +1,45 @@
+using System;
+using UnityEngine;
+
+namespace Managers
+{
+    public class LevelTimer : Manager
+    {
+        [SerializeField] private float defaultDuration = 120f;
+
+        public float RemainingTime { get; private set; }
+        public bool IsRunning { get; private set; }
+
+        public event Action OnTimerEnd;
+
+        public override void Init()
+        {
+            GameManager.Instance.RegisterManager(this);
+        }
+
+        private void Update()
+        {
+            if (IsRunning)
+            {
+                RemainingTime -= Time.deltaTime;
+                if (RemainingTime <= 0)
+                {
+                    RemainingTime = 0;
+                    IsRunning = false;
+                    OnTimerEnd?.Invoke();
+                }
+            }
+        }
+
+        public void StartTimer(float duration)
+        {
+            RemainingTime = duration;
+            IsRunning = true;
+        }
+
+        public void StopTimer()
+        {
+            IsRunning = false;
+        }
+    }
+}

@@ -12,7 +12,7 @@ namespace Managers
         public GameObject gameOverUI;
         public GameObject gameWinUI;
         public GameObject pauseUI;
-
+        public GameState gameState;
 
         public int nowCostumerOrderCount;
 
@@ -25,7 +25,11 @@ namespace Managers
         public int skipTo;
 
         public List<Manager> managers = new();
-        private Dictionary<Type, Manager> _managerMap = new();
+        
+        private readonly Dictionary<Type, Manager> _managerMap = new();
+
+        private int _customerFailCounter;
+        private int _customerSuccessCounter;
 
         private void Awake()
         {
@@ -37,8 +41,9 @@ namespace Managers
             }
 
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Optional: persist across scenes
-
+            
+            DontDestroyOnLoad(gameObject); // persist across scenes
+            gameState = GameState.Playing;
             // Auto-find and initialize all managers in the scene
             InitializeManagers();
         }
@@ -96,13 +101,73 @@ namespace Managers
         public void CostumerSuccess()
         {
             Debug.Log("[GameManager] Customer completed orders successfully!");
-            // TODO: Add score, money, or other rewards here
+            _customerSuccessCounter++;
         }
 
         public void CostumerFail()
         {
             Debug.Log("[GameManager] Customer left unhappy!");
-            // TODO: Add penalty or failure tracking here
+            _customerFailCounter++;
+        }
+
+        public void LevelStart()
+        {
+            gameState = GameState.Playing;
+        }
+
+        public void LevelFail()
+        {
+            gameState = GameState.GameOver;
+            GetManager<LevelTimer>().StopTimer();
+        }
+        
+        public void LevelPass()
+        {
+            gameState = GameState.GameOver;
+            GetManager<LevelTimer>().StopTimer();
+            if (gameWinUI != null) gameWinUI.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
+        public void LevelPause()
+        {
+            if (gameState == GameState.Paused)
+            {
+                // Resume
+                gameState = GameState.Playing;
+                Time.timeScale = 1f;
+                if (pauseUI != null) pauseUI.SetActive(false);
+                
+                // Resume timer
+                var timer = GetManager<LevelTimer>();
+                if (timer != null && timer.RemainingTime > 0)
+                {
+                    timer.StartTimer(timer.RemainingTime);
+                }
+            }
+            else if (gameState == GameState.Playing)
+            {
+                // Pause
+                gameState = GameState.Paused;
+                Time.timeScale = 0f;
+                if (pauseUI != null) pauseUI.SetActive(true);
+                GetManager<LevelTimer>().StopTimer();
+            }
+        }
+
+        public Dictionary<String, object> GetLevelResult()
+        {
+            return new Dictionary<String, object>()
+            {
+                { "Success", _customerSuccessCounter },
+                { "Fail", _customerFailCounter },
+            };
+        }
+
+        public void ResetLevel()
+        {
+            _customerFailCounter = 0;
+            _customerSuccessCounter = 0;
         }
     }
 

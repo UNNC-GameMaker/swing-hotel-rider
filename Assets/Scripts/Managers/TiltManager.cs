@@ -10,10 +10,12 @@ namespace Managers
         void Update()
         {
             //Debug.Log("[TiltManager] _totalTilt: " + TiltTarget);
+            if (GameManager.Instance.gameState == GameState.Playing)
+            {
+                TiltObject();
 
-            TiltObject();
-            
-            TiltCamera();
+                TiltCamera();
+            }
         }
 
         private void TiltObject()
