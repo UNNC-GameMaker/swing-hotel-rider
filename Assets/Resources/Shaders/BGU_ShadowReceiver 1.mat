@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ShadowReceiver
+  m_Name: BGU_ShadowReceiver 1
   m_Shader: {fileID: 4800000, guid: cd827af3f4172084c9f0e309654fbbaf, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -50,12 +50,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _Float0: 10
-    - _Hardness: 0.5
+    - _Hardness: 0.25
     - _PixelSize: 0.03125
     - _ShadowLevel: 0.95
     m_Colors:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Offset: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _Screen: {r: 19.2, g: 10.8, b: 0, a: 0}
-    - _ShadowOffset: {r: 3, g: 1, b: 0, a: 0}
+    - _ShadowOffset: {r: 2, g: 3, b: 0, a: 0}
   m_BuildTextureStacks: []
