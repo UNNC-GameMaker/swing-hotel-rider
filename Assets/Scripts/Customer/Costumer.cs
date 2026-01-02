@@ -25,6 +25,7 @@ namespace Customer
         [SerializeField] private float upOffset = 0.5f;
         public BuildingGridManager BuildingGridManager { get; private set; }
         public FurnitureManager FurnitureManager { get; private set; }
+        public TextureManager TextureManager { get; private set; }
 
         public RandomMove RandomMove { get; private set; }
         public HorizontalMovement2D HorizontalMovement { get; private set; }
@@ -59,16 +60,11 @@ namespace Customer
         private void Start()
         {
             if (GameManager.Instance != null)
-                BuildingGridManager = GameManager.Instance.GetManager<BuildingGridManager>();
-
-            if (BuildingGridManager == null)
             {
-                BuildingGridManager = FindObjectOfType<BuildingGridManager>();
-                if (BuildingGridManager == null)
-                    UnityEngine.Debug.LogError("BuildingGridManager not found! Costumer cannot function properly.");
+                BuildingGridManager = GameManager.Instance.GetManager<BuildingGridManager>();
+                FurnitureManager = GameManager.Instance.GetManager<FurnitureManager>();
+                TextureManager = GameManager.Instance.GetManager<TextureManager>();
             }
-
-            FurnitureManager = FurnitureManager.Instance;
 
             RandomMove = GetComponent<RandomMove>();
             HorizontalMovement = GetComponent<HorizontalMovement2D>();

@@ -130,6 +130,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2335973659015774497, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
+      propertyPath: OrderList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335973659015774497, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
+      propertyPath: OrderList.Array.data[0]
+      value: fresh-fish
+      objectReference: {fileID: 0}
     - target: {fileID: 4055609065738143433, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
       propertyPath: m_Name
       value: ControllerBase
@@ -532,12 +540,44 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 286514547771549278, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 318759623483088204, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 318759623483088204, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 318759623483088204, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 318759623483088204, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 979898398387677543, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 979898398387677543, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 979898398387677543, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.12
       objectReference: {fileID: 0}
     - target: {fileID: 1710017790847994572, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: targetCamera
       value: 
       objectReference: {fileID: 81657457}
+    - target: {fileID: 2235695871405934973, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: orderSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9112827552156739662, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.7812498

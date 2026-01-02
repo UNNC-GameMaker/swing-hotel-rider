@@ -23,7 +23,11 @@ namespace Customer.States
 
         public void ExecuteState()
         {
-            if (_customer.NowOrder == null) return;
+            if (_customer.NowOrder == null)
+            {
+                UnityEngine.Debug.LogError("now order is null!");
+                return;
+            }
 
             var isPlayer = _customer.IsPickedUpByPlayer();
             var inRestaurant = _customer.IsInRestaurant();

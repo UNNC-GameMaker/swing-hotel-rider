@@ -23,6 +23,8 @@ namespace Managers
 
         private void Update()
         {
+            if (GameManager.Instance == null) return;
+
             //Debug.Log("[TiltManager] _totalTilt: " + TiltTarget);
             if (GameManager.Instance.gameState == GameState.Playing)
             {

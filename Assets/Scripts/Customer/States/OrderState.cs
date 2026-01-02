@@ -38,7 +38,7 @@ namespace Customer.States
             while (true)
             {
                 // Thinking about ordering
-                _customer.Think.StartThink("Order", false);
+                _customer.Think.StartThink("fresh-ish", false);
                 yield return Wait(_customer.OrderSpeed);
 
                 GameManager.Instance.GetManager<SFXManager>().PlayClip("Order");

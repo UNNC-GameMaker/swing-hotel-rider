@@ -1,4 +1,5 @@
 using Camera;
+using Managers;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -20,6 +21,7 @@ namespace Customer
 
         public void StartThink(string text, bool important, int sorting = 0, Color color = default)
         {
+            
             if (color != default)
                 bubble.color = color;
             else
@@ -37,30 +39,13 @@ namespace Customer
 
             nowThink = text;
 
-            target.sprite = LoadSprite("" + text, "Think");
+            target.sprite = GameManager.Instance.GetManager<TextureManager>().GetSprite("Food/" + nowThink);
         }
 
         public void StopThink()
         {
             target.transform.parent.gameObject.SetActive(false);
         }
-
-        public static Sprite LoadSprite(string filePath, string sliceName)
-        {
-            var slices = Resources.LoadAll<Sprite>(filePath);
-
-            if (slices == null || slices.Length == 0)
-            {
-                UnityEngine.Debug.LogError($"SpriteLoaderNoCache: 未能加载 Resources/{filePath}");
-                return null;
-            }
-
-            foreach (var s in slices)
-                if (s.name == sliceName)
-                    return s;
-
-            UnityEngine.Debug.LogError($"SpriteLoaderNoCache: 在 {filePath} 中未找到切片 \"{sliceName}\"");
-            return null;
-        }
+        
     }
 }
