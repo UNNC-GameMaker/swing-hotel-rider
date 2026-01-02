@@ -422,11 +422,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2235695871405934973, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: maxWaitTime
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2235695871405934973, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: maxWaitOrderTime
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8727635190431037897, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
