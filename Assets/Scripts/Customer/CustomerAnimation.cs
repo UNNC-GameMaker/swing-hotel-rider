@@ -7,7 +7,7 @@ namespace Customer
     public class CustomerAnimation : MonoBehaviour
     {
         [SerializeField] private NPCAnimationController npcAnimationController;
-        [SerializeField] private Customer.Costumer customer;
+        [SerializeField] private Costumer customer;
         
         private Rigidbody2D _rb;
 

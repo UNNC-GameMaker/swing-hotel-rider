@@ -18,7 +18,7 @@ namespace Managers
 
         public List<DayData> dayData = new();
 
-        public int currentDay;
+        public int currentDay; // current chapter?
 
         public float tiltMax = 8f;
 
@@ -90,6 +90,15 @@ namespace Managers
 
                 UnityEngine.Debug.Log($"[GameManager] Registered: {manager.GetType().Name}");
             }
+        }
+
+        public String GetCurrentChapter()
+        {
+            if (gameState != GameState.Playing)
+            {
+                return "";
+            }
+            return "Chapter" + (currentDay < 10 ? "0" + currentDay : currentDay.ToString());
         }
 
         public void CostumerSuccess()

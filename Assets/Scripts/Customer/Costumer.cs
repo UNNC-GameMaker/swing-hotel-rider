@@ -120,13 +120,19 @@ namespace Customer
 
         public bool CheckFood(string foodType)
         {
-            var colliders = Physics2D.OverlapCircleAll(transform.position, 0.5f);
+            var colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
             foreach (var _collider in colliders)
-                if (_collider.gameObject.CompareTag("Food") && _collider.GetComponent<Food>().FoodType == foodType)
+            {
+                if (_collider.gameObject.CompareTag("Grabbable"))
                 {
-                    DestroyImmediate(_collider.gameObject);
-                    return true;
+                    var food = _collider.GetComponent<Food>();
+                    if (food != null && food.FoodType == foodType)
+                    {
+                        DestroyImmediate(_collider.gameObject);
+                        return true;
+                    }
                 }
+            }
 
             return false;
         }

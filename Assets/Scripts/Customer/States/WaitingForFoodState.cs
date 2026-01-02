@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 
 namespace Customer.States
@@ -32,22 +33,7 @@ namespace Customer.States
             var isPlayer = _customer.IsPickedUpByPlayer();
             var inRestaurant = _customer.IsInRestaurant();
 
-            if (_customer.transform.position.y > _customer.Level * _customer.BuildingGridManager.GridSize.y + 1f ||
-                isPlayer || !inRestaurant)
-            {
-                _waitTime += Time.deltaTime;
-
-                if (_waitTime > _customer.MaxWaitTime)
-                {
-                    _customer.StateReference = CustomerState.OrderTimeout;
-                    _customer.CostumerFail();
-                    return;
-                }
-
-                UpdateWaitThinkBubble();
-            }
-            else
-            {
+            UnityEngine.Debug.Log($"[WaitingForFoodState] Executing. isPlayer: {isPlayer}, inRestaurant: {inRestaurant}, Y: {_customer.transform.position.y}, Threshold: {_customer.Level * _customer.BuildingGridManager.GridSize.y + 1f}");
                 _waitTime = 0;
 
                 _waitOrderTime += Time.deltaTime;
@@ -60,16 +46,12 @@ namespace Customer.States
 
                 UpdateOrderThinkBubble();
 
+                UnityEngine.Debug.Log($"[WaitingForFoodState] Checking food: {_customer.NowOrder}");
                 if (_customer.CheckFood(_customer.NowOrder))
-                    // Food received, go back to eating in OrderState
-                    // We need to transition back to a state that handles eating.
-                    // Since OrderState has the logic, we can create a new one or use a dedicated EatingState.
-                    // For simplicity, let's call a method on the previous state or create a new EatingState.
-                    // But wait, OrderState was exited. Let's create a new EatingState or handle it here.
-                    // Actually, the previous design had Order -> CheckFood -> Eating in one loop.
-                    // Let's transition to a new EatingState.
+                {
+                    UnityEngine.Debug.Log("[WaitingForFoodState] Food check passed. Transitioning to EatingState.");
                     _customer.ChangeState(new EatingState(_customer));
-            }
+                }
         }
 
         public void ExitState()
@@ -96,7 +78,7 @@ namespace Customer.States
             float colorLerp = 0;
             if (_waitOrderTime > _customer.MaxWaitOrderTime / 3)
                 colorLerp = (_waitOrderTime - _customer.MaxWaitOrderTime / 3) / (_customer.MaxWaitOrderTime * 2 / 3);
-            _customer.Think.StartThink(_customer.NowOrder, true, Mathf.RoundToInt(_waitOrderTime * 10),
+            _customer.Think.StartThink(GameManager.Instance.GetCurrentChapter()+"/Food/" + _customer.NowOrder, true, Mathf.RoundToInt(_waitOrderTime * 10),
                 Color.Lerp(_customer.DefaultColor, _customer.WaitColor, colorLerp));
         }
     }
