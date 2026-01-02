@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Managers
 {
@@ -13,6 +14,7 @@ namespace Managers
         public GameObject gameWinUI;
         public GameObject pauseUI;
         public GameState gameState;
+        public string selectSceneName = "Select";
 
         public int nowCostumerOrderCount;
 
@@ -153,6 +155,26 @@ namespace Managers
                 if (pauseUI != null) pauseUI.SetActive(true);
                 GetManager<LevelTimer>().StopTimer();
             }
+        }
+
+        public void ResumeGame()
+        {
+            if (gameState != GameState.Paused) return;
+            gameState = GameState.Playing;
+            Time.timeScale = 1f;
+            if (pauseUI != null) pauseUI.SetActive(false);
+
+            var timer = GetManager<LevelTimer>();
+            if (timer != null && timer.RemainingTime > 0) timer.StartTimer(timer.RemainingTime);
+        }
+
+        public void ReturnToSelectScene()
+        {
+            Time.timeScale = 1f;
+            gameState = GameState.Playing;
+            if (pauseUI != null) pauseUI.SetActive(false);
+            if (!string.IsNullOrEmpty(selectSceneName))
+                SceneManager.LoadScene(selectSceneName);
         }
 
         public Dictionary<string, object> GetLevelResult()
