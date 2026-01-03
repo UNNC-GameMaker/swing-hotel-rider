@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Customer;
 using GameObjects;
 
 namespace Managers
@@ -12,9 +11,7 @@ namespace Managers
             Desired,
             Occupied
         }
-
-        public List<string> OrderList = new();
-        private Dictionary<Furniture, Costumer> _deskCustomerPair;
+        
 
         private Dictionary<Furniture, DeskStatus> _furnitureList;
         private List<(int, int)> _levelUp; // that house which has a ladder
@@ -36,13 +33,12 @@ namespace Managers
         {
             GameManager.Instance.RegisterManager(this);
             _furnitureList = new Dictionary<Furniture, DeskStatus>();
-            _deskCustomerPair = new Dictionary<Furniture, Costumer>();
             _levelUp = new List<(int, int)>();
         }
 
         public void AddNewFurniture(Furniture furniture)
         {
-            if (!_furnitureList.ContainsKey(furniture)) _furnitureList[furniture] = DeskStatus.Empty;
+            _furnitureList.TryAdd(furniture, DeskStatus.Empty);
         }
 
         // Alias for compatibility
@@ -75,7 +71,7 @@ namespace Managers
 
         public DeskStatus GetFurnitureStatus(Furniture furniture)
         {
-            return _furnitureList.TryGetValue(furniture, out var status) ? status : DeskStatus.Empty;
+            return _furnitureList.GetValueOrDefault(furniture, DeskStatus.Empty);
         }
 
         private void SetFurnitureStatus(Furniture furniture, DeskStatus status)

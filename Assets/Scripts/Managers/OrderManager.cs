@@ -42,6 +42,7 @@ namespace Managers
                 UnityEngine.Debug.Log($"[OrderManager] Loaded {currentOrderList.Orders.Count} orders for {chapter}");
             }
         }
+        
         public string GetRandomOrder()
         {
             if (currentOrderList == null || currentOrderList.Orders == null || currentOrderList.Orders.Count == 0)

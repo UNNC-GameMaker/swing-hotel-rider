@@ -7,7 +7,7 @@ namespace Managers
     ///     Execution order set to -50 to ensure managers initialize after GameManager (-100)
     ///     but before regular game scripts (default 0).
     /// </summary>
-    [DefaultExecutionOrder(-50)]
+    [DefaultExecutionOrder(-90)]
     public abstract class Manager : MonoBehaviour
     {
         public abstract void Init();
