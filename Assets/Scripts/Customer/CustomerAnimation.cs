@@ -25,7 +25,6 @@ namespace Customer
             if (customer == null || npcAnimationController == null) return;
 
             UpdateAnimationState();
-            UpdateDirection();
         }
 
         private void UpdateAnimationState()
@@ -57,6 +56,11 @@ namespace Customer
             npcAnimationController.SetWalking(isWalking);
             npcAnimationController.SetSitting(isSitting);
             npcAnimationController.SetEating(isEating);
+        }
+
+        private void FixedUpdate()
+        {
+            UpdateDirection();
         }
 
         private void UpdateDirection()

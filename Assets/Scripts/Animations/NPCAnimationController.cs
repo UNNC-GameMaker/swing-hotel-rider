@@ -8,7 +8,7 @@ namespace Animations
         [SerializeField] private Animator animator;
         [SerializeField] private SpriteRenderer spriteRenderer;
 
-        private readonly int _idleTrigger = Animator.StringToHash("IDLE_2");
+        private readonly int _idleTrigger = Animator.StringToHash("idle2");
         private readonly int _isWalking = Animator.StringToHash("walking");
         private readonly int _isSitting = Animator.StringToHash("sitting");
         private readonly int _isEating = Animator.StringToHash("eating");
@@ -40,6 +40,9 @@ namespace Animations
             if (Mathf.Abs(velocityX) > 0.1f)
             {
                 spriteRenderer.flipX = velocityX < 0;
+                UnityEngine.Debug.Log("UpdateDirection: " + velocityX);
+                UnityEngine.Debug.Log("UpdateDirection.flipX: " + (velocityX < 0));
+                UnityEngine.Debug.Log("UpdateDirection.flipX: " + spriteRenderer.flipX);
             }
         }
 
