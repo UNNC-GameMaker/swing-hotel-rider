@@ -8,6 +8,8 @@ namespace Debug
     {
         [SerializeField] private string quitButton = "Cancel";
 
+        private bool _pauseConsumed;
+
         private void Start()
         {
             if (GameManager.Instance != null)
@@ -28,8 +30,17 @@ namespace Debug
 
         public void OnInputEvent(InputEvents inputEvent, InputState state)
         {
-            if ((inputEvent == InputEvents.Exit || inputEvent == InputEvents.Pause) &&
-                (state == InputState.Started || state == InputState.Performed)) GameManager.Instance.LevelPause();
+            if (inputEvent != InputEvents.Exit && inputEvent != InputEvents.Pause) return;
+
+            if (state == InputState.Canceled)
+            {
+                _pauseConsumed = false;
+                return;
+            }
+
+            if (_pauseConsumed) return;
+            _pauseConsumed = true;
+            GameManager.Instance.LevelPause();
         }
 
         public void OnInputAxis(InputAxis axis, Vector2 value)
