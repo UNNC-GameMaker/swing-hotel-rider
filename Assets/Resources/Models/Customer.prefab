@@ -67,7 +67,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 09c3a1accbc0b457b81e099a84aa39c2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -215,6 +215,7 @@ MonoBehaviour:
   maxWaitTime: 10
   upSpeed: 10
   upOffset: 0.5
+  sitOffset: {x: 0, y: 0.625}
   StateReference: 0
 --- !u!114 &4043566879921244085
 MonoBehaviour:

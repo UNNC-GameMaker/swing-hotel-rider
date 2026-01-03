@@ -120,7 +120,8 @@ namespace Customer.States
             var rb = _customer.GetComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Kinematic;
             _customer.transform.SetParent(_customer.Desk.transform);
-            _customer.transform.localPosition = Vector3.zero;
+            Transform deskSetOffset = _customer.Desk.transform.Find("SitOffset");
+            _customer.transform.localPosition = (Vector3)_customer.sitOffset+ deskSetOffset.localPosition;
         }
 
         private IEnumerator StartMove(float target)

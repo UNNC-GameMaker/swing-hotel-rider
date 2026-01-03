@@ -23,6 +23,8 @@ namespace Customer
         [SerializeField] private float upSpeed = 10f;
 
         [SerializeField] private float upOffset = 0.5f;
+
+        [SerializeField] public Vector2 sitOffset;
         public BuildingGridManager BuildingGridManager { get; private set; }
         public FurnitureManager FurnitureManager { get; private set; }
         public TextureManager TextureManager { get; private set; }
