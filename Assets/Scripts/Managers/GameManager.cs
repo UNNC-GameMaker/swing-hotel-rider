@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 namespace Managers
@@ -15,6 +16,7 @@ namespace Managers
         public GameObject pauseUI;
         public GameState gameState;
         public string selectSceneName = "Select";
+        [SerializeField] private string pauseUIPrefabPath = "Models/UI/PausePanel";
 
         public int nowCostumerOrderCount;
 
@@ -48,6 +50,22 @@ namespace Managers
             gameState = GameState.Playing;
             // Auto-find and initialize all managers in the scene
             InitializeManagers();
+        }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += HandleSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= HandleSceneLoaded;
+        }
+
+        private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            pauseUI = null;
+            EnsureEventSystem();
         }
 
         /// <summary>
@@ -149,7 +167,7 @@ namespace Managers
                 // Resume
                 gameState = GameState.Playing;
                 Time.timeScale = 1f;
-                if (pauseUI != null) pauseUI.SetActive(false);
+                SetPauseUIActive(false);
 
                 // Resume timer
                 var timer = GetManager<LevelTimer>();
@@ -160,7 +178,7 @@ namespace Managers
                 // Pause
                 gameState = GameState.Paused;
                 Time.timeScale = 0f;
-                if (pauseUI != null) pauseUI.SetActive(true);
+                SetPauseUIActive(true);
                 GetManager<LevelTimer>().StopTimer();
             }
         }
@@ -170,7 +188,7 @@ namespace Managers
             if (gameState != GameState.Paused) return;
             gameState = GameState.Playing;
             Time.timeScale = 1f;
-            if (pauseUI != null) pauseUI.SetActive(false);
+            SetPauseUIActive(false);
 
             var timer = GetManager<LevelTimer>();
             if (timer != null && timer.RemainingTime > 0) timer.StartTimer(timer.RemainingTime);
@@ -180,7 +198,7 @@ namespace Managers
         {
             Time.timeScale = 1f;
             gameState = GameState.Playing;
-            if (pauseUI != null) pauseUI.SetActive(false);
+            SetPauseUIActive(false);
             if (!string.IsNullOrEmpty(selectSceneName))
                 SceneManager.LoadScene(selectSceneName);
         }
@@ -198,6 +216,43 @@ namespace Managers
         {
             _customerFailCounter = 0;
             _customerSuccessCounter = 0;
+        }
+
+        private static void EnsureEventSystem()
+        {
+            if (EventSystem.current != null) return;
+
+            var eventSystemObject = new GameObject("EventSystem");
+            eventSystemObject.AddComponent<EventSystem>();
+            eventSystemObject.AddComponent<StandaloneInputModule>();
+            DontDestroyOnLoad(eventSystemObject);
+        }
+
+        private void EnsurePauseUI()
+        {
+            if (pauseUI != null) return;
+            if (string.IsNullOrEmpty(pauseUIPrefabPath)) return;
+
+            var prefab = Resources.Load<GameObject>(pauseUIPrefabPath);
+            if (prefab == null) return;
+
+            pauseUI = Instantiate(prefab);
+            pauseUI.name = "PauseUI_Runtime";
+            pauseUI.SetActive(false);
+        }
+
+        private void SetPauseUIActive(bool active)
+        {
+            if (pauseUI == null) EnsurePauseUI();
+            if (pauseUI == null) return;
+
+            if (active) EnsureEventSystem();
+            pauseUI.SetActive(active);
+
+            var canvasGroup = pauseUI.GetComponent<CanvasGroup>();
+            if (canvasGroup == null) canvasGroup = pauseUI.AddComponent<CanvasGroup>();
+            canvasGroup.interactable = active;
+            canvasGroup.blocksRaycasts = active;
         }
     }
 
