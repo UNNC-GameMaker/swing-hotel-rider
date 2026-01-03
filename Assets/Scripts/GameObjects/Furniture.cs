@@ -52,6 +52,7 @@ namespace GameObjects
         public override void OnGrab()
         {
             UnityEngine.Debug.Log($"{gameObject.name} was grabbed!");
+            _isGrabbed = true;
         }
 
         /// <summary>
@@ -60,12 +61,16 @@ namespace GameObjects
         public override void OnRelease()
         {
             UnityEngine.Debug.Log($"{gameObject.name} was released!");
+            _isGrabbed = false;
         }
+
+        public bool IsGrabbed => _isGrabbed;
 
         #region Private Fields
 
         private bool _isOccupied;
         private FurnitureManager _furnitureManager;
+        private bool _isGrabbed = false;
 
         #endregion
     }

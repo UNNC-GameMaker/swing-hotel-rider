@@ -32,7 +32,7 @@ namespace Customer.States
             // Cache the desk position once when entering state
             _deskSetOffset = _customer.Desk.transform.Find("SitOffset");
             _cachedDeskPosition = _customer.Desk.transform.position;
-            _cachedDeskLevel = _customer.Desk.Level;;
+            _cachedDeskLevel = _customer.Desk.Level;
 
             // Start the movement coroutine
             _moveCoroutine = _customer.StartCoroutine(MoveToDesk());
@@ -89,6 +89,12 @@ namespace Customer.States
             // Now move horizontally to the desk on the same level
             yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x + _deskSetOffset.localPosition.x));
 
+            // Wait if desk is grabbed
+            while (_customer.Desk != null && _customer.Desk.IsGrabbed)
+            {
+                yield return null;
+            }
+
             if (IsOnDesk())
             {
                 SetOnDesk();
@@ -110,7 +116,7 @@ namespace Customer.States
             {
                 UnityEngine.Debug.Log("Desk Distance: " + (_customer.Desk.transform.position.x + _deskSetOffset.localPosition.x - _customer.transform.position.x));
                 return Mathf.Abs(_customer.Desk.transform.position.x + _deskSetOffset.localPosition.x - _customer.transform.position.x) <= 0.5f &&
-                       _customer.Level == _cachedDeskLevel;
+                       _customer.Level == _cachedDeskLevel && _cachedDeskPosition == _customer.Desk.transform.position;
             }
 
             return false;
