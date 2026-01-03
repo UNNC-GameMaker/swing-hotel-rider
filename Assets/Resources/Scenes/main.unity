@@ -395,6 +395,10 @@ PrefabInstance:
       propertyPath: targetCamera
       value: 
       objectReference: {fileID: 81657457}
+    - target: {fileID: 4560957583917477970, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ec7406e878365094fbfa9cb17b1d6c0c, type: 3}
     - target: {fileID: 9112827552156739662, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.7812498
