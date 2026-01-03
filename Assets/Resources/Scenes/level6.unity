@@ -640,7 +640,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4379049080668830506, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
+    - {fileID: 5035844949270273812, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6697065785264695750, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
       insertIndex: -1
@@ -2109,6 +2111,7 @@ MonoBehaviour:
   factorY: -0.1
   offsetX: 16.20125
   offsetY: 0.23
+  mouseStrength: 0.05
 --- !u!212 &895392466
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2934,6 +2937,7 @@ MonoBehaviour:
   factorY: -0.1
   offsetX: -22.36125
   offsetY: 0.23
+  mouseStrength: 0.05
 --- !u!212 &1535894580
 SpriteRenderer:
   m_ObjectHideFlags: 0
