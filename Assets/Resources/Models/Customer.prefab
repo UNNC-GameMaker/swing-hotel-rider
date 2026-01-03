@@ -175,7 +175,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 9216
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -209,10 +209,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultColor: {r: 1, g: 0, b: 0, a: 0}
   waitColor: {r: 0, g: 1, b: 0.13595366, a: 0}
-  eatingSpeed: 30
-  orderSpeed: 10
-  maxWaitOrderTime: 30
-  maxWaitTime: 30
+  eatingSpeed: 1
+  orderSpeed: 1
+  maxWaitOrderTime: 10
+  maxWaitTime: 10
   upSpeed: 10
   upOffset: 0.5
   StateReference: 0
@@ -365,8 +365,8 @@ Transform:
   m_GameObject: {fileID: 4236116025982444265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.597, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.12, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9112827552156739662}
@@ -449,7 +449,7 @@ Transform:
   m_GameObject: {fileID: 7276081424059413112}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.572, z: 0}
+  m_LocalPosition: {x: 0.03, y: 0.96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

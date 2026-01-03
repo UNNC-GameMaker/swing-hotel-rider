@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3012407150975771974}
   - component: {fileID: 2391393739910291802}
   - component: {fileID: 7432157451916341144}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: fresh-fish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9044162753299292696}
   - component: {fileID: 394559373965427541}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 6952055224640474279}
   - component: {fileID: 7413037692759638618}
   - component: {fileID: 8476073998262763435}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Fish
   m_TagString: Grabbable
   m_Icon: {fileID: 0}
@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 3324042699942718466}
-  FoodType: Fish
+  FoodType: fresh-fish
 --- !u!58 &8476073998262763435
 CircleCollider2D:
   m_ObjectHideFlags: 0
