@@ -3,20 +3,31 @@ using UnityEngine;
 
 namespace GameObjects.Generators
 {
+    [RequireComponent(typeof(BoxCollider2D))]
     public class FoodGenerator : Interactable
     {
         [SerializeField]
         private GameObject foodPrefab;
+        [SerializeField] private Transform spawnPoint;
+        [SerializeField] private BoxCollider2D interactionBox;
 
-        void Awake()
+        protected override void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();
+            base.Awake();
+            if (interactionBox == null) interactionBox = GetComponent<BoxCollider2D>();
         }
-        
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            if (interactionBox == null) interactionBox = GetComponent<BoxCollider2D>();
+        }
+
         public override void OnInteract()
         {   
             UnityEngine.Debug.LogError("called");
-            Instantiate(foodPrefab, transform.position, Quaternion.identity);
+            var spawnTransform = spawnPoint != null ? spawnPoint : transform;
+            Instantiate(foodPrefab, spawnTransform.position, Quaternion.identity);
         }
     }
 }
