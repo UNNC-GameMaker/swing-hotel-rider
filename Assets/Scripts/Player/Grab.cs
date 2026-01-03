@@ -5,18 +5,22 @@ using Input;
 using Managers;
 using Player;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Grab : MonoBehaviour, IInputListener
 {
     private Grabbable _closestGrabbable;
 
     private Interactable _closestInteract;
+    private SpriteRenderer _cursorSpriteRenderer;
+    private Image _cursorImage;
 
     private void Awake()
     {
         _playerRb = GetComponent<Rigidbody2D>();
         _playerAnimation = GetComponent<PlayerAnimation>();
         _sfxManager = GameManager.Instance.GetManager<SFXManager>();
+        InitializeCursor();
     }
 
     private void OnEnable()
@@ -73,12 +77,12 @@ public class Grab : MonoBehaviour, IInputListener
             if (closestInteract != null)
             {
                 cursor.SetActive(true);
-                cursor.transform.position = closestInteract.Transform.position;
+                cursor.transform.position = closestInteract.InteractionPoint.position + cursorOffset;
             }
             else if (closestGrabbable != null)
             {
                 cursor.SetActive(true);
-                cursor.transform.position = closestGrabbable.transform.position;
+                cursor.transform.position = closestGrabbable.transform.position + cursorOffset;
             }
             else
             {
@@ -249,6 +253,27 @@ public class Grab : MonoBehaviour, IInputListener
         }
     }
 
+    private void InitializeCursor()
+    {
+        if (cursor == null) return;
+
+        _cursorSpriteRenderer = cursor.GetComponent<SpriteRenderer>();
+        _cursorImage = cursor.GetComponent<Image>();
+
+        if (_cursorSpriteRenderer == null && _cursorImage == null)
+        {
+            _cursorSpriteRenderer = cursor.AddComponent<SpriteRenderer>();
+            _cursorSpriteRenderer.sortingOrder = 100;
+        }
+
+        if (string.IsNullOrEmpty(grabCursorSpritePath)) return;
+        var sprite = Resources.Load<Sprite>(grabCursorSpritePath);
+        if (sprite == null) return;
+
+        if (_cursorSpriteRenderer != null) _cursorSpriteRenderer.sprite = sprite;
+        if (_cursorImage != null) _cursorImage.sprite = sprite;
+    }
+
     #region Inspector Fields
 
     [SerializeField] [Tooltip("Radius for grab field")]
@@ -256,6 +281,10 @@ public class Grab : MonoBehaviour, IInputListener
 
     [SerializeField] [Tooltip("Cursor GameObject to show grab target")]
     private GameObject cursor;
+    [SerializeField] [Tooltip("Sprite path under Resources for the grab cursor")]
+    private string grabCursorSpritePath = "Textures/Chapter01/Test/grab";
+    [SerializeField] [Tooltip("World-space offset for the cursor above the target")]
+    private Vector3 cursorOffset = new Vector3(0f, 0.6f, 0f);
 
     [SerializeField] [Tooltip("Force applied when releasing objects")]
     private Vector3 releaseForce = Vector3.up;
