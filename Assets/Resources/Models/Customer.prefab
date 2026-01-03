@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 2235695871405934973}
   - component: {fileID: 4043566879921244085}
   - component: {fileID: 7412482396916444784}
-  - component: {fileID: 6473904453999446380}
   - component: {fileID: 6852309666071323535}
   - component: {fileID: 1710017790847994572}
   - component: {fileID: 8811415282236792606}
@@ -67,7 +66,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 09c3a1accbc0b457b81e099a84aa39c2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -215,6 +214,7 @@ MonoBehaviour:
   maxWaitTime: 10
   upSpeed: 10
   upOffset: 0.5
+  sitOffset: {x: 0, y: 0.625}
   StateReference: 0
 --- !u!114 &4043566879921244085
 MonoBehaviour:
@@ -250,24 +250,6 @@ MonoBehaviour:
   maxX: 5
   minWaitTime: 1
   maxWaitTime: 3
---- !u!114 &6473904453999446380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286514547771549278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c06dbb39bba491f8e2dcc907b44d771, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 3
-  acceleration: 10
-  deceleration: 15
-  stopThreshold: 0.01
-  animator: {fileID: 0}
-  spriteRenderer: {fileID: 0}
 --- !u!114 &6852309666071323535
 MonoBehaviour:
   m_ObjectHideFlags: 0

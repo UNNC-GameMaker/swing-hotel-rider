@@ -9,6 +9,7 @@ namespace Customer.States
         private int _cachedDeskLevel;
         private Vector3 _cachedDeskPosition;
         private Coroutine _moveCoroutine;
+        private Transform _deskSetOffset;
 
         public MoveToDeskState(Costumer customer)
         {
@@ -29,8 +30,9 @@ namespace Customer.States
             }
 
             // Cache the desk position once when entering state
+            _deskSetOffset = _customer.Desk.transform.Find("SitOffset");
             _cachedDeskPosition = _customer.Desk.transform.position;
-            _cachedDeskLevel = _customer.Desk.Level;
+            _cachedDeskLevel = _customer.Desk.Level;;
 
             // Start the movement coroutine
             _moveCoroutine = _customer.StartCoroutine(MoveToDesk());
@@ -85,7 +87,7 @@ namespace Customer.States
             }
 
             // Now move horizontally to the desk on the same level
-            yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x));
+            yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x + _deskSetOffset.localPosition.x));
 
             if (IsOnDesk())
             {
@@ -106,8 +108,8 @@ namespace Customer.States
         {
             if (_customer.Desk)
             {
-                UnityEngine.Debug.Log("Desk Distance: " + (_customer.Desk.transform.position.x - _customer.transform.position.x));
-                return Mathf.Abs(_customer.Desk.transform.position.x - _customer.transform.position.x) <= 0.5f &&
+                UnityEngine.Debug.Log("Desk Distance: " + (_customer.Desk.transform.position.x + _deskSetOffset.localPosition.x - _customer.transform.position.x));
+                return Mathf.Abs(_customer.Desk.transform.position.x + _deskSetOffset.localPosition.x - _customer.transform.position.x) <= 0.5f &&
                        _customer.Level == _cachedDeskLevel;
             }
 
@@ -120,7 +122,7 @@ namespace Customer.States
             var rb = _customer.GetComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Kinematic;
             _customer.transform.SetParent(_customer.Desk.transform);
-            _customer.transform.localPosition = Vector3.zero;
+            _customer.transform.localPosition = (Vector3)_customer.sitOffset+ _deskSetOffset.localPosition;
         }
 
         private IEnumerator StartMove(float target)

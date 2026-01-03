@@ -83,7 +83,7 @@ namespace Customer
             }
 
             // Update animation and sprite flip
-            UpdateAnimation();
+            //UpdateAnimation();
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Customer
         {
             TargetX = x;
             _isMoving = true;
-            UpdateAnimation();
+            //UpdateAnimation();
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Customer
         public void StopMove()
         {
             _isMoving = false;
-            UpdateAnimation();
+            //UpdateAnimation();
         }
 
         /// <summary>
