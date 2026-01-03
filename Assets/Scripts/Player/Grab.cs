@@ -10,7 +10,7 @@ public class Grab : MonoBehaviour, IInputListener
 {
     private Grabbable _closestGrabbable;
 
-    private IInteract _closestInteract;
+    private Interactable _closestInteract;
 
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class Grab : MonoBehaviour, IInputListener
             // Detect grabbable objects in range
             var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, grabRange, _overlapResults);
             Grabbable closestGrabbable = null;
-            IInteract closestInteract = null;
+            Interactable closestInteract = null;
             for (var i = 0; i < hitCount; i++)
             {
                 var col = _overlapResults[i];
@@ -64,7 +64,7 @@ public class Grab : MonoBehaviour, IInputListener
                 // Find closest Interact object
                 if (col.gameObject.CompareTag("Interactable"))
                 {
-                    var interact = col.gameObject.GetComponent<IInteract>();
+                    var interact = col.gameObject.GetComponent<Interactable>();
                     if (interact != null) closestInteract ??= interact;
                 }
             }
@@ -162,7 +162,7 @@ public class Grab : MonoBehaviour, IInputListener
     {
             // Try to interact first, then grab
             if (_closestInteract != null)
-                _closestInteract.Interact();
+                _closestInteract.OnInteract();
             else if (_closestGrabbable != null) GrabObj(_closestGrabbable);
     }
 

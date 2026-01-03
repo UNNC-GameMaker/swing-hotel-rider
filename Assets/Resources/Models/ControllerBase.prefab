@@ -295,6 +295,7 @@ MonoBehaviour:
   pauseUI: {fileID: 0}
   gameState: 0
   selectSceneName: Select
+  pauseUIPrefabPath: Models/UI/PausePanel
   nowCostumerOrderCount: 0
   dayData: []
   currentDay: 1

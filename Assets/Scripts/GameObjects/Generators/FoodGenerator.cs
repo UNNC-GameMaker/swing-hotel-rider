@@ -8,8 +8,14 @@ namespace GameObjects.Generators
         [SerializeField]
         private GameObject foodPrefab;
 
-        public override void OnInteract()
+        void Awake()
         {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        
+        public override void OnInteract()
+        {   
+            UnityEngine.Debug.LogError("called");
             Instantiate(foodPrefab, transform.position, Quaternion.identity);
         }
     }
