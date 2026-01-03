@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5780860577118661632}
   - component: {fileID: 6797837671864103885}
   - component: {fileID: 4512679963581883745}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SpriteNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3480708619116024054}
   - component: {fileID: 8927408387722717549}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: JumpAudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2943862931458657606}
   - component: {fileID: 5587385673561005445}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FootCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 9155387627846111358}
   - component: {fileID: 1482189958865433918}
   - component: {fileID: 2594778707868114871}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
