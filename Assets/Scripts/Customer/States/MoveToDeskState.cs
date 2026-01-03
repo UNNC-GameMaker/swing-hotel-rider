@@ -9,6 +9,7 @@ namespace Customer.States
         private int _cachedDeskLevel;
         private Vector3 _cachedDeskPosition;
         private Coroutine _moveCoroutine;
+        private Transform _deskSetOffset;
 
         public MoveToDeskState(Costumer customer)
         {
@@ -29,8 +30,9 @@ namespace Customer.States
             }
 
             // Cache the desk position once when entering state
-            _cachedDeskPosition = _customer.Desk.transform.position;
-            _cachedDeskLevel = _customer.Desk.Level;
+            _deskSetOffset = _customer.Desk.transform.Find("SitOffset");
+            _cachedDeskPosition = _customer.Desk.transform.position + _deskSetOffset.localPosition;
+            _cachedDeskLevel = _customer.Desk.Level;;
 
             // Start the movement coroutine
             _moveCoroutine = _customer.StartCoroutine(MoveToDesk());
@@ -45,7 +47,7 @@ namespace Customer.States
                 if (distanceMoved > 0.5f) // Tolerance threshold
                 {
                     // Desk moved significantly, recalculate path
-                    _cachedDeskPosition = _customer.Desk.transform.position;
+                    _cachedDeskPosition = _customer.Desk.transform.position + _deskSetOffset.localPosition;
                     _cachedDeskLevel = _customer.Desk.Level;
 
                     if (_moveCoroutine != null) _customer.StopCoroutine(_moveCoroutine);
@@ -106,8 +108,8 @@ namespace Customer.States
         {
             if (_customer.Desk)
             {
-                UnityEngine.Debug.Log("Desk Distance: " + (_customer.Desk.transform.position.x - _customer.transform.position.x));
-                return Mathf.Abs(_customer.Desk.transform.position.x - _customer.transform.position.x) <= 0.5f &&
+                UnityEngine.Debug.Log("Desk Distance: " + (_customer.Desk.transform.position.x + _deskSetOffset.localPosition.x - _customer.transform.position.x));
+                return Mathf.Abs(_customer.Desk.transform.position.x + _deskSetOffset.localPosition.x - _customer.transform.position.x) <= 0.5f &&
                        _customer.Level == _cachedDeskLevel;
             }
 
@@ -120,8 +122,7 @@ namespace Customer.States
             var rb = _customer.GetComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Kinematic;
             _customer.transform.SetParent(_customer.Desk.transform);
-            Transform deskSetOffset = _customer.Desk.transform.Find("SitOffset");
-            _customer.transform.localPosition = (Vector3)_customer.sitOffset+ deskSetOffset.localPosition;
+            _customer.transform.localPosition = (Vector3)_customer.sitOffset+ _deskSetOffset.localPosition;
         }
 
         private IEnumerator StartMove(float target)
