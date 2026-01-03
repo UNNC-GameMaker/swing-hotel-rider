@@ -47,3 +47,12 @@ TagManager:
   - name: Front
     uniqueID: 2061745461
     locked: 0
+  - name: Background
+    uniqueID: 2546118779
+    locked: 0
+  - name: Glass
+    uniqueID: 729908719
+    locked: 0
+  - name: UI
+    uniqueID: 3694882871
+    locked: 0
