@@ -31,7 +31,7 @@ namespace Customer.States
 
             // Cache the desk position once when entering state
             _deskSetOffset = _customer.Desk.transform.Find("SitOffset");
-            _cachedDeskPosition = _customer.Desk.transform.position + _deskSetOffset.localPosition;
+            _cachedDeskPosition = _customer.Desk.transform.position;
             _cachedDeskLevel = _customer.Desk.Level;;
 
             // Start the movement coroutine
@@ -47,7 +47,7 @@ namespace Customer.States
                 if (distanceMoved > 0.5f) // Tolerance threshold
                 {
                     // Desk moved significantly, recalculate path
-                    _cachedDeskPosition = _customer.Desk.transform.position + _deskSetOffset.localPosition;
+                    _cachedDeskPosition = _customer.Desk.transform.position;
                     _cachedDeskLevel = _customer.Desk.Level;
 
                     if (_moveCoroutine != null) _customer.StopCoroutine(_moveCoroutine);
@@ -87,7 +87,7 @@ namespace Customer.States
             }
 
             // Now move horizontally to the desk on the same level
-            yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x));
+            yield return _customer.StartCoroutine(StartMove(_cachedDeskPosition.x + _deskSetOffset.localPosition.x));
 
             if (IsOnDesk())
             {
