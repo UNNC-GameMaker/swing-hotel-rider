@@ -65,9 +65,7 @@ public class Grab : MonoBehaviour, IInputListener
                 if (col.gameObject.CompareTag("Interactable"))
                 {
                     var interact = col.gameObject.GetComponent<IInteract>();
-                    if (interact != null)
-                        if (closestInteract == null)
-                            closestInteract = interact;
+                    if (interact != null) closestInteract ??= interact;
                 }
             }
 
@@ -114,7 +112,7 @@ public class Grab : MonoBehaviour, IInputListener
         // Show grab range value
         UnityEditor.Handles.Label(transform.position + Vector3.up * grabRange, $"Grab Range: {grabRange:F2}");
         
-        // Show closest grabbable if exists
+        // Show the closest grabbable if exists
         if (_closestGrabbable != null)
         {
             Gizmos.color = Color.green;
@@ -210,7 +208,7 @@ public class Grab : MonoBehaviour, IInputListener
         if (_grabbedObjects.Count == 0) return;
 
         // Get the last object (LIFO)
-        Rigidbody2D rb = _grabbedObjects[_grabbedObjects.Count - 1];
+        var rb = _grabbedObjects[^1];
         _grabbedObjects.RemoveAt(_grabbedObjects.Count - 1);
 
         // Restore physics
@@ -247,7 +245,7 @@ public class Grab : MonoBehaviour, IInputListener
     {
         if (_sfxManager != null)
         {
-            _sfxManager.PlayClipUniversal("PlayerRealease");
+            _sfxManager.PlayClipUniversal("Player Release");
         }
     }
 
@@ -268,8 +266,8 @@ public class Grab : MonoBehaviour, IInputListener
 
     private Rigidbody2D _playerRb;
     private PlayerAnimation _playerAnimation;
-    private List<Rigidbody2D> _grabbedObjects = new List<Rigidbody2D>();
-    private int _inventorySize = 4;
+    private readonly List<Rigidbody2D> _grabbedObjects = new List<Rigidbody2D>();
+    private readonly int _inventorySize = 4;
     private readonly Collider2D[] _overlapResults = new Collider2D[1024]; // Never trust players
     private SFXManager _sfxManager;
 
