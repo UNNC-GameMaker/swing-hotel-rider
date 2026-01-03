@@ -133,9 +133,10 @@ namespace Player
         {
             // Determine vertical state first
             var verticalState = MovementState.Idle;
-            if (Rb.velocity.y > 0 && !IsGrounded)
+            // Add threshold to avoid jitter when landing
+            if (Rb.velocity.y > 0.1f && !IsGrounded)
                 verticalState = MovementState.JumpAsc;
-            else if (Rb.velocity.y < 0 && !IsGrounded) // Fixed: should check !_isGrounded for falling
+            else if (Rb.velocity.y < -0.1f && !IsGrounded) 
                 verticalState = MovementState.JumpDesc;
 
             // Determine horizontal state

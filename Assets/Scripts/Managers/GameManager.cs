@@ -20,7 +20,7 @@ namespace Managers
 
         public List<DayData> dayData = new();
 
-        public int currentDay; // current chapter?
+        public int currentDay = 1; // current chapter?
 
         public float tiltMax = 8f;
 

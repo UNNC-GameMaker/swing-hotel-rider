@@ -55,6 +55,16 @@ namespace Player
 
             UnityEngine.Debug.Log("get Animator = " + animator);
             UnityEngine.Debug.Log("get SpriteRenderer = " + spriteRenderer);
+            
+        }
+
+        private void Start()
+        {
+            // Force idle state on start to prevent getting stuck in JumpStart if it's the default state
+            if (animator != null)
+            {
+                animator.Play("Idle1");
+            }
         }
 
         private void Update()
@@ -83,7 +93,8 @@ namespace Player
                     if (_playerMovement.IsGrounded && !IsInState("Idle1") && !IsInState("Idle2"))
                     {
                         // Reset conflicting triggers when transitioning to idle on ground
-                        animator.ResetTrigger(_isDescending);
+                        animator.SetBool(_isDescending, false);
+                        animator.ResetTrigger(_jumpStart);
                         animator.SetBool(_isRunning, false);
                     }
 
@@ -103,7 +114,7 @@ namespace Player
                 case PlayerMovement.MovementState.JumpAsc:
                     if (!IsInState("JumpAsc"))
                     {
-                        animator.ResetTrigger(_isDescending);
+                        animator.SetBool(_isDescending, false);
                         animator.SetBool(_isRunning, false);
                         animator.SetTrigger(_jumpStart);
                     }
@@ -111,7 +122,7 @@ namespace Player
                     break;
 
                 case PlayerMovement.MovementState.JumpDesc:
-                    if (!_playerMovement.IsGrounded && !IsInState("JumpDesc")) animator.SetTrigger(_isDescending);
+                    if (!_playerMovement.IsGrounded && !IsInState("JumpDesc")) animator.SetBool(_isDescending, true);
                     break;
             }
         }
@@ -156,7 +167,7 @@ namespace Player
 
 
         private void TriggerJumpStart()
-        {
+        {   
             animator.SetTrigger(_jumpStart);
         }
 

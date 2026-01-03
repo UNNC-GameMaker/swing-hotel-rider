@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f448e2dc45b445c91c8175934f69794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentOrderList:
+    chapter: 0
 --- !u!1 &46817997730301931
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,8 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d74c2c5fe070494db8f879a79b89bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OrderList:
-  - fresh-fish
 --- !u!1 &2396864058104990394
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +297,7 @@ MonoBehaviour:
   selectSceneName: Select
   nowCostumerOrderCount: 0
   dayData: []
-  currentDay: 0
+  currentDay: 1
   tiltMax: 8
   skipTo: 0
   managers: []
