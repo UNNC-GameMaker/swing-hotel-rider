@@ -42,8 +42,17 @@ namespace Customer.States
                 yield return Wait(_customer.OrderSpeed);
 
                 GameManager.Instance.GetManager<SFXManager>().PlayClip("Order");
-                _customer.NowOrder =
-                    _customer.FurnitureManager.OrderList[Random.Range(0, _customer.FurnitureManager.OrderList.Count)];
+                
+                var orderManager = GameManager.Instance.GetManager<OrderManager>();
+                if (orderManager != null)
+                {
+                    _customer.NowOrder = orderManager.GetRandomOrder();
+                }
+                else
+                {
+                    UnityEngine.Debug.LogError("OrderManager not found!");
+                    _customer.NowOrder = "fresh-fish"; // Fallback
+                }
 
                 // Waiting for food
                 _customer.ChangeState(new WaitingForFoodState(_customer));
