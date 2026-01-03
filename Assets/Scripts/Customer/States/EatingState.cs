@@ -17,7 +17,7 @@ namespace Customer.States
         public void EnterState()
         {
             UnityEngine.Debug.Log("Eating State in");
-            _customer.StateReference = CustomerState.Eating;
+            _customer.stateReference = CustomerState.Eating;
             _eatCoroutine = _customer.StartCoroutine(EatRoutine());
         }
 

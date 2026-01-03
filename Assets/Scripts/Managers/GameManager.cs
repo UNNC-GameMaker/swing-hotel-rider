@@ -63,6 +63,14 @@ namespace Managers
                     UnityEngine.Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
                 }
         }
+        
+        
+        // TODO duct tape function, need revision later
+        public void PlayReset()
+        {
+            UnityEngine.Debug.LogError("[GameManager] Play Reset");
+            InitializeManagers();
+        }
 
         public T GetManager<T>() where T : Manager
         {

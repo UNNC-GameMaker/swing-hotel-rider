@@ -130,14 +130,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2335973659015774497, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: OrderList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2335973659015774497, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: OrderList.Array.data[0]
-      value: fresh-fish
-      objectReference: {fileID: 0}
     - target: {fileID: 4055609065738143433, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
       propertyPath: m_Name
       value: ControllerBase

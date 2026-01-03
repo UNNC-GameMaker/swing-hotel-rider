@@ -18,7 +18,7 @@ namespace Customer.States
         public void EnterState()
         {
             UnityEngine.Debug.Log("Enter MoveToDeskState");
-            _customer.StateReference = CustomerState.MoveToDesk;
+            _customer.stateReference = CustomerState.MoveToDesk;
 
             // Validate desk exists
             if (_customer.Desk == null)

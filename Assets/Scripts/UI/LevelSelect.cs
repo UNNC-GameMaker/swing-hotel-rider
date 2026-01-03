@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,8 +16,9 @@ namespace UI
                 UnityEngine.Debug.LogWarning("LevelSelect.LoadLevel called with empty scene name.");
                 return;
             }
-
             SceneManager.LoadScene(sceneName);
+            GameManager.Instance.ResetLevel();
+            GameManager.Instance.PlayReset();
         }
 
         public void LoadLevelByIndex(int buildIndex)

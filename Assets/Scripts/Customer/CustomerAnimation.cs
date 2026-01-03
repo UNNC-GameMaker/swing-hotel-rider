@@ -34,7 +34,7 @@ namespace Customer
             bool isSitting = false;
             bool isEating = false;
 
-            switch (customer.StateReference)
+            switch (customer.stateReference)
             {
                 case CustomerState.FindDesk:
                 case CustomerState.MoveToDesk:

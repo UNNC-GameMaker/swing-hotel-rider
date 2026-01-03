@@ -17,7 +17,7 @@ namespace Customer.States
         public void EnterState()
         {
             UnityEngine.Debug.Log("Entering Order State");
-            _customer.StateReference = CustomerState.Order;
+            _customer.stateReference = CustomerState.Order;
             _orderCoroutine = _customer.StartCoroutine(OrderRoutine());
         }
 
@@ -36,11 +36,11 @@ namespace Customer.States
         private IEnumerator OrderRoutine()
         {
             while (true)
-            {
+            {   
                 // Thinking about ordering
-                _customer.Think.StartThink("think", false);
+                _customer.Think.StartThink("UI/InGame/logo-fork-knife", false);
                 yield return Wait(_customer.OrderSpeed);
-
+                
                 GameManager.Instance.GetManager<SFXManager>().PlayClip("Order");
                 
                 var orderManager = GameManager.Instance.GetManager<OrderManager>();
@@ -59,7 +59,7 @@ namespace Customer.States
                 yield break; // Exit this coroutine, state change handles the rest
             }
         }
-
+        
 
         private IEnumerator Wait(float time)
         {

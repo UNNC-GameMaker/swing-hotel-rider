@@ -1,3 +1,4 @@
+using System;
 using Input;
 using Managers;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Debug
                 if (inputManager != null) inputManager.RegisterListener(this);
             }
         }
-
+        
         private void OnDisable()
         {
             if (GameManager.Instance != null)
