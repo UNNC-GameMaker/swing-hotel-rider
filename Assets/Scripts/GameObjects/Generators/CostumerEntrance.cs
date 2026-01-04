@@ -6,14 +6,15 @@ using UnityEngine;
 
 namespace GameObjects.Generators
 {
-    public class CustomerEntrance : MonoBehaviour
+    public class CostumerEntrance : MonoBehaviour
     {
         private Vector3 _doorPosition; // initial pos = doorX, doorY - 6
         private Vector3 _initPosition;
         private FurnitureManager _furnitureManager;
+        private float _timer = 0f;
         
         // customers that waiting on scaffold
-        private List<GameObject> _waitingCustomers = new List<GameObject>();
+        private List<GameObject> _waitingCostumers = new List<GameObject>();
         
         [SerializeField] private GameObject customerPrefab;
         [SerializeField] private int scaffoldCount = 6;
@@ -33,25 +34,24 @@ namespace GameObjects.Generators
             for (int i = 0; i < scaffoldCount; i++)
             {
                 SpawnCustomer();
-                StartCoroutine(Wait());
 
             }
         }
 
         void Update()
         {
-            TryActivateCustomer();
+            _timer += Time.deltaTime;
+            if (_timer > 1f){
+                TryActivateCustomer();
+                _timer = 0f;
+            }
         }
-
-        IEnumerator Wait()
-        {
-            yield return new WaitForSeconds(3f);
-        }
+        
 
         // spawn customer 
         public bool SpawnCustomer()
         {
-            if(_waitingCustomers.Count >= scaffoldCount) { return false; }
+            if(_waitingCostumers.Count >= scaffoldCount) { return false; }
             
             var customer = Instantiate(customerPrefab, _initPosition, Quaternion.identity);
             
@@ -62,7 +62,7 @@ namespace GameObjects.Generators
             var rb = customer.GetComponent<Rigidbody2D>();
             if (rb != null) rb.bodyType = RigidbodyType2D.Kinematic;
             
-            _waitingCustomers.Add(customer);
+            _waitingCostumers.Add(customer);
             
             UpdateScaffoldPositions();
             
@@ -70,19 +70,20 @@ namespace GameObjects.Generators
         }
 
         private void TryActivateCustomer()
-        {
+        {   
             if (_furnitureManager.GetFreeDeskCount() > 0)
             {
+                UnityEngine.Debug.LogError(_furnitureManager.GetFreeDeskCount());
                 GetInRestaurant();
             }
         }
 
         private void GetInRestaurant()
         {
-            if (_waitingCustomers.Count > 0)
+            if (_waitingCostumers.Count > 0)
             {
-                var customer = _waitingCustomers[0];
-                _waitingCustomers.RemoveAt(0);
+                var customer = _waitingCostumers[0];
+                _waitingCostumers.RemoveAt(0);
                 MoveToEntrance(customer);
                 UpdateScaffoldPositions();
             }
@@ -90,13 +91,13 @@ namespace GameObjects.Generators
 
         private void UpdateScaffoldPositions()
         {
-            for (int i = 0; i < _waitingCustomers.Count; i++)
+            for (int i = 0; i < _waitingCostumers.Count; i++)
             {
                 // Fill from top (closest to door) down
                 // i=0 is top
                 float yOffset = (i + 1) * scaffoldSpacing;
                 var destPosition = new Vector3(_doorPosition.x, _doorPosition.y - yOffset, _doorPosition.z);
-                MoveUpOnScaffold(_waitingCustomers[i], destPosition);
+                MoveUpOnScaffold(_waitingCostumers[i], destPosition);
             }
         }
 

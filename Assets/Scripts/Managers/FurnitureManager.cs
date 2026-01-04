@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Customer;
 using GameObjects;
 
 namespace Managers
@@ -14,6 +15,7 @@ namespace Managers
         
 
         private Dictionary<Furniture, DeskStatus> _furnitureList;
+        private Dictionary<Furniture, Costumer> _bookedList;
         private List<(int, int)> _levelUp; // that house which has a ladder
         public static FurnitureManager Instance { get; private set; }
 
@@ -33,6 +35,7 @@ namespace Managers
         {
             GameManager.Instance.RegisterManager(this);
             _furnitureList = new Dictionary<Furniture, DeskStatus>();
+            _bookedList = new Dictionary<Furniture, Costumer>();
             _levelUp = new List<(int, int)>();
         }
 
@@ -52,15 +55,27 @@ namespace Managers
             _furnitureList.Remove(furniture);
         }
 
+        public void RemoveBookedFurniture(Furniture furniture)
+        {
+            _bookedList.Remove(furniture);
+        }
+
+        public bool WhoseFurnitureIsThis(Furniture furniture, Customer.Costumer customer)
+        {
+            return _bookedList[furniture] == customer;
+        }
+
         // Compatibility methods for Furniture.cs
         public void AddFreeFurniture(Furniture furniture)
         {
             SetFurnitureStatus(furniture, DeskStatus.Empty);
+            RemoveBookedFurniture(furniture);
         }
 
-        public void BookFreeFurniture(Furniture furniture)
+        public void BookFreeFurniture(Furniture furniture, Costumer customer)
         {
             SetFurnitureStatus(furniture, DeskStatus.Desired);
+            _bookedList.Add(furniture, customer);
         }
 
         public void RemoveFreeFurniture(Furniture furniture)

@@ -28,6 +28,12 @@ namespace Customer.States
                 _customer.ChangeState(new FindDeskState(_customer));
                 return;
             }
+            
+            // if the desk isn't yours
+            if (!_customer.FurnitureManager.WhoseFurnitureIsThis(_customer.Desk, _customer))
+            {
+                _customer.ChangeState(new FindDeskState(_customer));
+            }
 
             // Cache the desk position once when entering state
             _deskSetOffset = _customer.Desk.transform.Find("SitOffset");

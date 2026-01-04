@@ -28,11 +28,7 @@ namespace GameObjects
             _furnitureManager?.AddFurniture(this);
             GetComponent<Tiltable>().Activate();
         }
-
-        public void Book()
-        {
-            _furnitureManager.BookFreeFurniture(this);
-        }
+        
 
         public void SetOccupied()
         {

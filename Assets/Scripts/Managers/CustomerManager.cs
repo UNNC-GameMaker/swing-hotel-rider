@@ -24,7 +24,7 @@ namespace Managers
 
         private LevelSpawnData _levelData;
         private readonly List<float> _spawnTimes = new List<float>();
-        private CustomerEntrance _customerEntrance;
+        private CostumerEntrance _costumerEntrance;
         private LevelTimer _levelTimer;
 
         public override void Init()
@@ -34,7 +34,7 @@ namespace Managers
 
         private void Start()
         {
-            _customerEntrance = FindObjectOfType<CustomerEntrance>();
+            _costumerEntrance = FindObjectOfType<CostumerEntrance>();
             _levelTimer = GameManager.Instance.GetManager<LevelTimer>();
             LoadLevelData();
         }
@@ -117,9 +117,9 @@ namespace Managers
 
         private void SpawnCustomer()
         {
-            if (_customerEntrance != null)
+            if (_costumerEntrance != null)
             {
-                _customerEntrance.SpawnCustomer();
+                _costumerEntrance.SpawnCustomer();
             }
         }
     }

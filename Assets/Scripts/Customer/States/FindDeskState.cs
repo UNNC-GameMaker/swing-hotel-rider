@@ -30,7 +30,6 @@ namespace Customer.States
                 GetDesk();
                 if (_customer.Desk != null)
                 {
-                    _customer.Desk.Book();
                     _customer.RandomMove.StopRandomMove();
                     _customer.ChangeState(new MoveToDeskState(_customer));
                 }
@@ -53,6 +52,7 @@ namespace Customer.States
             if (availableDesks.Count > 0)
             {
                 _customer.Desk = availableDesks[Random.Range(0, availableDesks.Count)];
+                _customer.FurnitureManager.BookFreeFurniture(_customer.Desk, _customer);
                 UnityEngine.Debug.Log("Desk: " + _customer.Desk);
                 return;
             }
@@ -61,6 +61,7 @@ namespace Customer.States
             if (allDesks.Count > 0)
             {
                 _customer.Desk = allDesks[Random.Range(0, allDesks.Count)];
+                _customer.FurnitureManager.BookFreeFurniture(_customer.Desk, _customer);
                 UnityEngine.Debug.Log("Desk: " + _customer.Desk);
                 return;
             }
