@@ -17,7 +17,7 @@ namespace Managers
         private void LoadOrderList()
         {
             string chapter = GameManager.Instance.GetCurrentChapter();
-            TextAsset jsonText = Resources.Load<TextAsset>($"OrderList/{chapter}");
+            TextAsset jsonText = Resources.Load<TextAsset>($"ChapterData/OrderList/{chapter}");
             UnityEngine.Debug.Log($"[OrderManager] Loaded {jsonText.text}");
             
             if (jsonText == null)
@@ -73,26 +73,25 @@ namespace Managers
             return "";
         }
     }
-}
 
-[Serializable]
-public class OrderList
-{
-    public int chapter;
-    // orders: order name, order probability
-    public Dictionary<string, float> Orders;
-}
+    [Serializable]
+    public class OrderList
+    {
+        public int chapter;
+        // orders: order name, order probability
+        public Dictionary<string, float> Orders;
+    }
 
-[Serializable]
-public class OrderItemJson
-{
-    public string name;
-    public float prob;
-}
+    [Serializable]
+    public class OrderItemJson
+    {
+        public string name;
+        public float prob;
+    }
 
-[Serializable]
-public class OrderListJson
-{
-    public List<OrderItemJson> orders;
+    [Serializable]
+    public class OrderListJson
+    {
+        public List<OrderItemJson> orders;
+    }
 }
-

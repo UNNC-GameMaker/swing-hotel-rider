@@ -104,6 +104,11 @@ namespace Managers
 
             return res;
         }
+        
+        public int GetFreeDeskCount()
+        {
+            return GetAllEmptyFurnitureList().Count;
+        }
 
         // LevelUp methods
         public void AddLevelUp(int level, int position)

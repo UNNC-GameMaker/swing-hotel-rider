@@ -1,0 +1,15 @@
+{
+  "timerStart": 100,
+  "npc1": [
+    {
+      "time": 90,
+      "randomSec": 5,
+      "count": 3
+    },
+    {
+      "time": 80,
+      "randomSec": 5,
+      "count": 3
+    }
+  ]
+}

@@ -1,118 +1,118 @@
 using System.Collections.Generic;
-using Building;
 using GameObjects;
 using Input;
 using Managers;
-using Player;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Grab : MonoBehaviour, IInputListener
+namespace Player
 {
-    private Grabbable _closestGrabbable;
-
-    private Interactable _closestInteract;
-    private SpriteRenderer _cursorSpriteRenderer;
-    private Image _cursorImage;
-
-    private void Awake()
+    public class Grab : MonoBehaviour, IInputListener
     {
-        _playerRb = GetComponent<Rigidbody2D>();
-        _playerAnimation = GetComponent<PlayerAnimation>();
-        _sfxManager = GameManager.Instance.GetManager<SFXManager>();
-        InitializeCursor();
-    }
+        private Grabbable _closestGrabbable;
 
-    private void OnEnable()
-    {
-        // Register with InputManager
-        GameManager.Instance.GetManager<InputManager>().RegisterListener(this);
-    }
+        private Interactable _closestInteract;
+        private SpriteRenderer _cursorSpriteRenderer;
+        private Image _cursorImage;
 
-    private void OnDisable()
-    {
-        // Unregister from InputManager
-        GameManager.Instance.GetManager<InputManager>().UnregisterListener(this);
-    }
-
-    private void Update()
-    {
-        if (_grabbedObjects.Count < _inventorySize)
+        private void Awake()
         {
-            // Detect grabbable objects in range
-            var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, grabRange, _overlapResults);
-            Grabbable closestGrabbable = null;
-            Interactable closestInteract = null;
-            for (var i = 0; i < hitCount; i++)
+            _playerRb = GetComponent<Rigidbody2D>();
+            _playerAnimation = GetComponent<PlayerAnimation>();
+            _sfxManager = GameManager.Instance.GetManager<SFXManager>();
+            InitializeCursor();
+        }
+
+        private void OnEnable()
+        {
+            // Register with InputManager
+            GameManager.Instance.GetManager<InputManager>().RegisterListener(this);
+        }
+
+        private void OnDisable()
+        {
+            // Unregister from InputManager
+            GameManager.Instance.GetManager<InputManager>().UnregisterListener(this);
+        }
+
+        private void Update()
+        {
+            if (_grabbedObjects.Count < _inventorySize)
             {
-                var col = _overlapResults[i];
-                // Find the closest Grabbable object
-                if (col.gameObject.CompareTag("Grabbable"))
-                {   
-                    var grabbable = col.gameObject.GetComponent<Grabbable>();
-                    if (grabbable)
-                    {
-                        if (!closestGrabbable)
+                // Detect grabbable objects in range
+                var hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, grabRange, _overlapResults);
+                Grabbable closestGrabbable = null;
+                Interactable closestInteract = null;
+                for (var i = 0; i < hitCount; i++)
+                {
+                    var col = _overlapResults[i];
+                    // Find the closest Grabbable object
+                    if (col.gameObject.CompareTag("Grabbable"))
+                    {   
+                        var grabbable = col.gameObject.GetComponent<Grabbable>();
+                        if (grabbable)
                         {
-                            closestGrabbable = grabbable;
-                        }
-                        else
-                        {
-                            if (Vector2.Distance(transform.position, grabbable.transform.position) <
-                                Vector2.Distance(transform.position, closestGrabbable.transform.position))
+                            if (!closestGrabbable)
+                            {
                                 closestGrabbable = grabbable;
+                            }
+                            else
+                            {
+                                if (Vector2.Distance(transform.position, grabbable.transform.position) <
+                                    Vector2.Distance(transform.position, closestGrabbable.transform.position))
+                                    closestGrabbable = grabbable;
+                            }
                         }
+                    }
+
+                    // Find closest Interact object
+                    if (col.gameObject.CompareTag("Interactable"))
+                    {
+                        var interact = col.gameObject.GetComponent<Interactable>();
+                        if (interact != null) closestInteract ??= interact;
                     }
                 }
 
-                // Find closest Interact object
-                if (col.gameObject.CompareTag("Interactable"))
+                // Update cursor position
+                if (closestInteract != null)
                 {
-                    var interact = col.gameObject.GetComponent<Interactable>();
-                    if (interact != null) closestInteract ??= interact;
+                    cursor.SetActive(true);
+                    cursor.transform.position = closestInteract.InteractionPoint.position + cursorOffset;
                 }
-            }
+                else if (closestGrabbable != null)
+                {
+                    cursor.SetActive(true);
+                    cursor.transform.position = closestGrabbable.transform.position + cursorOffset;
+                }
+                else
+                {
+                    cursor.SetActive(false);
+                }
 
-            // Update cursor position
-            if (closestInteract != null)
-            {
-                cursor.SetActive(true);
-                cursor.transform.position = closestInteract.InteractionPoint.position + cursorOffset;
-            }
-            else if (closestGrabbable != null)
-            {
-                cursor.SetActive(true);
-                cursor.transform.position = closestGrabbable.transform.position + cursorOffset;
+                // Store closest objects for grab callback
+                _closestInteract = closestInteract;
+                _closestGrabbable = closestGrabbable;
             }
             else
             {
+                // Hide cursor when holding max objects
                 cursor.SetActive(false);
+                _closestInteract = null;
+                _closestGrabbable = null;
             }
-
-            // Store closest objects for grab callback
-            _closestInteract = closestInteract;
-            _closestGrabbable = closestGrabbable;
         }
-        else
+
+        private void OnDrawGizmos()
         {
-            // Hide cursor when holding max objects
-            cursor.SetActive(false);
-            _closestInteract = null;
-            _closestGrabbable = null;
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        // Visualize grab range in editor
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, grabRange);
+            // Visualize grab range in editor
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, grabRange);
         
-        // Draw a filled circle at a smaller radius for better visibility
-        Gizmos.color = new Color(1f, 1f, 0f, 0.1f);
-        DrawCircle(transform.position, grabRange, 32);
+            // Draw a filled circle at a smaller radius for better visibility
+            Gizmos.color = new Color(1f, 1f, 0f, 0.1f);
+            DrawCircle(transform.position, grabRange, 32);
         
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         // Show grab range value
         UnityEditor.Handles.Label(transform.position + Vector3.up * grabRange, $"Grab Range: {grabRange:F2}");
         
@@ -142,200 +142,201 @@ public class Grab : MonoBehaviour, IInputListener
                 UnityEditor.Handles.Label(rb.transform.position, "GRABBED");
             }
         }
-        #endif
-    }
-    
-    private void DrawCircle(Vector3 center, float radius, int segments)
-    {
-        float angleStep = 360f / segments;
-        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
-        
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = angleStep * i * Mathf.Deg2Rad;
-            Vector3 newPoint = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
-            Gizmos.DrawLine(prevPoint, newPoint);
-            prevPoint = newPoint;
+#endif
         }
-    }
+    
+        private void DrawCircle(Vector3 center, float radius, int segments)
+        {
+            float angleStep = 360f / segments;
+            Vector3 prevPoint = center + new Vector3(radius, 0, 0);
+        
+            for (int i = 1; i <= segments; i++)
+            {
+                float angle = angleStep * i * Mathf.Deg2Rad;
+                Vector3 newPoint = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+                Gizmos.DrawLine(prevPoint, newPoint);
+                prevPoint = newPoint;
+            }
+        }
 
-    /// <summary>
-    ///     Called when grab/interaction button is pressed
-    /// </summary>
-    private void HandleGrabPressed()
-    {
+        /// <summary>
+        ///     Called when grab/interaction button is pressed
+        /// </summary>
+        private void HandleGrabPressed()
+        {
             // Try to interact first, then grab
             if (_closestInteract != null)
                 _closestInteract.OnInteract();
             else if (_closestGrabbable != null) GrabObj(_closestGrabbable);
-    }
+        }
 
-    /// <summary>
-    ///     Grab an object and parent it to the player
-    /// </summary>
-    private void GrabObj(Grabbable grabbable)
-    {
-        if (grabbable == null) return;
-        if (_grabbedObjects.Count >= _inventorySize) return;
+        /// <summary>
+        ///     Grab an object and parent it to the player
+        /// </summary>
+        private void GrabObj(Grabbable grabbable)
+        {
+            if (grabbable == null) return;
+            if (_grabbedObjects.Count >= _inventorySize) return;
 
-        Rigidbody2D rb = grabbable.rb;
-        _grabbedObjects.Add(rb);
-        cursor.SetActive(false);
+            Rigidbody2D rb = grabbable.rb;
+            _grabbedObjects.Add(rb);
+            cursor.SetActive(false);
 
-        // Make object kinematic and reset physics
-        rb.isKinematic = true;
-        rb.velocity = Vector2.zero;
-        rb.angularVelocity = 0;
+            // Make object kinematic and reset physics
+            rb.isKinematic = true;
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0;
 
-        // Parent to player and position above
-        rb.transform.SetParent(transform);
+            // Parent to player and position above
+            rb.transform.SetParent(transform);
         
-        // Stack objects visually
-        float stackOffset = 1.0f;
-        float itemHeight = 0.8f;
-        rb.transform.localPosition = Vector3.up * (stackOffset + (_grabbedObjects.Count - 1) * itemHeight);
+            // Stack objects visually
+            float stackOffset = 1.0f;
+            float itemHeight = 0.8f;
+            rb.transform.localPosition = Vector3.up * (stackOffset + (_grabbedObjects.Count - 1) * itemHeight);
 
-        // Disable colliders while grabbed
-        var colliders = rb.transform.GetComponentsInChildren<Collider2D>();
-        foreach (var col in colliders) col.enabled = false;
+            // Disable colliders while grabbed
+            var colliders = rb.transform.GetComponentsInChildren<Collider2D>();
+            foreach (var col in colliders) col.enabled = false;
 
-        // Call OnGrab callback
-        grabbable.OnGrab();
-        PlayGrabSfx();
-    }
-
-    /// <summary>
-    ///     Release the grabbed object and apply force
-    /// </summary>
-    private void ReleaseObj()
-    {
-        if (_grabbedObjects.Count == 0) return;
-
-        // Get the last object (LIFO)
-        var rb = _grabbedObjects[^1];
-        _grabbedObjects.RemoveAt(_grabbedObjects.Count - 1);
-
-        // Restore physics
-        rb.isKinematic = false;
-        rb.transform.SetParent(null);
-
-        // Apply release force based on player direction
-        var direction = 1f;
-        if (_playerAnimation != null && _playerAnimation.spriteRenderer != null)
-            direction = _playerAnimation.spriteRenderer.flipX ? -1f : 1f;
-        var force = new Vector3(releaseForce.x * direction, releaseForce.y, 0);
-        rb.velocity = _playerRb.velocity;
-        rb.AddForce(force, ForceMode2D.Impulse);
-
-        // Re-enable colliders
-        var colliders = rb.transform.GetComponentsInChildren<Collider2D>();
-        foreach (var col in colliders) col.enabled = true;
-
-        // Call OnRelease callback
-        var grabbable = rb.GetComponent<Grabbable>();
-        if (grabbable != null) grabbable.OnRelease();
-        PlayReleaseSfx();
-    }
-
-    private void PlayGrabSfx()
-    {
-        if (_sfxManager != null)
-        {
-            _sfxManager.PlayClipUniversal("PlayerGrab");
-        }
-    }
-
-    private void PlayReleaseSfx()
-    {
-        if (_sfxManager != null)
-        {
-            _sfxManager.PlayClipUniversal("Player Release");
-        }
-    }
-
-    private void InitializeCursor()
-    {
-        if (cursor == null) return;
-
-        _cursorSpriteRenderer = cursor.GetComponent<SpriteRenderer>();
-        _cursorImage = cursor.GetComponent<Image>();
-
-        if (_cursorSpriteRenderer == null && _cursorImage == null)
-        {
-            _cursorSpriteRenderer = cursor.AddComponent<SpriteRenderer>();
-            _cursorSpriteRenderer.sortingOrder = 100;
+            // Call OnGrab callback
+            grabbable.OnGrab();
+            PlayGrabSfx();
         }
 
-        if (string.IsNullOrEmpty(grabCursorSpritePath)) return;
-        var sprite = Resources.Load<Sprite>(grabCursorSpritePath);
-        if (sprite == null) return;
-
-        if (_cursorSpriteRenderer != null) _cursorSpriteRenderer.sprite = sprite;
-        if (_cursorImage != null) _cursorImage.sprite = sprite;
-    }
-
-    #region Inspector Fields
-
-    [SerializeField] [Tooltip("Radius for grab field")]
-    private float grabRange = 0.9f;
-
-    [SerializeField] [Tooltip("Cursor GameObject to show grab target")]
-    private GameObject cursor;
-    [SerializeField] [Tooltip("Sprite path under Resources for the grab cursor")]
-    private string grabCursorSpritePath = "Textures/Chapter01/Test/grab";
-    [SerializeField] [Tooltip("World-space offset for the cursor above the target")]
-    private Vector3 cursorOffset = new Vector3(0f, 0.6f, 0f);
-
-    [SerializeField] [Tooltip("Force applied when releasing objects")]
-    private Vector3 releaseForce = Vector3.up;
-
-    #endregion
-
-    #region Private Fields
-
-    private Rigidbody2D _playerRb;
-    private PlayerAnimation _playerAnimation;
-    private readonly List<Rigidbody2D> _grabbedObjects = new List<Rigidbody2D>();
-    private readonly int _inventorySize = 4;
-    private readonly Collider2D[] _overlapResults = new Collider2D[1024]; // Never trust players
-    private SFXManager _sfxManager;
-
-    #endregion
-
-    #region IInputListener Implementation
-
-    public void OnInputEvent(InputEvents inputEvent, InputState state)
-    {
-        switch (inputEvent)
+        /// <summary>
+        ///     Release the grabbed object and apply force
+        /// </summary>
+        private void ReleaseObj()
         {
-            case InputEvents.Grab:
-                if (state == InputState.Started)
-                {
-                    // Grab button pressed
-                    HandleGrabPressed();
-                }
-                break;
-            
-            case InputEvents.Release:
-                if (state == InputState.Started)
-                {
-                    // Release button pressed - throw the object
-                    if (_grabbedObjects.Count > 0)
+            if (_grabbedObjects.Count == 0) return;
+
+            // Get the last object (LIFO)
+            var rb = _grabbedObjects[^1];
+            _grabbedObjects.RemoveAt(_grabbedObjects.Count - 1);
+
+            // Restore physics
+            rb.isKinematic = false;
+            rb.transform.SetParent(null);
+
+            // Apply release force based on player direction
+            var direction = 1f;
+            if (_playerAnimation != null && _playerAnimation.spriteRenderer != null)
+                direction = _playerAnimation.spriteRenderer.flipX ? -1f : 1f;
+            var force = new Vector3(releaseForce.x * direction, releaseForce.y, 0);
+            rb.velocity = _playerRb.velocity;
+            rb.AddForce(force, ForceMode2D.Impulse);
+
+            // Re-enable colliders
+            var colliders = rb.transform.GetComponentsInChildren<Collider2D>();
+            foreach (var col in colliders) col.enabled = true;
+
+            // Call OnRelease callback
+            var grabbable = rb.GetComponent<Grabbable>();
+            if (grabbable != null) grabbable.OnRelease();
+            PlayReleaseSfx();
+        }
+
+        private void PlayGrabSfx()
+        {
+            if (_sfxManager != null)
+            {
+                _sfxManager.PlayClipUniversal("PlayerGrab");
+            }
+        }
+
+        private void PlayReleaseSfx()
+        {
+            if (_sfxManager != null)
+            {
+                _sfxManager.PlayClipUniversal("Player Release");
+            }
+        }
+
+        private void InitializeCursor()
+        {
+            if (cursor == null) return;
+
+            _cursorSpriteRenderer = cursor.GetComponent<SpriteRenderer>();
+            _cursorImage = cursor.GetComponent<Image>();
+
+            if (_cursorSpriteRenderer == null && _cursorImage == null)
+            {
+                _cursorSpriteRenderer = cursor.AddComponent<SpriteRenderer>();
+                _cursorSpriteRenderer.sortingOrder = 100;
+            }
+
+            if (string.IsNullOrEmpty(grabCursorSpritePath)) return;
+            var sprite = Resources.Load<Sprite>(grabCursorSpritePath);
+            if (sprite == null) return;
+
+            if (_cursorSpriteRenderer != null) _cursorSpriteRenderer.sprite = sprite;
+            if (_cursorImage != null) _cursorImage.sprite = sprite;
+        }
+
+        #region Inspector Fields
+
+        [SerializeField] [Tooltip("Radius for grab field")]
+        private float grabRange = 0.9f;
+
+        [SerializeField] [Tooltip("Cursor GameObject to show grab target")]
+        private GameObject cursor;
+        [SerializeField] [Tooltip("Sprite path under Resources for the grab cursor")]
+        private string grabCursorSpritePath = "Textures/Chapter01/Test/grab";
+        [SerializeField] [Tooltip("World-space offset for the cursor above the target")]
+        private Vector3 cursorOffset = new Vector3(0f, 0.6f, 0f);
+
+        [SerializeField] [Tooltip("Force applied when releasing objects")]
+        private Vector3 releaseForce = Vector3.up;
+
+        #endregion
+
+        #region Private Fields
+
+        private Rigidbody2D _playerRb;
+        private PlayerAnimation _playerAnimation;
+        private readonly List<Rigidbody2D> _grabbedObjects = new List<Rigidbody2D>();
+        private readonly int _inventorySize = 4;
+        private readonly Collider2D[] _overlapResults = new Collider2D[1024]; // Never trust players
+        private SFXManager _sfxManager;
+
+        #endregion
+
+        #region IInputListener Implementation
+
+        public void OnInputEvent(InputEvents inputEvent, InputState state)
+        {
+            switch (inputEvent)
+            {
+                case InputEvents.Grab:
+                    if (state == InputState.Started)
                     {
-                        ReleaseObj();
+                        // Grab button pressed
+                        HandleGrabPressed();
                     }
-                }
-                break;
+                    break;
+            
+                case InputEvents.Release:
+                    if (state == InputState.Started)
+                    {
+                        // Release button pressed - throw the object
+                        if (_grabbedObjects.Count > 0)
+                        {
+                            ReleaseObj();
+                        }
+                    }
+                    break;
+            }
         }
+
+        public void OnInputAxis(InputAxis axis, Vector2 value)
+        {
+            // Grab doesn't need axis input
+        }
+
+        public int InputPriority => 0;
+        public bool IsInputEnabled => true;
+
+        #endregion
     }
-
-    public void OnInputAxis(InputAxis axis, Vector2 value)
-    {
-        // Grab doesn't need axis input
-    }
-
-    public int InputPriority => 0;
-    public bool IsInputEnabled => true;
-
-    #endregion
 }

@@ -65,6 +65,7 @@ namespace GameObjects
         }
 
         public bool IsGrabbed => _isGrabbed;
+        
 
         #region Private Fields
 
