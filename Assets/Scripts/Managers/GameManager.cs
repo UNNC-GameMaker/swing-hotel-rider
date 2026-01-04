@@ -76,16 +76,17 @@ namespace Managers
         /// </summary>
         private void InitializeManagers()
         {
-            var foundManagers = GetComponentsInChildren<Manager>();
+            var foundManagers = FindObjectsOfType<Manager>();
             foreach (var manager in foundManagers)
                 if (!managers.Contains(manager))
                 {
                     manager.Init();
                     UnityEngine.Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
                 }
-            
-            _successCounter = GameObject.Find("UI/Canvas/ui-happy/ui-happy-text").GetComponent<TextMeshProUGUI>();
+
+            // Updated to use TextMeshProUGUI
             _failCounter = GameObject.Find("UI/Canvas/ui-angry/ui-angry-text").GetComponent<TextMeshProUGUI>();
+            _successCounter = GameObject.Find("UI/Canvas/ui-happy/ui-happy-text").GetComponent<TextMeshProUGUI>();
             _successCounter.text = 0.ToString();
             _failCounter.text = 0.ToString();
         }

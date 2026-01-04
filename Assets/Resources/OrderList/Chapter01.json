@@ -1,12 +1,8 @@
 {
-  "Orders":[
+  "orders":[
     {
-      "Name": "fresh-fish",
-      "Prob": 50.0
-    },
-    {
-      "Name": "boiled-fish",
-      "Prob": 50.0
+      "name": "fresh-fish",
+      "prob": 100.0
     }
   ]
 }

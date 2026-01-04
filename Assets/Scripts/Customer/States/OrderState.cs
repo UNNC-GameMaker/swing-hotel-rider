@@ -38,7 +38,7 @@ namespace Customer.States
             while (true)
             {   
                 // Thinking about ordering
-                _customer.Think.StartThink("UI/InGame/logo-fork-knife", false);
+                _customer.Think.StartThink("Chapter01/NPC/thinking", false);
                 yield return Wait(_customer.OrderSpeed);
                 
                 GameManager.Instance.GetManager<SFXManager>().PlayClip("Order");

@@ -29,44 +29,23 @@ namespace Customer.States
                 UnityEngine.Debug.LogError("now order is null!");
                 return;
             }
+            
+            _waitTime = 0;
 
-            var isPlayer = _customer.IsPickedUpByPlayer();
-            var inRestaurant = _customer.IsInRestaurant();
-
-            if (_customer.transform.position.y > _customer.Level * _customer.BuildingGridManager.GridSize.y + 1f ||
-                isPlayer || !inRestaurant)
+            _waitOrderTime += Time.deltaTime;
+            if (_waitOrderTime > _customer.MaxWaitOrderTime)
             {
-                _waitTime += Time.deltaTime;
-
-                if (_waitTime > _customer.MaxWaitTime)
-                {
-                    _customer.stateReference = CustomerState.OrderTimeout;
-                    _customer.CostumerFail();
-                    return;
-                }
-
-                UpdateWaitThinkBubble();
+                _customer.CostumerFail();
+                return;
             }
-            else
+
+            UpdateOrderThinkBubble();
+
+            UnityEngine.Debug.Log($"[WaitingForFoodState] Checking food: {_customer.NowOrder}");
+            if (_customer.CheckFood(_customer.NowOrder))
             {
-                _waitTime = 0;
-
-                _waitOrderTime += Time.deltaTime;
-
-                if (_waitOrderTime > _customer.MaxWaitOrderTime)
-                {
-                    _customer.CostumerFail();
-                    return;
-                }
-
-                UpdateOrderThinkBubble();
-
-                UnityEngine.Debug.Log($"[WaitingForFoodState] Checking food: {_customer.NowOrder}");
-                if (_customer.CheckFood(_customer.NowOrder))
-                {
-                    UnityEngine.Debug.Log("[WaitingForFoodState] Food check passed. Transitioning to EatingState.");
-                    _customer.ChangeState(new EatingState(_customer));
-                }
+                UnityEngine.Debug.Log("[WaitingForFoodState] Food check passed. Transitioning to EatingState.");
+                _customer.ChangeState(new EatingState(_customer));
             }
         }
 
@@ -80,12 +59,12 @@ namespace Customer.States
             if (_waitTime > _customer.MaxWaitTime / 2)
             {
                 var lerp = Mathf.InverseLerp(_customer.MaxWaitTime / 2, _customer.MaxWaitTime, _waitTime);
-                _customer.Think.StartThink("UI/InGame/indicator-dish", true, Mathf.RoundToInt(_waitTime * 10),
+                _customer.Think.StartThink(GameManager.Instance.GetCurrentChapter() + "/Food/" + _customer.NowOrder, true, Mathf.RoundToInt(_waitTime * 10),
                     Color.Lerp(_customer.DefaultColor, _customer.WaitColor, lerp));
             }
             else
             {
-                _customer.Think.StartThink("UI/InGame/indicator-dish", false);
+                _customer.Think.StartThink(GameManager.Instance.GetCurrentChapter() + "/Food/" + _customer.NowOrder, false);
             }
         }
 

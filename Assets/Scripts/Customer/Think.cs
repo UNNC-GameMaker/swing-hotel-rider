@@ -27,6 +27,8 @@ namespace Customer
             else
                 bubble.color = Color.white;
 
+            if (bubble != null) bubble.gameObject.SetActive(true);
+
             // Prevent deactivating the Customer if target is a direct child
             if (target.transform.parent != transform)
             {
@@ -35,7 +37,6 @@ namespace Customer
             else
             {
                 target.gameObject.SetActive(true);
-                if (bubble != null) bubble.gameObject.SetActive(true);
             }
 
             if (important)
@@ -50,7 +51,7 @@ namespace Customer
             nowThink = text;
 
             // this is the sprite in the bubble, so in waiting state it should show what customer ordered
-            // in other states it shows current status (texture currently missing)
+            // in other states it shows current status
             target.sprite = GameManager.Instance.GetManager<TextureManager>().GetSprite(nowThink);
         }
 
@@ -61,12 +62,12 @@ namespace Customer
                 // Prevent deactivating the Customer if target is a direct child
                 if (target.transform.parent != transform)
                 {
-                    UnityEngine.Debug.Log($"[Think] StopThink deactivating parent: {target.transform.parent.gameObject.name}");
+                    // UnityEngine.Debug.Log($"[Think] StopThink deactivating parent: {target.transform.parent.gameObject.name}");
                     target.transform.parent.gameObject.SetActive(false);
                 }
                 else
                 {
-                    UnityEngine.Debug.Log($"[Think] StopThink deactivating target and bubble directly");
+                    // UnityEngine.Debug.Log($"[Think] StopThink deactivating target and bubble directly");
                     target.gameObject.SetActive(false);
                     if (bubble != null) bubble.gameObject.SetActive(false);
                 }

@@ -18,6 +18,7 @@ namespace Managers
         {
             string chapter = GameManager.Instance.GetCurrentChapter();
             TextAsset jsonText = Resources.Load<TextAsset>($"OrderList/{chapter}");
+            UnityEngine.Debug.Log($"[OrderManager] Loaded {jsonText.text}");
             
             if (jsonText == null)
             {

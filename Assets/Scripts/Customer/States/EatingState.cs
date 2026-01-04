@@ -33,7 +33,7 @@ namespace Customer.States
 
         private IEnumerator EatRoutine()
         {
-            _customer.Think.StartThink("Eating", false);
+            _customer.Think.StartThink(GameManager.Instance.GetCurrentChapter()+"/NPC/eat", false);
             yield return Wait(_customer.EatingSpeed);
 
             _customer.Think.StopThink();

@@ -182,6 +182,10 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 189633122}
+    - target: {fileID: 8941755094064287893, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
+      propertyPath: currentOrderList.chapter
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -387,6 +391,14 @@ PrefabInstance:
       propertyPath: targetCamera
       value: 
       objectReference: {fileID: 81657457}
+    - target: {fileID: 2187162579984261385, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187162579984261385, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9112827552156739662, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.7812498
@@ -2609,7 +2621,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6103767781407219385, guid: 60f0d8b54a317154983fd53a1ce95263, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.11
+      value: -4.75
       objectReference: {fileID: 0}
     - target: {fileID: 6103767781407219385, guid: 60f0d8b54a317154983fd53a1ce95263, type: 3}
       propertyPath: m_LocalPosition.y
