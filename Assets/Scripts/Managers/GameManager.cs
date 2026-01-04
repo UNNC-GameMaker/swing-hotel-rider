@@ -37,6 +37,7 @@ namespace Managers
         private int _customerSuccessCounter;
         private TextMeshProUGUI _successCounter;
         private TextMeshProUGUI _failCounter;
+        private TextMeshProUGUI _timerText;
 
         private void Awake()
         {
@@ -53,6 +54,7 @@ namespace Managers
             gameState = GameState.Playing;
             // Auto-find and initialize all managers in the scene
             InitializeManagers();
+            LevelStart();
         }
 
         private void OnEnable()
@@ -87,11 +89,14 @@ namespace Managers
             // Updated to use TextMeshProUGUI
             _failCounter = GameObject.Find("UI/Canvas/ui-angry/ui-angry-text").GetComponent<TextMeshProUGUI>();
             _successCounter = GameObject.Find("UI/Canvas/ui-happy/ui-happy-text").GetComponent<TextMeshProUGUI>();
+            _timerText = GameObject.Find("UI/Canvas/ui-clock/ui-clock-text").GetComponent<TextMeshProUGUI>();
             _successCounter.text = 0.ToString();
             _failCounter.text = 0.ToString();
         }
-        
-        // TODO duct tape function, need revision later
+
+        public TextMeshProUGUI TimerText => _timerText;
+
+       // TODO duct tape function, need revision later
         public void PlayReset()
         {
             UnityEngine.Debug.LogError("[GameManager] Play Reset");
@@ -154,6 +159,7 @@ namespace Managers
         public void LevelStart()
         {
             gameState = GameState.Playing;
+            GetManager<LevelTimer>().StartTimer(100);
         }
 
         public void LevelFail()

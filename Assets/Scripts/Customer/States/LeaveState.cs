@@ -20,6 +20,9 @@ namespace Customer.States
             _customer.Think.StopThink();
             SetOffDesk();
             _customer.StartCoroutine(LeaveRoutine());
+            
+            var collider = _customer.GetComponent<Collider2D>();
+            if (collider != null) collider.enabled = true;
         }
 
         public void ExecuteState()

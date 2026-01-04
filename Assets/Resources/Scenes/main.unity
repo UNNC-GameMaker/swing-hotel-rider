@@ -182,10 +182,6 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 189633122}
-    - target: {fileID: 8941755094064287893, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: currentOrderList.chapter
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -391,14 +387,6 @@ PrefabInstance:
       propertyPath: targetCamera
       value: 
       objectReference: {fileID: 81657457}
-    - target: {fileID: 2187162579984261385, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2187162579984261385, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9112827552156739662, guid: ae05cb187436b44db8b4d64b4199a524, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.7812498
@@ -1949,10 +1937,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Supply
       objectReference: {fileID: 0}
-    - target: {fileID: 1178156527399481943, guid: fde57a4d606a3444abd735d8834ca84f, type: 3}
-      propertyPath: foodPrefab
-      value: 
-      objectReference: {fileID: 1465097286}
     - target: {fileID: 3455884875840296131, guid: fde57a4d606a3444abd735d8834ca84f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.5
@@ -2375,11 +2359,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3718844019348173442, guid: 0f68b43e8b2824922b2c32d397491af2, type: 3}
   m_PrefabInstance: {fileID: 1407575265}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1465097286 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9108717713414912694, guid: 60f0d8b54a317154983fd53a1ce95263, type: 3}
-  m_PrefabInstance: {fileID: 1710952645}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1479451500
 GameObject:

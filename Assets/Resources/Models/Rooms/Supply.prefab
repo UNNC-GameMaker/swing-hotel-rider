@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionCollider: {fileID: 363432101697434698}
   interactionPoint: {fileID: 3354493508996011743}
-  foodPrefab: {fileID: 0}
+  foodPrefab: {fileID: 9108717713414912694, guid: 60f0d8b54a317154983fd53a1ce95263, type: 3}
   spawnPoint: {fileID: 2066751874197945513}
   interactionBox: {fileID: 363432101697434698}
 --- !u!1 &6889753387182767498

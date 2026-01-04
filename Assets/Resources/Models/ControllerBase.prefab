@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentOrderList:
-    chapter: 0
+    chapter: 1
 --- !u!1 &46817997730301931
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,6 +311,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8339490943983787151}
+  - component: {fileID: 8023566770328300524}
   m_Layer: 0
   m_Name: LevelTimer
   m_TagString: Untagged
@@ -333,6 +334,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5700537619642902121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8023566770328300524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4457137310277393767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce90684a0d04476a8d9fcee0ca0fb9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultDuration: 120
 --- !u!1 &5212392400597961547
 GameObject:
   m_ObjectHideFlags: 0
