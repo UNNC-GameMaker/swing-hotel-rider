@@ -1,7 +1,10 @@
+using System;
 using Cinemachine;
 using GravityTilt;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -12,6 +15,7 @@ namespace Managers
         #region Private Properties
 
         private float _totalTilt;
+        private Image _mask;
 
         #endregion
 
@@ -20,6 +24,11 @@ namespace Managers
         public float TiltTarget { get; private set; }
 
         #endregion
+
+        private void Start()
+        {
+            _mask = GameObject.Find("ColorMask").GetComponent<Image>();
+        }
 
         private void Update()
         {
@@ -31,6 +40,26 @@ namespace Managers
                 TiltObject();
 
                 TiltCamera();
+            }
+
+            if (_mask)
+            {
+                if (Math.Abs(TiltTarget) < greenAngle)
+                {
+                    _mask.color = none;
+                } 
+                else if (Math.Abs(TiltTarget) < yellowAngle)
+                {
+                    _mask.color = yellow;
+                }
+                else
+                {
+                    _mask.color = red;
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("Mask not found");
             }
         }
 
@@ -85,6 +114,15 @@ namespace Managers
         private float tiltSpeed = 1f;
 
         [SerializeField] private float centerX = 10f;
+
+        [SerializeField] private Color none =  new Color(0f, 0f, 0f, 0f);
+        [SerializeField] private Color green;
+        [SerializeField] private Color yellow;
+        [SerializeField] private Color red;
+
+        [SerializeField] private float greenAngle;
+        [SerializeField] private float yellowAngle;
+        [SerializeField] private float redAngle;
 
         #endregion
     }

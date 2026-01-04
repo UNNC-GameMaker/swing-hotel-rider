@@ -221,6 +221,7 @@ MonoBehaviour:
   factorY: -0.1
   offsetX: -22.36125
   offsetY: 0.23
+  mouseStrength: 0.05
 --- !u!1 &8695133567424290443
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,6 +324,7 @@ MonoBehaviour:
   factorY: -0.1
   offsetX: 16.20125
   offsetY: 0.23
+  mouseStrength: 0.05
 --- !u!1 &9142948247486256917
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,8 +396,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2061745461
+  m_SortingLayer: 1
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: b61cecf3996736d45be44097bc5b8c70, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -622,6 +624,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 782023265123084147, guid: 3235c1c6012996848bcb3f8023601265, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -8.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 782023265123084147, guid: 3235c1c6012996848bcb3f8023601265, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.69
+      objectReference: {fileID: 0}
     - target: {fileID: 1888574741908499492, guid: 3235c1c6012996848bcb3f8023601265, type: 3}
       propertyPath: angleFactor
       value: 0.01744444
@@ -633,6 +643,10 @@ PrefabInstance:
     - target: {fileID: 1888574741908499492, guid: 3235c1c6012996848bcb3f8023601265, type: 3}
       propertyPath: heightFactor
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2597204089622583653, guid: 3235c1c6012996848bcb3f8023601265, type: 3}
+      propertyPath: m_SortingOrder
+      value: 49
       objectReference: {fileID: 0}
     - target: {fileID: 3249766020534577387, guid: 3235c1c6012996848bcb3f8023601265, type: 3}
       propertyPath: m_Name

@@ -446,6 +446,12 @@ MonoBehaviour:
   tiltFactor: 5
   tiltSpeed: 10
   centerX: 0
+  green: {r: 0, g: 1, b: 0.027116776, a: 0}
+  yellow: {r: 1, g: 0.9104993, b: 0, a: 0}
+  red: {r: 1, g: 0, b: 0, a: 0}
+  greenAngle: 0
+  yellowAngle: 5
+  redAngle: 8
 --- !u!114 &6952800998458920982
 MonoBehaviour:
   m_ObjectHideFlags: 0
