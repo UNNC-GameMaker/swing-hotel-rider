@@ -57,10 +57,6 @@ namespace Managers
                     _mask.color = red;
                 }
             }
-            else
-            {
-                UnityEngine.Debug.LogError("Mask not found");
-            }
         }
 
         #region Debug
@@ -115,7 +111,7 @@ namespace Managers
 
         [SerializeField] private float centerX = 10f;
 
-        [SerializeField] private Color none =  new Color(0f, 0f, 0f, 0f);
+        [SerializeField] private Color none =  new (0f, 0f, 0f, 0f);
         [SerializeField] private Color green;
         [SerializeField] private Color yellow;
         [SerializeField] private Color red;

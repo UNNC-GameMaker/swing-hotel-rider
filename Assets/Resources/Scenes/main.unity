@@ -179,10 +179,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 447042801}
     - target: {fileID: 6836770809921711140, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
-      propertyPath: greenAngle
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6836770809921711140, guid: b8816e03c574f4b25af6deb2a29635f9, type: 3}
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 189633122}
