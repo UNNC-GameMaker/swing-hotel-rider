@@ -16,6 +16,7 @@ namespace Managers
 
         private float _totalTilt;
         private Image _mask;
+        private Animator _animator;
 
         #endregion
 
@@ -28,6 +29,7 @@ namespace Managers
         private void Start()
         {
             _mask = GameObject.Find("ColorMask").GetComponent<Image>();
+            _animator = _mask.GetComponent<Animator>();
         }
 
         private void Update()
@@ -47,14 +49,17 @@ namespace Managers
                 if (Math.Abs(TiltTarget) < greenAngle)
                 {
                     _mask.color = none;
+                    _animator.SetBool("enable", false);
                 } 
                 else if (Math.Abs(TiltTarget) < yellowAngle)
                 {
                     _mask.color = yellow;
+                    _animator.SetBool("enable", true);
                 }
                 else
                 {
                     _mask.color = red;
+                    _animator.SetBool("enable", true);
                 }
             }
         }
