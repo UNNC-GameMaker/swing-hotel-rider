@@ -71,6 +71,7 @@ namespace Managers
         {
             pauseUI = null;
             EnsureEventSystem();
+            BindUI();
         }
 
         /// <summary>
@@ -86,12 +87,22 @@ namespace Managers
                     UnityEngine.Debug.Log($"[GameManager] Initialized: {manager.GetType().Name}");
                 }
 
-            // Updated to use TextMeshProUGUI
-            _failCounter = GameObject.Find("UI/Canvas/ui-angry/ui-angry-text").GetComponent<TextMeshProUGUI>();
-            _successCounter = GameObject.Find("UI/Canvas/ui-happy/ui-happy-text").GetComponent<TextMeshProUGUI>();
-            _timerText = GameObject.Find("UI/Canvas/ui-clock/ui-clock-text").GetComponent<TextMeshProUGUI>();
-            _successCounter.text = 0.ToString();
-            _failCounter.text = 0.ToString();
+            BindUI();
+        }
+
+        private void BindUI()
+        {
+            var failObj = GameObject.Find("UI/Canvas/ui-angry/ui-angry-text");
+            if (failObj != null) _failCounter = failObj.GetComponent<TextMeshProUGUI>();
+            
+            var successObj = GameObject.Find("UI/Canvas/ui-happy/ui-happy-text");
+            if (successObj != null) _successCounter = successObj.GetComponent<TextMeshProUGUI>();
+            
+            var timerObj = GameObject.Find("UI/Canvas/ui-clock/ui-clock-text");
+            if (timerObj != null) _timerText = timerObj.GetComponent<TextMeshProUGUI>();
+            
+            if (_successCounter != null) _successCounter.text = "0";
+            if (_failCounter != null) _failCounter.text = "0";
         }
 
         public TextMeshProUGUI TimerText => _timerText;

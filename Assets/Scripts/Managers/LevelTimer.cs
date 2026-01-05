@@ -15,7 +15,10 @@ namespace Managers
             if (IsRunning)
             {
                 RemainingTime -= Time.deltaTime;
-                GameManager.Instance.TimerText.text = RemainingTime.ToString("F0");
+                if (GameManager.Instance.TimerText != null)
+                {
+                    GameManager.Instance.TimerText.text = RemainingTime.ToString("F0");
+                }
                 if (RemainingTime <= 0)
                 {
                     RemainingTime = 0;

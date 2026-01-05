@@ -452,6 +452,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Base
       objectReference: {fileID: 0}
+    - target: {fileID: 864842833395306217, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1432092494086276457, guid: cb1a1cea117c449aaac62bbc76284f73, type: 3}
       propertyPath: Cam
       value: 
